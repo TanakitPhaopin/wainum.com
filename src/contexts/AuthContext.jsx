@@ -9,12 +9,14 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         // get initial session
         supabase.auth.getSession().then(({data}) => {
+            console.log("Initial session", data);
             setSession(data.session);
         });
 
         // listen for changes
         const { data: listener } = supabase.auth.onAuthStateChange(
             (_event, newSession) => {
+                console.log("Auth state changed", { _event, newSession });
                 setSession(newSession);
             }
         );

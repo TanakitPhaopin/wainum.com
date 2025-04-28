@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate('/', { replace: true });
+    if (user) navigate('/dashboard', { replace: true });
   }, [user]);
 
   async function handleSubmit(e) {
@@ -19,7 +19,7 @@ export default function Login() {
     if (error) {
       alert(error.message);
     } else {
-      navigate('/', { replace: true });
+      navigate('/dashboard', { replace: true });
     }
   }
 
