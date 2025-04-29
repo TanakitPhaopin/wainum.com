@@ -69,7 +69,7 @@ export default function Home() {
                     </div>
                     <div className='w-full flex gap-x-2 mt-2'>
                         <Button variant="text" onClick={getLocation} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ครูว่ายน้ำใกล้ฉัน</Button>
-                        <Button variant="text" onClick={() => console.log('click')} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ออนไลน์</Button>
+                        <Button variant="text" onClick={() => navigate('/search?type=online')} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ออนไลน์</Button>
                     </div>
                 </div>
             </div>

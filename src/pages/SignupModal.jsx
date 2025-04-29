@@ -29,7 +29,7 @@ import MySelect from '../components/Select.jsx';
     };
 
   export default function SignupModal({open, handleClose, openLogin}) {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const r = searchParams.get('r');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -42,7 +42,6 @@ import MySelect from '../components/Select.jsx';
       if (r) {
           if (r === 'teacher') {
               setRole('ครูสอนว่ายน้ำ');
-              console.log('role: ครูสอนว่ายน้ำ');
           }
       }
       }, [r]);
@@ -73,7 +72,7 @@ import MySelect from '../components/Select.jsx';
     <div>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {handleClose(); setSearchParams({})}}
       >
         <Box sx={style}>
           <div className='flex flex-col items-center justify-center p-4 gap-4'>
