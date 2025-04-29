@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
-import Signup from './pages/Signup.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Home from './pages/Home.jsx'
 import { Navbar } from './components/Navbar.jsx'
 import LoginModal from './pages/LoginModal.jsx'
 import SignupModal from './pages/SignupModal.jsx'
+import Search from './pages/Search.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -28,7 +28,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           {/* Public auth routes */}
-          <Route path="/signup" element={<Signup />} />
+          <Route path='/search' element={<Search />} />
 
           {/* Private dashboard */}
           <Route

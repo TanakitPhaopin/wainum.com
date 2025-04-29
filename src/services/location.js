@@ -30,3 +30,17 @@ export const getCurrentLocation = async () => {
         console.error('Error getting current location:', error);
     }
 }
+
+export const findProvinceInThailand = (provinceEn, provinces_th) => {
+        try {
+            const province = provinces_th.find((province) => province.provinceNameEn === provinceEn);
+            if (!province) {
+                throw new Error('Province not found');
+            }
+            return province;
+        }
+        catch (error) {
+            alert('ไม่สามารถค้นหาตำแหน่งของคุณได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณหรืออนุญาตให้เข้าถึงตำแหน่ง');
+            console.error('Error finding province:', error);
+        }    
+}

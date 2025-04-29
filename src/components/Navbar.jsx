@@ -36,7 +36,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     };
 
     const guestMenu = [
-        { text: 'ค้นหา',     icon: <MailIcon />,   onClick: () => navigate('/') },
+        { text: 'ค้นหา',     icon: <MailIcon />,   onClick: () => navigate('/search') },
     ];
     const secondaryGuest = [
         { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick() },
