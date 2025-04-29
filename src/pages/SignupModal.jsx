@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { signUp } from '../lib/auth';
 import MySelect from '../components/Select.jsx';
@@ -28,13 +28,24 @@ import MySelect from '../components/Select.jsx';
     borderRadius: 2,
     };
 
-    export default function SignupModal({open, handleClose, openLogin, dafaultRole}) {
+  export default function SignupModal({open, handleClose, openLogin}) {
+    const [searchParams] = useSearchParams();
+    const r = searchParams.get('r');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
     const [error, setError] = useState(null);
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (r) {
+          if (r === 'teacher') {
+              setRole('ครูสอนว่ายน้ำ');
+              console.log('role: ครูสอนว่ายน้ำ');
+          }
+      }
+      }, [r]);
 
     useEffect(() => {
         if (user) navigate('/dashboard', { replace: true });
@@ -44,6 +55,7 @@ import MySelect from '../components/Select.jsx';
         if (open) {
         setEmail('');
         setPassword('');
+        setRole('');
         setError(null);
         }
     }, [open]);
@@ -72,7 +84,7 @@ import MySelect from '../components/Select.jsx';
                     { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' },
                 ]}
                 label={'ประเภทผู้ใช้'}
-                value={dafaultRole}
+                value={role}
                 onChange={e => setRole(e.target.value)}
             />
             <TextField 

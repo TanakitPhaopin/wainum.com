@@ -19,8 +19,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='w-full h-full bg-yellow-50'>
-        <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
+      <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
+      <div className='p-4 w-full min-h-screen bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]'>
         <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
         <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
         <Routes>
