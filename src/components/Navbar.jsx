@@ -43,7 +43,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     ];
     const secondaryGuest = [
         { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick() },
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();} },
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => openSignupClick()},
     ];
     const userMenu = [
         { text: 'หน้าหลัก',       icon: <InboxIcon />,   onClick: () => {/* navigate('/dashboard') */} },
@@ -54,7 +54,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut() },
     ];
     const guestMenuLaptop = [
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => openSignupClick(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
         { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
     const userMenuLaptop = [

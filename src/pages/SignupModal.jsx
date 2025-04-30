@@ -36,7 +36,7 @@ import { toast } from 'react-toastify';
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) navigate('/search', { replace: true });
+        if (user) navigate('/dashboard', { replace: true });
     }, [user]);
 
     useEffect(() => {

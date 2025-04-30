@@ -8,6 +8,7 @@ import { Navbar } from './components/Navbar.jsx'
 import LoginModal from './pages/LoginModal.jsx'
 import SignupModal from './pages/SignupModal.jsx'
 import Search from './pages/Search.jsx'
+import Setup from './pages/Setup.jsx'
 import { ToastContainer, Slide } from 'react-toastify';
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
 
           {/* Public auth routes */}
           <Route path='/search' element={<Search />} />
+          <Route path="/profile/setup" element={<Setup />}
+      />
 
           {/* Private dashboard */}
           <Route
@@ -53,6 +56,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
