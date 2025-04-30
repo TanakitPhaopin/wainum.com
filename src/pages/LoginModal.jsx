@@ -5,7 +5,6 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { signIn } from '../lib/auth';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../contexts/AuthContext.jsx';
 import { toast } from 'react-toastify';
 
 const style = {
@@ -31,12 +30,7 @@ const style = {
 export default function LoginModal({open, handleClose, openSignup}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) navigate('/dashboard', { replace: true });
-  }, [user]);
 
   useEffect(() => {
     if (open) {
@@ -53,7 +47,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
       console.error('Error login', error.message);
     } else {
       handleClose();
-      navigate('/dashboard', { replace: true });
+      navigate('/profile/setup', { replace: true });
       toast.success('เข้าสู่ระบบสำเร็จ');
     }
   }

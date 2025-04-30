@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { signUp } from '../lib/auth';
 import { toast } from 'react-toastify';
+import MySelect from '../components/Select.jsx';
+import Divider from '@mui/material/Divider';
+
 
     const style = {
     position: 'absolute',
@@ -31,6 +34,7 @@ import { toast } from 'react-toastify';
   export default function SignupModal({open, handleClose, openLogin}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -43,6 +47,8 @@ import { toast } from 'react-toastify';
         if (open) {
         setEmail('');
         setPassword('');
+        setConfirmPassword('');
+        setRole('');
         }
     }, [open]);
   
@@ -51,8 +57,7 @@ import { toast } from 'react-toastify';
         toast.error('รหัสผ่านไม่ตรงกัน');
         return;
       }
-    
-      const { data, error } = await signUp(email, password);
+      const { data, error } = await signUp(email, password, role);
     
       if (error) {
         toast.error('เกิดข้อผิดพลาด: กรุณาตรวจสอบข้อมูลของคุณ');
@@ -72,6 +77,17 @@ import { toast } from 'react-toastify';
         <Box sx={style}>
           <div className='flex flex-col items-center justify-center p-4 gap-4'>
             <h1 className='font-semibold text-3xl'>สร้างบัญชี</h1>
+            <MySelect
+              id="role"
+              menuItems={[
+                { value: 'นักเรียน', label: 'นักเรียน' },
+                { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' }
+              ]}
+              value={role}
+              label="บทบาท"
+              onChange={(e) => setRole(e.target.value)}
+            />
+            <Divider className='w-full' />
             <TextField 
               id="email" 
               label="อีเมล" 

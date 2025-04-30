@@ -44,10 +44,10 @@ function App() {
 
           {/* Public auth routes */}
           <Route path='/search' element={<Search />} />
-          <Route path="/profile/setup" element={<Setup />}
-      />
+          <Route path="/profile/setup" element={<Setup />}/>
 
-          {/* Private dashboard */}
+          {/* Private */}
+  
           <Route
             path="/dashboard"
             element={
@@ -56,6 +56,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/teacher/dashboard"
+            element={
+              <ProtectedRoute>
+                <div className='text-black text-3xl'>Teacher Dashboard</div>
+              </ProtectedRoute>
+            }
+          />
+
 
 
           {/* Fallback */}

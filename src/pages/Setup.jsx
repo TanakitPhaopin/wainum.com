@@ -16,12 +16,7 @@ export default function Setup() {
   const [role, setRole] = useState('');
   const [email, setEmail] = useState(user?.email || '');
   const [dob, setDob] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/', { replace: true });
-    }
-  }, [user]);
+  console.log('User in Setup:', user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +43,7 @@ export default function Setup() {
       console.error(error);
     } else {
       toast.success('ตั้งค่าโปรไฟล์สำเร็จ');
-      navigate('/dashboard');
+      navigate('/redirect', { replace: true });
     }
   };
 

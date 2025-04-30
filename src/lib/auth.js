@@ -1,10 +1,15 @@
 import { supabase } from './supabase.js'
 
 // Sign up
-export function signUp(email, password) {
+export function signUp(email, password, role) {
     return supabase.auth.signUp({
         email,
         password,
+        options : {
+            data: {
+                role: role,
+            },
+        }
     });
 }
 
