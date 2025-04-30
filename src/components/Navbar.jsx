@@ -15,6 +15,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useNavigate } from 'react-router';
 import { signOut } from '../lib/auth';
+import { toast } from 'react-toastify';
 
 export function Navbar({onLoginClick, openSignupClick}) {
     const [open, setOpen] = React.useState(false);
@@ -25,8 +26,10 @@ export function Navbar({onLoginClick, openSignupClick}) {
     const handleSignOut = async () => {
         const { error } = await signOut();
         if (error) {
-            alert(error.message);
+            toast.error('เกิดข้อผิดพลาดในการออกจากระบบ');
+            console.error('Error signing out:', error);
         } else {
+            toast.info('ออกจากระบบสำเร็จ');
             navigate('/', { replace: true });
         }
     }

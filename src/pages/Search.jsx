@@ -1,5 +1,4 @@
 import { useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();

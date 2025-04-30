@@ -8,6 +8,7 @@ import { Navbar } from './components/Navbar.jsx'
 import LoginModal from './pages/LoginModal.jsx'
 import SignupModal from './pages/SignupModal.jsx'
 import Search from './pages/Search.jsx'
+import { ToastContainer, Slide } from 'react-toastify';
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -20,6 +21,19 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Slide}
+      />
       <div className='p-4 w-full min-h-screen bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]'>
         <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
         <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>

@@ -3,10 +3,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { signUp } from '../lib/auth';
-import MySelect from '../components/Select.jsx';
+import { toast } from 'react-toastify';
 
     const style = {
     position: 'absolute',
@@ -29,63 +29,49 @@ import MySelect from '../components/Select.jsx';
     };
 
   export default function SignupModal({open, handleClose, openLogin}) {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const r = searchParams.get('r');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('');
-    const [error, setError] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState('');
     const { user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (r) {
-          if (r === 'teacher') {
-              setRole('ครูสอนว่ายน้ำ');
-          }
-      }
-      }, [r]);
-
-    useEffect(() => {
-        if (user) navigate('/dashboard', { replace: true });
+        if (user) navigate('/search', { replace: true });
     }, [user]);
 
     useEffect(() => {
         if (open) {
         setEmail('');
         setPassword('');
-        setRole('');
-        setError(null);
         }
     }, [open]);
   
-    async function handleSubmit(e) {
-        e.preventDefault();
-        const { error } = await signUp(email, password);
-        if (error) {
-        alert(error.message);
-        } else {
-        alert('Check your email for the confirmation link!');
-        }
+    async function handleSignup(e) {
+      if (password !== confirmPassword) {
+        toast.error('รหัสผ่านไม่ตรงกัน');
+        return;
+      }
+    
+      const { data, error } = await signUp(email, password);
+    
+      if (error) {
+        toast.error('เกิดข้อผิดพลาด: กรุณาตรวจสอบข้อมูลของคุณ');
+        console.error('Error signing up:', error);
+      } else {
+        toast.success('ส่งอีเมลยืนยันแล้ว กรุณาตรวจสอบกล่องจดหมายของคุณ');
+        handleClose();
+      }
     }
+    
   return (
     <div>
       <Modal
         open={open}
-        onClose={() => {handleClose(); setSearchParams({})}}
+        onClose={handleClose}
       >
         <Box sx={style}>
           <div className='flex flex-col items-center justify-center p-4 gap-4'>
             <h1 className='font-semibold text-3xl'>สร้างบัญชี</h1>
-            <MySelect 
-                menuItems={[
-                    { value: 'นักเรียน', label: 'นักเรียน' },
-                    { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' },
-                ]}
-                label={'ประเภทผู้ใช้'}
-                value={role}
-                onChange={e => setRole(e.target.value)}
-            />
             <TextField 
               id="email" 
               label="อีเมล" 
@@ -103,8 +89,16 @@ import MySelect from '../components/Select.jsx';
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            {error && <p className='self-start w-full text-left text-red-500 text-sm font-sans'>ไม่สามารถสร้างบัญชีได้</p>} 
-            <Button variant="contained" color="primary" onClick={handleSubmit} className='w-full'>
+            <TextField 
+              id="confirm_password"
+              label="ยืนยันรหัสผ่าน" 
+              type="password" 
+              variant="outlined" 
+              className='w-full'
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+            <Button variant="contained" color="primary" onClick={handleSignup} className='w-full'>
               ดำเนินการต่อ
             </Button>
             <div className='mt-8 flex flex-col items-center gap-4'>

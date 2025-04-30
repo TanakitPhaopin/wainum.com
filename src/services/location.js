@@ -1,46 +1,35 @@
-const getVisitorIp = async () => {
-    try {
-        const response = await fetch('https://api.ipify.org');
-        const data = await response.text();
-        return data;
-    } catch (error) {
-        console.error('Error fetching IP address:', error);
-    }
-}
+import { setDefaults, fromLatLng } from "react-geocode";
 
-const fetchIPinfo = async (ip) => {
-    try {
-        const response = await fetch(`https://ipinfo.io/${ip}/geo`);
-        const data = await response.json();
-        const province = data.city;
-        return province;
-    }
-    catch (error) {
-        console.error('Error fetching geolocation data:', error);
-    }
-}
+setDefaults({
+    key: import.meta.env.VITE_GOOGLE_API_KEY,
+    language: "th",
+    region: "th"
+});
+  
+export default function getCurrentAddress() {
+// const latitude = 18.796143;
+// const longitude = 98.979263;
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
 
-export const getCurrentLocation = async () => {
-    try {
-        const ip = await getVisitorIp();
-        const province = await fetchIPinfo(ip);
-        return province;
-    } catch (error) {
-        alert('ไม่สามารถค้นหาตำแหน่งของคุณได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณหรืออนุญาตให้เข้าถึงตำแหน่ง');
-        console.error('Error getting current location:', error);
-    }
-}
+            fromLatLng(latitude.toString(), longitude.toString())
+            .then((response) => {
+                const components = response.results[0].address_components;
 
-export const findProvinceInThailand = (provinceEn, provinces_th) => {
-        try {
-            const province = provinces_th.find((province) => province.provinceNameEn === provinceEn);
-            if (!province) {
-                throw new Error('Province not found');
-            }
-            return province;
+                const provinceComponent = components.find((c) =>
+                    c.types.includes("administrative_area_level_1")
+                    );
+                    const province = provinceComponent?.long_name || null;
+                    resolve({ province });          
+            })
+        },
+        (error) => {
+            console.error("Geolocation error:", error);
+            reject(error);
         }
-        catch (error) {
-            alert('ไม่สามารถค้นหาตำแหน่งของคุณได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณหรืออนุญาตให้เข้าถึงตำแหน่ง');
-            console.error('Error finding province:', error);
-        }    
+        );
+    });
 }
+  

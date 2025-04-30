@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import { signIn } from '../lib/auth';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
-
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute',
@@ -31,19 +31,17 @@ const style = {
 export default function LoginModal({open, handleClose, openSignup}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate('/dashboard', { replace: true });
+    if (user) navigate('/search', { replace: true });
   }, [user]);
 
   useEffect(() => {
     if (open) {
       setEmail('');
       setPassword('');
-      setError(null);
     }
   }, [open]);
   
@@ -51,10 +49,12 @@ export default function LoginModal({open, handleClose, openSignup}) {
     e.preventDefault();
     const { error } = await signIn(email, password);
     if (error) {
-      setError(error.message);
+      toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+      console.error('Error login', error.message);
     } else {
       handleClose();
       navigate('/dashboard', { replace: true });
+      toast.success('เข้าสู่ระบบสำเร็จ');
     }
   }
   return (
@@ -83,7 +83,6 @@ export default function LoginModal({open, handleClose, openSignup}) {
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            {error && <p className='self-start w-full text-left text-red-500 text-sm font-sans'>อีเมลหรือรหัสผ่านไม่ถูกต้อง</p>} 
             <Button variant="contained" color="primary" onClick={handleSubmit} className='w-full'>
               ดำเนินการต่อ
             </Button>
