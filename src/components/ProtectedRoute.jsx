@@ -12,6 +12,7 @@ export default function ProtectedRoute({ children, requiredRole = null }) {
   }
 
   const role = user.user_metadata?.role;
+
   if (requiredRole && role !== requiredRole) {
     return <Navigate to="/redirect" replace />;
   }

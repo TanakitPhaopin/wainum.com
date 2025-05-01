@@ -22,7 +22,6 @@ export function Navbar({onLoginClick, openSignupClick}) {
     const toggle = () => setOpen(o => !o);
     const navigate = useNavigate();
     const { user } = useAuth();
-    console.log('user', user);
 
     const handleSignOut = async () => {
         const { error } = await signOut();

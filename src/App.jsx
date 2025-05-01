@@ -7,7 +7,6 @@ import { Navbar } from './components/Navbar.jsx'
 import LoginModal from './pages/LoginModal.jsx'
 import SignupModal from './pages/SignupModal.jsx'
 import Search from './pages/Search.jsx'
-import Setup from './pages/Setup.jsx'
 import { ToastContainer, Slide } from 'react-toastify';
 import Redirect from './pages/Redirect.jsx'
 
@@ -44,14 +43,13 @@ function App() {
 
           {/* Public auth routes */}
           <Route path='/search' element={<Search />} />
-          <Route path="/redirect" element={<Redirect />}/>
 
           {/* Private */}
           <Route
-            path="/profile/setup"
+            path="/redirect"
             element={
               <ProtectedRoute>
-                <Setup />
+                <Redirect />
               </ProtectedRoute>
             }
           />

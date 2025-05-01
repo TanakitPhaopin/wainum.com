@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import { signIn } from '../lib/auth';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const style = {
   position: 'absolute',
@@ -19,10 +21,17 @@ const style = {
     lg: 1/4, // big desktop
     xl: 1/5, // extra big desktop
   },
+  height: {
+    xs: 1, // mobile
+    sm: 1, // tablet
+    md: 2/3, // laptop
+    lg: 5/6, // big desktop
+    xl: 7/8, // extra big desktop
+ },
   bgcolor: 'white',
   boxShadow: 24,
   p: 4,
-  maxHeight: 5/6,
+  maxHeight: 6/6,
   overflowY: "auto",
   borderRadius: 2,
 };
@@ -58,7 +67,8 @@ export default function LoginModal({open, handleClose, openSignup}) {
         onClose={handleClose}
       >
         <Box sx={style}>
-          <div className='flex flex-col items-center justify-center p-4 gap-4'>
+          <div className='flex flex-col items-center justify-center p-4 gap-4 relative'>
+            <CloseIcon fontSize='large' className='absolute top-2 right-2 cursor-pointer' onClick={handleClose}/>
             <h1 className='font-semibold text-3xl'>เข้าสู่ระบบ</h1>
             <TextField 
               id="email" 

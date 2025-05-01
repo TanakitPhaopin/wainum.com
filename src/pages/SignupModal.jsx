@@ -3,12 +3,14 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { useNavigate, useSearchParams } from 'react-router';
-import { useAuth } from '../contexts/AuthContext.jsx';
+import { useSearchParams } from 'react-router';
 import { signUp } from '../lib/auth';
 import { toast } from 'react-toastify';
 import MySelect from '../components/Select.jsx';
 import Divider from '@mui/material/Divider';
+import CloseIcon from '@mui/icons-material/Close';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from 'moment';
 
   const style = {
     position: 'absolute',
@@ -17,15 +19,25 @@ import Divider from '@mui/material/Divider';
     transform: 'translate(-50%, -50%)',
     width: {
         xs: 1, // mobile
-        sm: 1/2, // tablet
-        md: 1/3, // laptop
-        lg: 1/4, // big desktop
-        xl: 1/5, // extra big desktop
+        sm: 1, // tablet
+        md: 2/3, // laptop
+        lg: 1/2, // big desktop
+        xl: 1/3, // extra big desktop
     },
+    height: {
+      xs: 1, // mobile
+      sm: 1, // tablet
+      md: 2/3, // laptop
+      lg: 5/6, // big desktop
+      xl: 7/8, // extra big desktop
+   },
     bgcolor: 'white',
     boxShadow: 24,
-    p: 4,
-    maxHeight: 5/6,
+    p: {
+      xs: 2, // mobile
+      sm: 4, // tablet
+   },
+    maxHeight: 6/6,
     overflowY: "auto",
     borderRadius: 2,
   };
@@ -35,8 +47,9 @@ import Divider from '@mui/material/Divider';
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [dob, setDob] = useState(null);  
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (open) {
@@ -53,11 +66,20 @@ import Divider from '@mui/material/Divider';
     }, [open, searchParams]);
   
     async function handleSignup(e) {
+      if ( role === '' || username === '' || email === '' || password === '' || confirmPassword === '' || dob === null) {
+        toast.error('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+
       if (password !== confirmPassword) {
         toast.error('รหัสผ่านไม่ตรงกัน');
         return;
       }
-      const { data, error } = await signUp(email, password, role);
+      if (role === '') {
+        toast.error('กรุณาเลือกบทบาท');
+        return;
+      }
+      const { data, error } = await signUp(email, password, role, username, dob);
     
       if (error) {
         toast.error('เกิดข้อผิดพลาด: กรุณาตรวจสอบข้อมูลของคุณ');
@@ -76,45 +98,67 @@ import Divider from '@mui/material/Divider';
         onClose={() => {handleClose(); setSearchParams({});}}
       >
         <Box sx={style}>
-          <div className='flex flex-col items-center justify-center p-4 gap-4'>
+          <div className='flex flex-col items-center justify-center p-4 gap-4 relative'>
+            <CloseIcon fontSize='large' className='absolute top-2 right-2 cursor-pointer' onClick={() => {handleClose(); setSearchParams({});}}/>
             <h1 className='font-semibold text-3xl'>สร้างบัญชี</h1>
-            <MySelect
-              id="role"
-              menuItems={[
-                { value: 'นักเรียน', label: 'นักเรียน' },
-                { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' }
-              ]}
-              value={role}
-              label="บทบาท"
-              onChange={(e) => setRole(e.target.value)}
-            />
-            <Divider className='w-full' />
-            <TextField 
-              id="email" 
-              label="อีเมล" 
-              variant="outlined" 
-              className='w-full'
-              onChange={e => setEmail(e.target.value)}
-              value={email}
-            />
-            <TextField 
-              id="password"
-              label="รหัสผ่าน" 
-              type="password" 
-              variant="outlined" 
-              className='w-full'
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-            <TextField 
-              id="confirm_password"
-              label="ยืนยันรหัสผ่าน" 
-              type="password" 
-              variant="outlined" 
-              className='w-full'
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-            />
+            <div className='flex flex-col items-center justify-center gap-4 mb-4 w-full'>
+              <MySelect
+                id="role"
+                menuItems={[
+                  { value: 'นักเรียน', label: 'นักเรียน' },
+                  { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' }
+                ]}
+                value={role}
+                label="บทบาท"
+                onChange={(e) => setRole(e.target.value)}
+              />
+              <TextField
+                label="ชื่อผู้ใช้"
+                placeholder="กรอกชื่อจริง-นามสกุล"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                fullWidth
+                variant="outlined"
+              />
+              <DatePicker
+                label="วันเดือนปีเกิด"
+                value={dob}
+                onChange={(newValue) => setDob(newValue)}
+                format="DD/MMM/YYYY"
+                maxDate={moment()}
+                disableFuture
+                className='w-full'
+              />
+            </div>
+            <Divider className='w-full'/>
+            <div className='flex flex-col items-center justify-center gap-4 my-4 w-full'>
+              <TextField 
+                id="email" 
+                label="อีเมล" 
+                variant="outlined" 
+                className='w-full'
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+              />
+              <TextField 
+                id="password"
+                label="รหัสผ่าน" 
+                type="password" 
+                variant="outlined" 
+                className='w-full'
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <TextField 
+                id="confirm_password"
+                label="ยืนยันรหัสผ่าน" 
+                type="password" 
+                variant="outlined" 
+                className='w-full'
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+              />
+            </div>
             <Button variant="contained" color="primary" onClick={handleSignup} className='w-full'>
               ดำเนินการต่อ
             </Button>
