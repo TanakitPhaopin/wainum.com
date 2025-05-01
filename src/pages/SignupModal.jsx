@@ -3,15 +3,14 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { signUp } from '../lib/auth';
 import { toast } from 'react-toastify';
 import MySelect from '../components/Select.jsx';
 import Divider from '@mui/material/Divider';
 
-
-    const style = {
+  const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -29,28 +28,29 @@ import Divider from '@mui/material/Divider';
     maxHeight: 5/6,
     overflowY: "auto",
     borderRadius: 2,
-    };
+  };
 
   export default function SignupModal({open, handleClose, openLogin}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const { user } = useAuth();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (user) navigate('/dashboard', { replace: true });
-    }, [user]);
 
     useEffect(() => {
         if (open) {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
-        setRole('');
+        const r = searchParams.get('r');
+          if (r=== 'teacher') {
+              setRole('ครูสอนว่ายน้ำ');
+          } else {
+            setRole('');
+          }
         }
-    }, [open]);
+    }, [open, searchParams]);
   
     async function handleSignup(e) {
       if (password !== confirmPassword) {
@@ -65,6 +65,7 @@ import Divider from '@mui/material/Divider';
       } else {
         toast.success('ส่งอีเมลยืนยันแล้ว กรุณาตรวจสอบกล่องจดหมายของคุณ');
         handleClose();
+        setSearchParams({});
       }
     }
     
@@ -72,7 +73,7 @@ import Divider from '@mui/material/Divider';
     <div>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {handleClose(); setSearchParams({});}}
       >
         <Box sx={style}>
           <div className='flex flex-col items-center justify-center p-4 gap-4'>

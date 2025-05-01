@@ -9,6 +9,7 @@ export function signUp(email, password, role) {
             data: {
                 role: role,
             },
+            emailRedirectTo: 'http://localhost:5173/redirect' // use your domain in production
         }
     });
 }

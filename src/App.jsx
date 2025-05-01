@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
-import Dashboard from './pages/Dashboard.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Home from './pages/Home.jsx'
 import { Navbar } from './components/Navbar.jsx'
@@ -10,6 +9,7 @@ import SignupModal from './pages/SignupModal.jsx'
 import Search from './pages/Search.jsx'
 import Setup from './pages/Setup.jsx'
 import { ToastContainer, Slide } from 'react-toastify';
+import Redirect from './pages/Redirect.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -44,23 +44,30 @@ function App() {
 
           {/* Public auth routes */}
           <Route path='/search' element={<Search />} />
-          <Route path="/profile/setup" element={<Setup />}/>
+          <Route path="/redirect" element={<Redirect />}/>
 
           {/* Private */}
-  
           <Route
-            path="/dashboard"
+            path="/profile/setup"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Setup />
               </ProtectedRoute>
             }
           />
           <Route
             path="/teacher/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
                 <div className='text-black text-3xl'>Teacher Dashboard</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/student/dashboard"
+            element={
+              <ProtectedRoute requiredRole={'นักเรียน'}>
+                <div className='text-black text-3xl'>Student Dashboard</div>
               </ProtectedRoute>
             }
           />

@@ -3,21 +3,25 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-toastify';
-import MySelect from '../components/Select';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 
 export default function Setup() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('');
-  const [email, setEmail] = useState(user?.email || '');
-  const [dob, setDob] = useState(null);
-  console.log('User in Setup:', user);
+  const [email, setEmail] = useState('');
+  const [dob, setDob] = useState(null);  
 
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email || '');
+    }
+  }, [user]);
+
+  {/* Submit */}
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,15 +30,14 @@ export default function Setup() {
       return;
     }
 
-    if (!role) {
-      toast.error('กรุณาเลือกบทบาท');
+    if (!user?.id) {
+      toast.error('ยังไม่มีข้อมูลผู้ใช้');
       return;
     }
 
     const { error } = await supabase.from('user_profiles').insert({
       id: user.id,
       full_name: username,
-      role,
       date_of_birth: dob,
     });
 
@@ -47,21 +50,19 @@ export default function Setup() {
     }
   };
 
+  if (loading || !user) {
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-600">
+        กำลังโหลดข้อมูลผู้ใช้...
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center h-screen px-4">
       <h1 className="text-4xl font-bold mb-4">ตั้งค่าโปรไฟล์ของคุณ</h1>
       <p className="text-lg mb-8">กรุณากรอกข้อมูลเพื่อเริ่มต้นใช้งาน</p>
       <form className="w-full max-w-sm flex flex-col gap-4" onSubmit={handleSubmit}>
-        <MySelect
-          id="role"
-          menuItems={[
-            { value: 'นักเรียน', label: 'นักเรียน' },
-            { value: 'ครูสอนว่ายน้ำ', label: 'ครูสอนว่ายน้ำ' }
-          ]}
-          value={role}
-          label="บทบาท"
-          onChange={(e) => setRole(e.target.value)}
-        />
         <TextField
           label="ชื่อผู้ใช้"
           placeholder="กรอกชื่อจริง-นามสกุล"
@@ -74,7 +75,7 @@ export default function Setup() {
           value={dob}
           onChange={(newValue) => setDob(newValue)}
           format="DD/MMM/YYYY"
-          maxDate={moment()} // prevent future dates
+          maxDate={moment()}
           disableFuture
         />
         <TextField
@@ -83,7 +84,6 @@ export default function Setup() {
           disabled
           fullWidth
         />
-
         <Button
           type="submit"
           variant="contained"

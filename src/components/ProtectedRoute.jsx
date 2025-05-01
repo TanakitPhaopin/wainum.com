@@ -1,38 +1,20 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { Navigate } from 'react-router';
 
-export default function Redirect() {
+export default function ProtectedRoute({ children, requiredRole = null }) {
   const { user, loading } = useAuth();
-  useEffect(() => {
-    console.log("User in Redirect:", user);
-    console.log("Loading in Redirect:", loading);
-    }, [user, loading]);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loading) return; // ✅ wait for session
+  if (loading) return null;
 
-    if (!user) {
-      navigate("/", { replace: true });
-    } else {
-      const role = user.user_metadata?.role;
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
 
-      if (!role) {
-        navigate("/profile/setup", { replace: true });
-      } else if (role === "ครูสอนว่ายน้ำ") {
-        navigate("/teacher/dashboard", { replace: true });
-      } else if (role === "นักเรียน") {
-        navigate("/dashboard", { replace: true });
-      } else {
-        navigate("/not-authorized", { replace: true });
-      }
-    }
-  }, [user, loading]);
+  const role = user.user_metadata?.role;
+  if (requiredRole && role !== requiredRole) {
+    return <Navigate to="/redirect" replace />;
+  }
 
-  return (
-    <div className="flex justify-center items-center h-screen text-gray-600">
-      กำลังเปลี่ยนเส้นทาง...
-    </div>
-  );
+  return children;
 }

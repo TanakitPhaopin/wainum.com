@@ -47,7 +47,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
       console.error('Error login', error.message);
     } else {
       handleClose();
-      navigate('/profile/setup', { replace: true });
+      navigate('/redirect', { replace: true });
       toast.success('เข้าสู่ระบบสำเร็จ');
     }
   }

@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
     // Get initial session
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      setLoading(false); // ✅ Done loading
+      setLoading(false);
     });
 
     // Listen for changes
