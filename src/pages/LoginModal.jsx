@@ -22,11 +22,11 @@ const style = {
     xl: 1/5, // extra big desktop
   },
   height: {
-    xs: 1, // mobile
-    sm: 1, // tablet
-    md: 2/3, // laptop
-    lg: 5/6, // big desktop
-    xl: 7/8, // extra big desktop
+    xs: 'auto', // mobile
+    sm: 'auto', // tablet
+    md: 'auto', // laptop
+    lg: 'auto', // big desktop
+    xl: 'auto', // extra big desktop
  },
   bgcolor: 'white',
   boxShadow: 24,

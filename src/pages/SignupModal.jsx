@@ -19,17 +19,17 @@ import moment from 'moment';
     transform: 'translate(-50%, -50%)',
     width: {
         xs: 1, // mobile
-        sm: 1, // tablet
-        md: 2/3, // laptop
-        lg: 1/2, // big desktop
-        xl: 1/3, // extra big desktop
+        sm: 'auto', // tablet
+        md: 'auto', // laptop
+        lg: 'auto', // big desktop
+        xl: 'auto', // extra big desktop
     },
     height: {
       xs: 1, // mobile
       sm: 1, // tablet
-      md: 2/3, // laptop
-      lg: 5/6, // big desktop
-      xl: 7/8, // extra big desktop
+      md: 'auto', // laptop
+      lg: 'auto', // big desktop
+      xl: 'auto', // extra big desktop
    },
     bgcolor: 'white',
     boxShadow: 24,

@@ -38,6 +38,10 @@ export function Navbar({onLoginClick, openSignupClick}) {
         setOpen(newOpen);
     };
 
+    const role = user?.user_metadata?.role;
+
+    {/* Mobile */}
+    // Not logged in
     const guestMenu = [
         { text: 'ค้นหา',     icon: <MailIcon />,   onClick: () => navigate('/search') },
     ];
@@ -45,28 +49,61 @@ export function Navbar({onLoginClick, openSignupClick}) {
         { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick() },
         { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}},
     ];
-    const userMenu = [
-        { text: 'หน้าหลัก',       icon: <InboxIcon />,   onClick: () => {/* navigate('/dashboard') */} },
-        { text: 'โปรไฟล์ของฉัน',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
+    // Logged in - Teacher
+    const teacherMenu = [
+        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
+        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
+        { text: 'อีเวนต์',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
     ];
-    const secondaryUser = [
+    const secondaryTeacherStudent = [
         { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */} },
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut() },
     ];
+    // Logged in - Student
+    const studentMenu = [
+        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
+        { text: 'อีเวนต์ของฉัน',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
+    ];
+
+    {/* Laptop */}
+    // Not logged in
     const guestMenuLaptop = [
         { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
         { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
-    const userMenuLaptop = [
-        { text: 'หน้าหลัก',       icon: <InboxIcon />,   onClick: () => {/* navigate('/dashboard') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'โปรไฟล์ของฉัน',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+    // Logged in - Teacher
+    const teacherMenuLaptop = [
+        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'อีเวนต์',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]
 
-    const mobilePrimary   = user ? userMenu        : guestMenu;
-    const mobileSecondary = user ? secondaryUser   : secondaryGuest;
-    const laptopMenu      = user ? userMenuLaptop  : guestMenuLaptop;
+     // Logged in - Student
+     const studentMenuLaptop = [
+        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'อีเวนต์ของฉัน',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+    ]
+
+    const mobilePrimary = !user
+        ? guestMenu
+        : role === 'ครูสอนว่ายน้ำ'
+            ? teacherMenu
+            : studentMenu;
+
+        const mobileSecondary = !user
+        ? secondaryGuest
+        : secondaryTeacherStudent;
+
+        const laptopMenu = !user
+        ? guestMenuLaptop
+        : role === 'ครูสอนว่ายน้ำ'
+          ? teacherMenuLaptop
+          : studentMenuLaptop;
+      
 
     const DrawerList = (
     <Box sx={{ width: 300 }} onClick={toggle}>
