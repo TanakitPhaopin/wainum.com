@@ -38,21 +38,26 @@ function App() {
         <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
         <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
         <Routes>
-          {/* Everyone hits HomePage */}
-          <Route path="/" element={<Home />} />
-
           {/* Public auth routes */}
+          <Route path="/" element={<Home />} />
           <Route path='/search' element={<Search />} />
 
-          {/* Private */}
-          <Route
-            path="/redirect"
+          {/* Private - All */}
+          <Route path="/redirect"
             element={
               <ProtectedRoute>
                 <Redirect />
               </ProtectedRoute>
             }
           />
+          <Route path="/settings"
+            element={
+              <ProtectedRoute>
+                <div className='text-black text-3xl'>Settings</div>
+              </ProtectedRoute>
+            }
+          />
+          {/* Private - Teacher */}
           <Route
             path="/teacher/dashboard"
             element={
@@ -61,11 +66,12 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Private - Student */}
           <Route
-            path="/student/dashboard"
+            path="/student/favorites"
             element={
               <ProtectedRoute requiredRole={'นักเรียน'}>
-                <div className='text-black text-3xl'>Student Dashboard</div>
+                <div className='text-black text-3xl'>Student Favourites</div>
               </ProtectedRoute>
             }
           />

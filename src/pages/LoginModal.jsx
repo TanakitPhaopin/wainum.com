@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { signIn } from '../lib/auth';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -40,6 +40,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (open) {
@@ -64,11 +65,11 @@ export default function LoginModal({open, handleClose, openSignup}) {
     <div>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => {setSearchParams({}); handleClose();}}
       >
         <Box sx={style}>
           <div className='flex flex-col items-center justify-center p-4 gap-4 relative'>
-            <CloseIcon fontSize='large' className='absolute top-2 right-2 cursor-pointer' onClick={handleClose}/>
+            <CloseIcon fontSize='large' className='absolute top-2 right-2 cursor-pointer' onClick={() => {setSearchParams({}); handleClose();}}/>
             <h1 className='font-semibold text-3xl'>เข้าสู่ระบบ</h1>
             <TextField 
               id="email" 

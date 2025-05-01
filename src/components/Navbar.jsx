@@ -52,17 +52,16 @@ export function Navbar({onLoginClick, openSignupClick}) {
     // Logged in - Teacher
     const teacherMenu = [
         { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
-        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
-        { text: 'อีเวนต์',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
+        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => navigate('/teacher/dashboard') },
     ];
     const secondaryTeacherStudent = [
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */} },
+        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings') },
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut() },
     ];
     // Logged in - Student
     const studentMenu = [
         { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
-        { text: 'อีเวนต์ของฉัน',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */} },
+        { text: 'ครูที่ชื่นชอบ',        icon: <InboxIcon />,   onClick: () => navigate('/student/favorites') },
     ];
 
     {/* Laptop */}
@@ -74,17 +73,16 @@ export function Navbar({onLoginClick, openSignupClick}) {
     // Logged in - Teacher
     const teacherMenuLaptop = [
         { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => {/* navigate('/profile') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'อีเวนต์',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => navigate('/teacher/dashboard'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]
 
      // Logged in - Student
      const studentMenuLaptop = [
         { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'อีเวนต์ของฉัน',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => {/* navigate('/settings') */}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ครูที่ชื่นชอบ',        icon: <InboxIcon />,   onClick: () => navigate('/student/favorites'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]
 
