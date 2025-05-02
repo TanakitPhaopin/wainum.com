@@ -23,6 +23,7 @@
     "react-dom": "^19.0.0",
     "react-geocode": "^2.0.1",
     "react-router": "^7.5.2",
+    "react-select": "^5.10.1",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.1.4"
   },

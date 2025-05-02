@@ -9,6 +9,7 @@ import SignupModal from './pages/SignupModal.jsx'
 import Search from './pages/Search.jsx'
 import { ToastContainer, Slide } from 'react-toastify';
 import Redirect from './pages/Redirect.jsx'
+import Dashboard from './pages/teacher/Dashboard.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -62,7 +63,7 @@ function App() {
             path="/teacher/dashboard"
             element={
               <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
-                <div className='text-black text-3xl'>Teacher Dashboard</div>
+                <Dashboard />
               </ProtectedRoute>
             }
           />
