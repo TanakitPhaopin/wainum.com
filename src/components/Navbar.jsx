@@ -10,12 +10,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useNavigate } from 'react-router';
 import { signOut } from '../lib/auth';
 import { toast } from 'react-toastify';
+import SearchIcon from '@mui/icons-material/Search';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 export function Navbar({onLoginClick, openSignupClick}) {
     const [open, setOpen] = React.useState(false);
@@ -43,47 +49,47 @@ export function Navbar({onLoginClick, openSignupClick}) {
     {/* Mobile */}
     // Not logged in
     const guestMenu = [
-        { text: 'ค้นหา',     icon: <MailIcon />,   onClick: () => navigate('/search') },
+        { text: 'ค้นหา',     icon: <SearchIcon />,   onClick: () => navigate('/search') },
     ];
     const secondaryGuest = [
-        { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick() },
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}},
+        { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick() },
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}},
     ];
     // Logged in - Teacher
     const teacherMenu = [
-        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
-        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => navigate('/teacher/dashboard') },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search') },
+        { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile') },
     ];
     const secondaryTeacherStudent = [
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings') },
-        { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut() },
+        { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings') },
+        { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut() },
     ];
     // Logged in - Student
     const studentMenu = [
-        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search') },
-        { text: 'ครูที่ชื่นชอบ',        icon: <InboxIcon />,   onClick: () => navigate('/student/favorites') },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search') },
+        { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites') },
     ];
 
     {/* Laptop */}
     // Not logged in
     const guestMenuLaptop = [
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <InboxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
-        { text: 'เข้าสู่ระบบ',     icon: <MailIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
+        { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
     // Logged in - Teacher
     const teacherMenuLaptop = [
-        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'แดชบอร์ด',      icon: <MailIcon />,    onClick: () => navigate('/teacher/dashboard'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]
 
      // Logged in - Student
      const studentMenuLaptop = [
-        { text: 'ค้นหา',       icon: <InboxIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ครูที่ชื่นชอบ',        icon: <InboxIcon />,   onClick: () => navigate('/student/favorites'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ตั้งค่า',        icon: <InboxIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'ออกจากระบบ',         icon: <MailIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]
 
     const mobilePrimary = !user
@@ -154,7 +160,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
                     ))}
                 </div>
             </div>
-            <Drawer open={open} onClose={toggleDrawer(false)}>
+            <Drawer open={open} onClose={toggleDrawer(false)} anchor="left" slotProps={ {paper: {sx: {backgroundColor: 'white', color: '#023047', fontFamily: "'Kanit', system-ui, Avenir, Helvetica, Arial, sans-serif",}}} }>
                 {DrawerList}
             </Drawer>
         </nav>

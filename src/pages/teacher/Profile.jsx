@@ -8,7 +8,7 @@ import MySelectionBox from '../../components/SelectionBox';
 import provinces_th from '../../assets/geography_th/provinces.json';
 import placeholder_image from '../../assets/placeholder_image.jpg';
 
-export default function TeacherProfileForm() {
+export default function Profile() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);

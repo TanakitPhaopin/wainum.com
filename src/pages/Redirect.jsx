@@ -9,7 +9,7 @@ export default function Redirect() {
   useEffect(() => {
     if (loading) return; // Wait for loading to finish
     const role = user?.user_metadata?.role;
-    const redirectTo = role === 'ครูสอนว่ายน้ำ' ? '/teacher/dashboard' : '/search';
+    const redirectTo = role === 'ครูสอนว่ายน้ำ' ? '/teacher/profile' : '/search';
     if (user) {
       // User is logged in, redirect to the appropriate dashboard
       navigate(redirectTo);
