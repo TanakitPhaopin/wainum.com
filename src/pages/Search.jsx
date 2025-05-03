@@ -38,9 +38,14 @@ export default function Search() {
       const handleProvinceChange = (selectedOptions) => {
         setSelectedProvinces(selectedOptions);
         const selectedCodes = selectedOptions.map((option) => option.value);
-        setSearchParams({ code: selectedCodes });
-      }
-
+      
+        // Merge existing searchParams with the new 'code' parameter
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('code'); // Remove existing 'code' parameters
+        selectedCodes.forEach((code) => newParams.append('code', code)); // Add new 'code' parameters
+      
+        setSearchParams(newParams); // Update the URL with merged parameters
+      };
       
       
     

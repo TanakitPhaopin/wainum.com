@@ -44,7 +44,7 @@ export default function Home() {
 
     return (
         <div className="h-full w-full">
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center py-0 lg:py-8">
                 <h1 className="text-3xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ</h1>
                 {/* Search Box */}
                 <div className="w-full items-center flex flex-col mt-4">
@@ -81,8 +81,8 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div>
-
+            <div className=''>
+                hey
             </div>
         </div>
     );
