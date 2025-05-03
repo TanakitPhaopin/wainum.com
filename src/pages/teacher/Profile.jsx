@@ -29,6 +29,7 @@ export default function Profile() {
   const [can_travel, setCan_travel] = useState(false);
   const [travel_note, setTravel_note] = useState('');
   const [can_online, setCan_online] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState([]);
   const [about_lesson, setAbout_lesson] = useState('');
   const [hourly_rate, setHourly_rate] = useState('');
   const [lesson_package, setLesson_package] = useState('');
@@ -39,6 +40,18 @@ export default function Profile() {
     label: province.provinceNameTh,
     value: province.provinceCode,
   }));
+
+  const levels = [
+    { label: 'ทารก', value: 'ทารก' },
+    { label: 'เด็ก', value: 'เด็ก' },
+    { label: 'ผู้ใหญ่', value: 'ผู้ใหญ่' },
+    { label: 'ผู้ที่มีความต้องการพิเศษ', value: 'ผู้ที่มีความต้องการพิเศษ' },
+    { label: 'ระดับเริ่มต้น', value: 'ระดับเริ่มต้น' },
+    { label: 'ระดับกลาง', value: 'ระดับกลาง' },
+    { label: 'ระดับสูง', value: 'ระดับสูง' },
+    { label: 'ระดับแข่งขัน', value: 'ระดับแข่งขัน' },
+
+  ];
 
   useEffect(() => {
     if (!user) return;
@@ -77,6 +90,10 @@ export default function Profile() {
           setCan_travel(data.can_travel || false);
           setTravel_note(data.travel_note || '');
           setCan_online(data.can_online || false);
+          const matchedLevels = data.levels
+            ?.map(level => levels.find(l => String(l.value) === String(level)))
+            .filter(Boolean); // remove undefined
+          setSelectedLevel(matchedLevels || []);
           setAbout_lesson(data.about_lesson || '');
           setHourly_rate(data.hourly_rate || '');
           setLesson_package(data.lesson_package || '');
@@ -92,6 +109,24 @@ export default function Profile() {
     }
   }, [user]);
 
+  const validateFields = () => {
+    // Check if all required fields are filled
+    const requiredFields = [
+      display_name,
+      bio,
+      contacts.some(contact => contact.value.trim() !== ''), // At least one contact must be filled
+      selectedProvinces.length > 0, // At least one province must be selected
+      about_location,
+      selectedLevel.length > 0, // At least one level must be selected
+      about_lesson,
+      hourly_rate,
+      experience,
+      qualification,
+    ];
+  
+    return requiredFields.every(field => field); // Return true if all fields are valid
+  };
+
   const handleChange = (field) => (e) => {
     const value = 
       field === 'can_travel' || field === 'can_online' || field === 'is_public'
@@ -99,6 +134,10 @@ export default function Profile() {
         : e.target.value;  // For text fields and other inputs
   
     if (field === 'is_public') {
+      if (!validateFields()) {
+        toast.error('กรุณากรอกข้อมูลให้ครบก่อนเผยแพร่');
+        return; // Prevent enabling `is_public` if validation fails
+      }
       toast.info('ระบบจะไม่อัปเดตหากคุณลืมบันทึกข้อมูล');
     }
 
@@ -130,6 +169,9 @@ export default function Profile() {
         break;
       case 'can_online':
         setCan_online(value);
+        break;
+      case 'levels':
+        setSelectedLevel(e); // Directly set the value from the selection box
         break;
       case 'about_lesson':
         setAbout_lesson(value);
@@ -199,6 +241,15 @@ export default function Profile() {
     setSubmitting(true);
   
     try {
+      // Validate required fields
+      if (!validateFields()) {
+        if (is_public) {
+          toast.error('กรุณากรอกข้อมูลให้ครบก่อนเผยแพร่');
+          setIs_public(false);
+        }
+      }
+
+      const levels = selectedLevel.map((level) => level.value);
       // Prepare the profile data
       const profileData = {
         id: user.id,
@@ -216,6 +267,7 @@ export default function Profile() {
         lesson_package,
         experience,
         qualification,
+        levels,
       };
   
       // Upsert the profile data
@@ -314,6 +366,7 @@ export default function Profile() {
           onChange={handleChange('display_name')}
           maxLength={32}
           showCounter={true}
+          required={true}
         />        
         <MyTextField
           id={'แนะนำตัว'}
@@ -324,6 +377,7 @@ export default function Profile() {
           rows={3}
           maxLength={150}
           showCounter={true}
+          required={true}
         />
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">รายละเอียดการติดต่อ</h4>
         {contacts.map((contact, index) => (
@@ -335,7 +389,7 @@ export default function Profile() {
               onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
               multiline={false} // No need for multiline unless required
               maxLength={100} // Adjust maxLength as needed
-            />
+              required={contact.type !== 'line' && contact.type !== 'facebook' && contact.type !== 'instagram' && contact.type !== 'email'}            />
           </div>
         ))}
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
@@ -356,6 +410,7 @@ export default function Profile() {
           rows={4}
           maxLength={1500}
           showCounter={true}
+          required={true}
         />
         <FormControlLabel control={<Switch checked={can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
         {can_travel && (
@@ -373,6 +428,14 @@ export default function Profile() {
         <FormControlLabel control={<Switch checked={can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
     
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลการสอน</h4>
+        <MySelectionBox 
+          options={levels} 
+          isMulti={true}
+          placeholder={'ระดับการสอน'}
+          className={'z-10'}
+          value={selectedLevel}
+          onChange={setSelectedLevel}
+        />
         <MyTextField
           id={'ข้อมูลเกี่ยวกับการสอน'}
           label="ข้อมูลเกี่ยวกับการสอน"
@@ -382,6 +445,7 @@ export default function Profile() {
           rows={4}
           maxLength={1500}
           showCounter={true}
+          required={true}
         />
         <MyTextField
           id={"ราคาต่อชั่วโมง (บาท)"}
@@ -389,6 +453,7 @@ export default function Profile() {
           value={hourly_rate}
           onChange={handleChange('hourly_rate')}
           type='number'
+          required={true}
         />
         <MyTextField
           id={'แพ็คเกจการสอน'}
@@ -411,6 +476,7 @@ export default function Profile() {
           rows={4}
           maxLength={1500}
           showCounter={true}
+          required={true}
         />
         <MyTextField
           id={"ใบรับรองคุณวุฒิ"}
@@ -421,6 +487,7 @@ export default function Profile() {
           rows={4}
           maxLength={1500}
           showCounter={true}
+          required={true}
         />
 
         <div className="sticky bottom-4 left-0 right-0 flex justify-center mt-10 z-20">
