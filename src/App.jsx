@@ -35,53 +35,55 @@ function App() {
         theme="colored"
         transition={Slide}
       />
-      <div className='p-4 w-full min-h-screen bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]'>
+      <div className='flex justify-center p-4 w-full min-h-screen bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]'>
         <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
         <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
-        <Routes>
-          {/* Public auth routes */}
-          <Route path="/" element={<Home />} />
-          <Route path='/search' element={<Search />} />
+        <div className='w-full md:w-11/12 xl:w-2/3 2xl:w-1/2'>
+          <Routes>
+            {/* Public auth routes */}
+            <Route path="/" element={<Home />} />
+            <Route path='/search' element={<Search />} />
 
-          {/* Private - All */}
-          <Route path="/redirect"
-            element={
-              <ProtectedRoute>
-                <Redirect />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/settings"
-            element={
-              <ProtectedRoute>
-                <div className='text-black text-3xl'>Settings</div>
-              </ProtectedRoute>
-            }
-          />
-          {/* Private - Teacher */}
-          <Route
-            path="/teacher/profile"
-            element={
-              <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          {/* Private - Student */}
-          <Route
-            path="/student/favorites"
-            element={
-              <ProtectedRoute requiredRole={'นักเรียน'}>
-                <div className='text-black text-3xl'>Student Favourites</div>
-              </ProtectedRoute>
-            }
-          />
+            {/* Private - All */}
+            <Route path="/redirect"
+              element={
+                <ProtectedRoute>
+                  <Redirect />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/settings"
+              element={
+                <ProtectedRoute>
+                  <div className='text-black text-3xl'>Settings</div>
+                </ProtectedRoute>
+              }
+            />
+            {/* Private - Teacher */}
+            <Route
+              path="/teacher/profile"
+              element={
+                <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            {/* Private - Student */}
+            <Route
+              path="/student/favorites"
+              element={
+                <ProtectedRoute requiredRole={'นักเรียน'}>
+                  <div className='text-black text-3xl'>Student Favourites</div>
+                </ProtectedRoute>
+              }
+            />
 
 
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
   )

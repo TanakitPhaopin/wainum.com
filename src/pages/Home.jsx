@@ -20,7 +20,8 @@ export default function Home() {
             if (provinceTH) {
                 setProvince(provinceTH.provinceNameTh);
                 setProvinceCode(provinceTH.provinceCode);
-                navigate(`/search?province=${encodeURIComponent(provinceTH.provinceNameTh)}&code=${provinceTH.provinceCode}`);
+                navigate(`/search?code=${provinceTH.provinceCode}`);
+
             } else {
                 navigate('/search');
                 notify('ไม่พบจังหวัดจากตำแหน่งของคุณ');
@@ -46,7 +47,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center">
                 <h1 className="text-3xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ</h1>
                 {/* Search Box */}
-                <div className="w-full items-center flex flex-col mt-4 md:w-3/4 lg:w-1/2">
+                <div className="w-full items-center flex flex-col mt-4">
                     <div className="relative w-full">
                         <Autocomplete
                             freeSolo
@@ -66,7 +67,7 @@ export default function Home() {
                         />
 
                         <button
-                            onClick={() => navigate(`/search?province=${encodeURIComponent(province)}&code=${provinceCode}`)}
+                            onClick={() => navigate(`/search?code=${provinceCode}`)}
                             className="absolute right-2 top-1/2 transform -translate-y-1/2
                                     bg-[#023047] text-white px-3 py-1 rounded-lg
                                     hover:bg-[#046291] transition-colors duration-150"

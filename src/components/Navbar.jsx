@@ -154,7 +154,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
                             key={text}
                             onClick={onClick}
                             className={`${className ?? 'text-white hover:underline'}`}
-                        >
+                        > 
                             {text}
                         </button>
                     ))}
