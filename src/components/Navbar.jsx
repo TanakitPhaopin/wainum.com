@@ -73,7 +73,8 @@ export function Navbar({onLoginClick, openSignupClick}) {
     {/* Laptop */}
     // Not logged in
     const guestMenuLaptop = [
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out'},
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out border-1 border-[#023047]' },
         { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
     // Logged in - Teacher
