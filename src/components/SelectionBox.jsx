@@ -7,10 +7,10 @@ import Select from 'react-select'
 //   { value: 'vanilla', label: 'Vanilla' }
 // ]
 
-export default function MySelectionBox ({options, name, isMulti, dafaultValue, className, placeholder, value, onChange}) {
+export default function MySelectionBox ({options, name, isMulti, dafaultValue, className, placeholder, value, onChange, closeMenuOnSelect}) {
     return (
         <div className={className}>
-            <Select options={options} name={name} isMulti={isMulti} defaultValue={dafaultValue} placeholder={placeholder} value={value} onChange={onChange}/>
+            <Select options={options} name={name} isMulti={isMulti} defaultValue={dafaultValue} placeholder={placeholder} value={value} onChange={onChange} closeMenuOnSelect={closeMenuOnSelect}/>
         </div>
     )
 }

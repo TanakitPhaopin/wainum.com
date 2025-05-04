@@ -1,14 +1,17 @@
 import { useSearchParams } from "react-router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, use } from "react";
 import MySelectionBox from "../components/SelectionBox";
 import provinces_th from "../assets/geography_th/provinces.json";
 import SearchFilter from "./SearchFilter";
 import Button from '@mui/material/Button';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import {getAllProfiles} from "../services/search";
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [profiles, setProfiles] = useState([]);
+    const [loading, setLoading] = useState(true);
     const provinceCodes = useMemo(() => {
         const rawCode = searchParams.getAll('code').join(',');
         return rawCode ? rawCode.split(',') : [];
@@ -23,6 +26,22 @@ export default function Search() {
         label: p.provinceNameTh,
         value: String(p.provinceCode),
       })), []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const data = await getAllProfiles();
+            if (data) {
+                console.log(data);
+                setProfiles(data);
+            } else {
+                console.error("Error fetching profiles");
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }
+    , []);
       
 
       useEffect(() => {
@@ -71,6 +90,20 @@ export default function Search() {
                     <SwapVertIcon className="mr-2" />Sort
                 </Button>
             </div>
+            {                loading ? (
+                <div className="flex justify-center items-center h-screen">
+                    <p>Loading...</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    {profiles.map((profile) => (
+                        <div key={profile.id} className="border p-4 rounded-lg shadow-md">
+                            <h2 className="text-xl font-bold">{profile.display_name}</h2>
+                            <p>{profile.bio}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
             <h1>Search</h1>
             <p>Province: {provinceCodes.join(',')}</p>
             <p>Type of Delivery: {typeOfDelivery}</p>

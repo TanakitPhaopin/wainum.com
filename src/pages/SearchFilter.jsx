@@ -4,10 +4,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Slider from '@mui/material/Slider';
-import { Switch, FormControlLabel, Button } from '@mui/material';
+import { Switch, FormControlLabel, Button, Checkbox, Divider } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
-    position: 'absolute',
+    position: 'relative',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -19,7 +20,7 @@ const style = {
       xl: 1/5, // extra big desktop
     },
     height: {
-      xs: 'auto', // mobile
+      xs: 1, // mobile
       sm: 'auto', // tablet
       md: 'auto', // laptop
       lg: 'auto', // big desktop
@@ -28,7 +29,13 @@ const style = {
     bgcolor: 'white',
     boxShadow: 24,
     p: 4,
-    maxHeight: 6/6,
+    maxHeight: {
+      xs: 1, // mobile
+      sm: 1, // tablet
+      md: 1, // laptop
+      lg: '90vh', // big desktop
+      xl: '90vh', // extra big desktop
+    },
     overflowY: "auto",
     borderRadius: 2,
   };
@@ -39,6 +46,8 @@ export default function SearchFilter({open, handleClose}) {
   const [apply_price, setApply_price] = useState(false);
   const [can_travel, setCan_travel] = useState(false);
   const [can_online, setCan_online] = useState(false);
+  const [levels, setLevels] = useState(false);
+  const [selectedLevels, setSelectedLevels] = useState([]);
   useEffect(() => {
     setPriceRange([
       parseInt(searchParams.get('minPrice')) || 0,
@@ -51,7 +60,7 @@ export default function SearchFilter({open, handleClose}) {
 
   const handleChange = (field) => (e) => {
     const value = 
-      field === 'can_travel' || field === 'can_online' || field === 'apply_price'
+      field === 'can_travel' || field === 'can_online' || field === 'apply_price' || field === 'levels'
         ? e.target.checked // For switches
         : e.target.value;  // For text fields and other inputs
     
@@ -65,10 +74,18 @@ export default function SearchFilter({open, handleClose}) {
       case 'apply_price':
         setApply_price(value);
         break;
+      case 'levels':
+        setLevels(value);
+        break;
       default:
         break;
     }
   }
+  const handleCloseModal = () => {
+    handleApply();
+    handleClose();
+  }
+
   const handleApply = () => {
     const filterData = {
       priceRange: apply_price ? priceRange : null,
@@ -96,6 +113,15 @@ export default function SearchFilter({open, handleClose}) {
     } else {
       newParams.delete('online');
     }
+    if (levels) {
+      if (selectedLevels.length > 0) {
+        newParams.set('levels', selectedLevels.join(','));
+      }
+    } else {
+      newParams.delete('levels');
+      setSelectedLevels([]);
+    }
+    
 
     setSearchParams(newParams); // Update the URL with new query parameters
     handleClose();
@@ -105,6 +131,8 @@ export default function SearchFilter({open, handleClose}) {
     setApply_price(false);
     setCan_travel(false);
     setCan_online(false);
+    setLevels(false);
+    setSelectedLevels([]);
 
     // Clear query parameters
     const newParams = new URLSearchParams(searchParams);
@@ -112,10 +140,24 @@ export default function SearchFilter({open, handleClose}) {
     newParams.delete('maxPrice');
     newParams.delete('travel');
     newParams.delete('online');
-
+    newParams.delete('levels');
     setSearchParams(newParams); // Update the URL
     handleClose();
   }
+
+  const handleLevelChange = (level) => (e) => {
+    const isChecked = e.target.checked;
+  
+    setSelectedLevels((prev) => {
+      if (isChecked) {
+        // Add the level to the selectedLevels array
+        return [...prev, level];
+      } else {
+        // Remove the level from the selectedLevels array
+        return prev.filter((l) => l !== level);
+      }
+    });
+  };
 
   return (
     <div>
@@ -124,6 +166,7 @@ export default function SearchFilter({open, handleClose}) {
         onClose={handleClose}
       >
         <Box sx={style}>
+          <CloseIcon fontSize='large' className='absolute top-2 right-2 cursor-pointer' onClick={handleCloseModal}/>
           <div>
             <Typography variant="h6" component="h2" className='text-center font-bold text-2xl'>
               ตัวกรอง
@@ -145,6 +188,24 @@ export default function SearchFilter({open, handleClose}) {
                   />
                 )}
               </div>
+              <FormControlLabel control={<Switch checked={levels} onChange={handleChange('levels')} />} label="ระดับการสอน" />
+              {levels && (
+              <div className="flex flex-col gap-2">
+                {['ทารก', 'เด็ก', 'ผู้ใหญ่', 'ผู้ที่มีความต้องการพิเศษ', 'ระดับเริ่มต้น', 'ระดับกลาง', 'ระดับสูง', 'ระดับแข่งขัน'].map((level) => (
+                  <FormControlLabel
+                    key={level}
+                    control={
+                      <Checkbox
+                        checked={selectedLevels.includes(level)}
+                        onChange={handleLevelChange(level)}
+                      />
+                    }
+                    label={level.charAt(0).toUpperCase() + level.slice(1)} // Capitalize the label
+                  />
+                ))}
+              </div>
+            )}
+              <Divider />
               <FormControlLabel control={<Switch checked={can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
               <FormControlLabel control={<Switch checked={can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
             </div>
