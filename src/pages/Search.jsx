@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import {getAllProfiles} from "../services/search";
+import MyCard from "../components/Card";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -90,23 +92,25 @@ export default function Search() {
                     <SwapVertIcon className="mr-2" />Sort
                 </Button>
             </div>
-            {                loading ? (
-                <div className="flex justify-center items-center h-screen">
-                    <p>Loading...</p>
-                </div>
+            { loading ? (
+                <div></div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 justify-items-center">
                     {profiles.map((profile) => (
-                        <div key={profile.id} className="border p-4 rounded-lg shadow-md">
-                            <h2 className="text-xl font-bold">{profile.display_name}</h2>
-                            <p>{profile.bio}</p>
-                        </div>
+                        <MyCard 
+                            display_name={profile.display_name} 
+                            bio={profile.bio} 
+                            key={profile.id} 
+                            image={profile.profile_picture}
+                            can_travel={profile.can_travel}
+                            can_online={profile.can_online}
+                            hourly_rate={profile.hourly_rate}
+                            province_code={profile.swim_teacher_locations}
+                            handleClick={() => console.log(profile.id)}
+                        />
                     ))}
                 </div>
             )}
-            <h1>Search</h1>
-            <p>Province: {provinceCodes.join(',')}</p>
-            <p>Type of Delivery: {typeOfDelivery}</p>
         </div>
     );
 }
