@@ -117,15 +117,16 @@ export default function Search() {
       };
 
     return (
-        <div className="">
+        <div className="relative">
             <div className="pb-4">
                 <SearchFilter open={openFilter} handleClose={handleCloseFilter} setFiltered={setFiltered}/>
                 <div className="mb-2">
                     <MySelectionBox 
                         options={provinces} 
                         isMulti={true}
-                        placeholder={'จังหวัดที่สอน'}
-                        className={'z-10'}
+                        placeholder={'จังหวัดที่ต้องการค้นหา'}
+                        className={'w-full'}
+                        class_select={'z-50'}
                         value={selectedProvinces}
                         onChange={handleProvinceChange}
                     />

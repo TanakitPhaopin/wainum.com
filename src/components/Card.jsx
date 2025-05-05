@@ -62,7 +62,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
                     />
                 )}
             </div>
-            <div className='absolute top-2 right-2 z-20'>
+            <div className='absolute top-2 right-2 z-10'>
               <IconButton
                 size="small"
                 sx={{
@@ -80,7 +80,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
                 <StarOutlineIcon sx={{ color: 'white'}} fontSize='large'/>
               </IconButton>
             </div>
-            <div className='absolute top-2 left-2 z-20'>
+            <div className='absolute top-2 left-2 z-10'>
               <MyChip
                 label="แนะนำ"
                 icon={<RecommendIcon sx={{color: '#0070ff'}}/>}
