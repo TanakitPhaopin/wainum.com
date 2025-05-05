@@ -364,7 +364,7 @@ export default function Profile() {
           label="ชื่อที่แสดง"
           value={display_name}
           onChange={handleChange('display_name')}
-          maxLength={32}
+          maxLength={16}
           showCounter={true}
           required={true}
         />        

@@ -7,12 +7,12 @@ setDefaults({
 });
   
 export default function getCurrentAddress() {
-const latitude = 13.7563;
-const longitude = 100.5018;
+// const latitude = 13.7563;
+// const longitude = 100.5018;
     return new Promise((resolve, reject) => {
-        // navigator.geolocation.getCurrentPosition(
-        // (position) => {
-        //     const { latitude, longitude } = position.coords;
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
 
             fromLatLng(latitude.toString(), longitude.toString())
             .then((response) => {
@@ -30,6 +30,6 @@ const longitude = 100.5018;
             reject(error);
         }
         );
-    // }); {/* Comment Out this line */}
+    }); {/* Comment Out this line */}
 }
   

@@ -74,7 +74,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     // Not logged in
     const guestMenuLaptop = [
         { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
-        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out border-1 border-[#023047]' },
+        { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
     // Logged in - Teacher
@@ -150,13 +150,13 @@ export function Navbar({onLoginClick, openSignupClick}) {
                     </IconButton>
                 </div>
                 <div className="hidden lg:flex space-x-4">
-                    {laptopMenu.map(({ text, onClick, className }) => (
+                    {laptopMenu.map(({ text, onClick, className, icon }) => (
                         <button
                             key={text}
                             onClick={onClick}
                             className={`${className ?? 'text-white hover:underline'}`}
                         > 
-                            {text}
+                            {icon} {text}
                         </button>
                     ))}
                 </div>

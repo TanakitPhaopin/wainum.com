@@ -40,7 +40,7 @@ const style = {
     borderRadius: 2,
   };
 
-export default function SearchFilter({open, handleClose}) {
+export default function SearchFilter({open, handleClose, setFiltered}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [apply_price, setApply_price] = useState(false);
@@ -49,6 +49,12 @@ export default function SearchFilter({open, handleClose}) {
   const [levels, setLevels] = useState(false);
   const [selectedLevels, setSelectedLevels] = useState([]);
   useEffect(() => {
+    const hasOtherFilters = [...searchParams].some(
+      ([key, value]) => key !== 'code'
+    );
+    
+    setFiltered(hasOtherFilters);
+    
     setPriceRange([
       parseInt(searchParams.get('minPrice')) || 0,
       parseInt(searchParams.get('maxPrice')) || 1000,
@@ -56,6 +62,15 @@ export default function SearchFilter({open, handleClose}) {
     setApply_price(searchParams.get('minPrice') !== null && searchParams.get('maxPrice') !== null);
     setCan_travel(searchParams.get('travel') === 'true');
     setCan_online(searchParams.get('online') === 'true');
+
+    const levelParam = searchParams.get('levels');
+    if (levelParam) {
+      setLevels(true);
+      setSelectedLevels(levelParam.split(','));
+    } else {
+      setLevels(false);
+      setSelectedLevels([]);
+    }
   }, [searchParams]);
 
   const handleChange = (field) => (e) => {
@@ -87,12 +102,6 @@ export default function SearchFilter({open, handleClose}) {
   }
 
   const handleApply = () => {
-    const filterData = {
-      priceRange: apply_price ? priceRange : null,
-      can_travel,
-      can_online
-    };
-    console.log(filterData);
     // Update query parameters
     const newParams = new URLSearchParams(searchParams);
 
