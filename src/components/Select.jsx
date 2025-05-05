@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 
-export default function MySelect({ label, menuItems, onChange, value }) {
+export default function MySelect({ label, menuItems, onChange, value, placeholder }) {
     return (
       <Box sx={{ width: 1 }}>
         <FormControl fullWidth>
@@ -15,7 +15,7 @@ export default function MySelect({ label, menuItems, onChange, value }) {
             defaultValue={''}
             value={value}
             onChange={onChange}
-            
+            placeholder={placeholder}
           >
             {menuItems.map((item, index) => (
               <MenuItem key={index} value={item.value}>

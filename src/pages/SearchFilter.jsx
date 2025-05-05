@@ -48,12 +48,14 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
   const [can_online, setCan_online] = useState(false);
   const [levels, setLevels] = useState(false);
   const [selectedLevels, setSelectedLevels] = useState([]);
+  const allowedKeys = ['code', 'sort', 'minPrice', 'maxPrice', 'travel', 'online', 'levels'];
   useEffect(() => {
-    const hasOtherFilters = [...searchParams].some(
-      ([key, value]) => key !== 'code'
+    const hasValidFilters = [...searchParams].some(
+      ([key]) => allowedKeys.includes(key) && key !== 'code' && key !== 'sort'
     );
+
     
-    setFiltered(hasOtherFilters);
+    setFiltered(hasValidFilters);
     
     setPriceRange([
       parseInt(searchParams.get('minPrice')) || 0,

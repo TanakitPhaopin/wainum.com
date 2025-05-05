@@ -8,6 +8,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import {getAllProfiles} from "../services/search";
 import MyCard from "../components/Card";
+import MySelect from "../components/Select";
+
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -83,13 +85,29 @@ export default function Search() {
               return levels.some(level => profileLevels.includes(level));
             });
           }
-          
-          
-      
+          const newParams = new URLSearchParams(searchParams);
+          if (searchParams.get('sort')) {
+            const sortBy = searchParams.get('sort');
+            if (sortBy === 'popularity') {
+              results.sort((a, b) => b.created_at - a.created_at);
+            } else if (sortBy === 'newest') {
+              results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            } else if (sortBy === 'price_asc') {
+              results.sort((a, b) => a.hourly_rate - b.hourly_rate);
+            } else if (sortBy === 'price_desc') {
+              results.sort((a, b) => b.hourly_rate - a.hourly_rate);
+            } else {
+              newParams.set('sort', 'popularity');
+              setSearchParams(newParams);
+              results.sort((a, b) => b.popularity - a.popularity);
+            }
+          } else {
+            newParams.set('sort', 'popularity');
+            setSearchParams(newParams);
+          }
           setProfiles(results);
           setLoading(false);
         };
-      
         fetchAndFilter();
       }, [searchParams]);
       
@@ -140,13 +158,28 @@ export default function Search() {
                             backgroundColor: filtered ? 'darkgray' : 'primary.dark',
                             }
                         }}
-                        onClick={handleOpenFilter} className="w-1/2"
+                        onClick={handleOpenFilter} className="w-2/3"
                     >
                         <FilterListIcon className="mr-2" />{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}
                     </Button>
-                    <Button variant="contained" color="primary" onClick={handleOpenFilter} className='w-1/2'>
-                        <SwapVertIcon className="mr-2" />เรียงลำดับ
-                    </Button>
+                    <div className="w-1/3">
+                      <MySelect 
+                          label={'เรียงลำดับ'}
+                          menuItems={[
+                              { label: 'ยอดนิยม', value: 'popularity' },
+                              { label: 'ใหม่ล่าสุด', value: 'newest' },
+                              { label: 'ราคา (น้อยไปมาก)', value: 'price_asc' },
+                              { label: 'ราคา (มากไปน้อย)', value: 'price_desc' },
+                          ]}
+                          onChange={(e) => {
+                              const selectedValue = e.target.value;
+                              const newParams = new URLSearchParams(searchParams);
+                              newParams.set('sort', selectedValue);
+                              setSearchParams(newParams);
+                          }}
+                          value={searchParams.get('sort') || ''}
+                      />
+                    </div>
                 </div>
             </div>
             { loading ? (
