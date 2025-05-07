@@ -77,7 +77,7 @@ export default function Teacher() {
 
     return (
         <div className='w-full min-h-screen'>
-            <ContactModal open={openModal} handleClose={handleCloseModal} />
+            <ContactModal open={openModal} handleClose={handleCloseModal} contacts={teacher.contacts}/>
             <div className="mb-4 flex justify-between items-center">
                 <Button onClick={() => navigate(from)} variant="contained" color="inherit" startIcon={<ArrowBackIcon />}>กลับ</Button>
                 <div>

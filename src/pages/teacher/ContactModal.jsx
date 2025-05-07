@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 const style = {
@@ -31,7 +30,7 @@ const style = {
     borderRadius: 2,
   };
 
-export default function ContactModal({open, handleClose}) {
+export default function ContactModal({open, handleClose, contacts}) {
   return (
     <div>
       <Modal
@@ -43,11 +42,56 @@ export default function ContactModal({open, handleClose}) {
         <Box sx={style}>
           <div>
             <h1>ข้อมูลการติดต่อ</h1>
-            <a href='tel:0426940468'> 0426940468</a>
-            {/* Call */}
-            {/* Email */}
-            {/* Line ID */}
-            {/* Facebook Link */}
+            <Box display="flex" flexDirection="column" gap={2}>
+            {contacts.map((contact, index) => {
+              let href = '';
+              let displayValue = '';
+
+              switch (contact.type) {
+                case 'phone':
+                    displayValue = contact.value;
+                    href = `tel:${contact.value}`;
+                    break;
+                case 'email':
+                    displayValue = 'Email';
+                    href = `mailto:${contact.value}`;
+                    break;
+                case 'facebook link':
+                    displayValue = 'Facebook';
+                    href = contact.value;
+                    break;
+                case 'instagram link':
+                    displayValue = 'Instagram';
+                    href = contact.value;
+                    break;
+                case 'line id':
+                    displayValue = 'Line';
+                    href = `https://line.me/ti/p/${contact.value}`;
+                    break;
+                default:
+                    href = '#';
+              }
+
+              return (
+                <Button
+                  key={index}
+                  variant="contained"
+                  onClick={() => {
+                    if (href !== '#') window.open(href, '_blank', 'noopener,noreferrer');
+                  }}
+                  sx={{
+                    backgroundColor: '#007bff',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: '#0056b3',
+                    },
+                  }}
+                >
+                  {contact.type === 'phone' ? `โทร: ${displayValue}` : displayValue}
+                </Button>
+              );
+            })}
+          </Box>
           </div>
         </Box>
       </Modal>
