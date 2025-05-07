@@ -112,19 +112,19 @@ export default function Profile() {
   const validateFields = () => {
     // Check if all required fields are filled
     const requiredFields = [
-      display_name,
-      bio,
+      display_name.trim(),
+      bio.trim(),
       contacts.some(contact => contact.value.trim() !== ''), // At least one contact must be filled
       selectedProvinces.length > 0, // At least one province must be selected
-      about_location,
-      selectedLevel.length > 0, // At least one level must be selected
-      about_lesson,
+      about_location.trim(),
+      selectedLevel.length > 0, // Ensure at least one valid level is selected
+      about_lesson.trim(),
       hourly_rate,
-      experience,
-      qualification,
+      experience.trim(),
+      qualification.trim(),
     ];
   
-    return requiredFields.every(field => field); // Return true if all fields are valid
+    return requiredFields.every(field => Boolean(field)); // Return true if all fields are valid
   };
 
   const handleChange = (field) => (e) => {
@@ -226,7 +226,6 @@ export default function Profile() {
   
       if (publicUrlData) {
         setProfile_picture(publicUrlData.publicUrl); // Update the profile picture state
-        console.log('Profile picture uploaded:', publicUrlData.publicUrl);
         toast.success('อัปโหลดรูปโปรไฟล์สำเร็จ');
       }
     } catch (error) {
@@ -243,12 +242,17 @@ export default function Profile() {
     try {
       // Validate required fields
       if (!validateFields()) {
+        toast.error('กรุณากรอกข้อมูลให้ครบก่อนบันทึก');
+        
+        // Reset `is_public` to false if validation fails and it's trying to be enabled
         if (is_public) {
-          toast.error('กรุณากรอกข้อมูลให้ครบก่อนเผยแพร่');
           setIs_public(false);
         }
+        
+        setSubmitting(false);
+        return; // Stop execution if validation fails
       }
-
+  
       const levels = selectedLevel.map((level) => level.value);
       // Prepare the profile data
       const profileData = {
@@ -329,6 +333,7 @@ export default function Profile() {
     <form
     onSubmit={handleSubmit}
     className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
+    noValidate
     >
         <FormControlLabel control={<Switch checked={is_public} onChange={handleChange('is_public')} />} label="เผยแพร่"  className='flex justify-end'/>
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
