@@ -67,7 +67,7 @@ export default function Home() {
                         />
 
                         <button
-                            onClick={() => navigate(`/search?code=${provinceCode}?sort=popularity`)}
+                            onClick={() => navigate(`/search?code=${provinceCode}&sort=popularity`)}
                             className="absolute right-2 top-1/2 transform -translate-y-1/2
                                     bg-[#023047] text-white px-3 py-1 rounded-lg
                                     hover:bg-[#046291] transition-colors duration-150"
