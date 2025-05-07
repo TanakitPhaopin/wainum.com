@@ -19,7 +19,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
 
   return (
     <div className='w-full' onClick={handleClick}>
-      <Card sx={{ width: 1 , ':hover': { boxShadow: 20, cursor: 'pointer' }, borderRadius: 2 }}>
+      <Card sx={{ width: 1 , ':hover': { boxShadow: 20, cursor: 'pointer' }, borderRadius: 2, }}>
           <div className='relative'>
             <Box
               sx={{

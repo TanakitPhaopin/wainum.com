@@ -10,6 +10,7 @@ import Search from './pages/Search.jsx'
 import { ToastContainer, Slide } from 'react-toastify';
 import Redirect from './pages/Redirect.jsx'
 import Profile from './pages/teacher/Profile.jsx'
+import Teacher from './pages/teacher/Teacher.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -43,6 +44,7 @@ function App() {
             {/* Public auth routes */}
             <Route path="/" element={<Home />} />
             <Route path='/search' element={<Search />} />
+            <Route path='/teacher/:id' element={<Teacher />} />
 
             {/* Private - All */}
             <Route path="/redirect"

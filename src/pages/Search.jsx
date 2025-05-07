@@ -1,17 +1,18 @@
-import { useSearchParams } from "react-router";
+import { useSearchParams, useNavigate, useLocation } from "react-router";
 import { useEffect, useState, useMemo } from "react";
 import MySelectionBox from "../components/SelectionBox";
 import provinces_th from "../assets/geography_th/provinces.json";
 import SearchFilter from "./SearchFilter";
 import Button from '@mui/material/Button';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import SwapVertIcon from '@mui/icons-material/SwapVert';
 import {getAllProfiles} from "../services/search";
 import MyCard from "../components/Card";
 import MySelect from "../components/Select";
 
 
 export default function Search() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const [profiles, setProfiles] = useState([]);
     const [filtered , setFiltered] = useState(false);
@@ -20,8 +21,6 @@ export default function Search() {
         const rawCode = searchParams.getAll('code').join(',');
         return rawCode ? rawCode.split(',') : [];
       }, [searchParams]);
-      
-    const typeOfDelivery = searchParams.get('type');  
     const [selectedProvinces, setSelectedProvinces] = useState(null);
     const [openFilter, setOpenFilter] = useState(false);
     const handleOpenFilter = () => setOpenFilter(true);
@@ -35,16 +34,13 @@ export default function Search() {
         const fetchAndFilter = async () => {
           setLoading(true);
           const data = await getAllProfiles();
-          console.log(data);
           if (!data) {
             console.error("Error fetching profiles");
             setProfiles([]);
             setLoading(false);
             return;
           }
-      
-          let results = [...data];
-      
+          let results = [...data];      
           // --- Filter by province
           const rawCode = searchParams.getAll('code').join(',');
           const provinceCodes = rawCode ? rawCode.split(',') : [];
@@ -158,11 +154,12 @@ export default function Search() {
                             backgroundColor: filtered ? 'darkgray' : 'primary.dark',
                             }
                         }}
-                        onClick={handleOpenFilter} className="w-2/3"
+                        onClick={handleOpenFilter} className="w-1/2"
+                        size="large"
                     >
                         <FilterListIcon className="mr-2" />{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}
                     </Button>
-                    <div className="w-1/3">
+                    <div className="w-1/2">
                       <MySelect 
                           label={'เรียงลำดับ'}
                           menuItems={[
@@ -200,7 +197,7 @@ export default function Search() {
                                 can_online={profile.can_online}
                                 hourly_rate={profile.hourly_rate}
                                 province_code={profile.swim_teacher_locations}
-                                handleClick={() => console.log(profile.id)}
+                                handleClick={() => navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }})}
                                 levels={profile.levels}
                                 handleStarClick={() => console.log('Star clicked!', profile.id)}
                             />

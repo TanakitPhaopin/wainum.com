@@ -20,10 +20,10 @@ export default function Home() {
             if (provinceTH) {
                 setProvince(provinceTH.provinceNameTh);
                 setProvinceCode(provinceTH.provinceCode);
-                navigate(`/search?code=${provinceTH.provinceCode}`);
+                navigate(`/search?code=${provinceTH.provinceCode}&sort=popularity`);
 
             } else {
-                navigate('/search');
+                navigate('/search?sort=popularity');
                 notify('ไม่พบจังหวัดจากตำแหน่งของคุณ');
             }
         } catch (error) {
@@ -67,7 +67,7 @@ export default function Home() {
                         />
 
                         <button
-                            onClick={() => navigate(`/search?code=${provinceCode}`)}
+                            onClick={() => navigate(`/search?code=${provinceCode}?sort=popularity`)}
                             className="absolute right-2 top-1/2 transform -translate-y-1/2
                                     bg-[#023047] text-white px-3 py-1 rounded-lg
                                     hover:bg-[#046291] transition-colors duration-150"
@@ -77,7 +77,7 @@ export default function Home() {
                     </div>
                     <div className='w-full flex gap-x-2 mt-2'>
                         <Button variant="text" onClick={getLocation} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ครูว่ายน้ำใกล้ฉัน</Button>
-                        <Button variant="text" onClick={() => navigate('/search?online=true')} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ออนไลน์</Button>
+                        <Button variant="text" onClick={() => navigate('/search?online=true&sort=popularity')} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ออนไลน์</Button>
                     </div>
                 </div>
             </div>

@@ -49,7 +49,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     {/* Mobile */}
     // Not logged in
     const guestMenu = [
-        { text: 'ค้นหา',     icon: <SearchIcon />,   onClick: () => navigate('/search') },
+        { text: 'ค้นหา',     icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity') },
     ];
     const secondaryGuest = [
         { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick() },
@@ -57,7 +57,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     ];
     // Logged in - Teacher
     const teacherMenu = [
-        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search') },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity') },
         { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile') },
     ];
     const secondaryTeacherStudent = [
@@ -66,20 +66,20 @@ export function Navbar({onLoginClick, openSignupClick}) {
     ];
     // Logged in - Student
     const studentMenu = [
-        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search') },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity') },
         { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites') },
     ];
 
     {/* Laptop */}
     // Not logged in
     const guestMenuLaptop = [
-        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'สมัครเป็นครูสอนว่ายน้ำ',    icon: <AccountBoxIcon />,  onClick: () => {navigate('?r=teacher'); openSignupClick();}, className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'เข้าสู่ระบบ',     icon: <LoginIcon />,   onClick: () => onLoginClick(), className: 'cursor-pointer text-white bg-[#023047] px-4 py-2 rounded-lg hover:bg-gray-600 duration-300 ease-in-out'},
     ];
     // Logged in - Teacher
     const teacherMenuLaptop = [
-        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
@@ -87,7 +87,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
 
      // Logged in - Student
      const studentMenuLaptop = [
-        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
@@ -137,7 +137,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     );
 
     return (
-        <nav className="p-4 w-full overflow-hidden sticky top-0 z-50 bg-[#F0F9FA]">
+        <nav className="p-4 w-full overflow-hidden sticky top-0 z-100 bg-[#F0F9FA]">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="text-#023047 text-lg font-bold lg:text-xl"><a href="/">ว่ายน้ำ.com</a></div>
                 <div className='lg:hidden'>
