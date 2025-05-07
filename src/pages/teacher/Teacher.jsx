@@ -14,6 +14,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ContactModal from "./ContactModal";
 
 
 export default function Teacher() {
@@ -22,6 +23,9 @@ export default function Teacher() {
     const from = location.state?.from || '/search?sort=popularity';
     const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
     const { id } = useParams();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -73,6 +77,7 @@ export default function Teacher() {
 
     return (
         <div className='w-full min-h-screen'>
+            <ContactModal open={openModal} handleClose={handleCloseModal} />
             <div className="mb-4 flex justify-between items-center">
                 <Button onClick={() => navigate(from)} variant="contained" color="inherit" startIcon={<ArrowBackIcon />}>กลับ</Button>
                 <div>
@@ -152,7 +157,7 @@ export default function Teacher() {
                                 variant="contained"
                                 color="primary"
                                 className="w-full"
-                                onClick={() => console.log("Contacting teacher...")}
+                                onClick={handleOpenModal}
                                 sx={{
                                     backgroundColor: 'primary.main',
                                     '&:hover': {

@@ -20,9 +20,9 @@ export default function Profile() {
   const [contacts, setContacts] = useState([
     { type: 'phone', value: '' },
     { type: 'email', value: '' },
-    { type: 'line', value: '' },
-    { type: 'facebook', value: '' },
-    { type: 'instagram', value: '' },
+    { type: 'line id', value: '' },
+    { type: 'facebook link', value: '' },
+    { type: 'instagram link', value: '' },
   ]);
   const [selectedProvinces, setSelectedProvinces] = useState([]);
   const [about_location, setAbout_location] = useState('');
@@ -78,9 +78,9 @@ export default function Profile() {
           setContacts(data.contacts || [
             { type: 'phone', value: '' },
             { type: 'email', value: '' },
-            { type: 'line', value: '' },
-            { type: 'facebook', value: '' },
-            { type: 'instagram', value: '' },
+            { type: 'line id', value: '' },
+            { type: 'facebook link', value: '' },
+            { type: 'instagram link', value: '' },
           ]);
           const matched = data.swim_teacher_locations
             ?.map(loc => provinces.find(p => String(p.value) === String(loc.province_code)))
@@ -394,7 +394,7 @@ export default function Profile() {
               onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
               multiline={false} // No need for multiline unless required
               maxLength={100} // Adjust maxLength as needed
-              required={contact.type !== 'line' && contact.type !== 'facebook' && contact.type !== 'instagram' && contact.type !== 'email'}            />
+              required={contact.type !== 'line id' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
           </div>
         ))}
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
