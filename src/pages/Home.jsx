@@ -13,6 +13,11 @@ export default function Home() {
     const [province, setProvince] = useState(null);
     const [provinceCode, setProvinceCode] = useState(null);
 
+    // Scroll to top
+    useEffect(() => 
+        window.scrollTo(0, 0), []
+    );
+
     const getLocation = async () => {
         try {
             const address = await getCurrentAddress();

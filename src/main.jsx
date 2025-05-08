@@ -9,10 +9,10 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LocalizationProvider dateAdapter={AdapterMoment}>
-      <AuthProvider>
+    <AuthProvider>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
         <App />
-      </AuthProvider>
-    </LocalizationProvider>
+      </LocalizationProvider>
+    </AuthProvider>
   </StrictMode>,
 )

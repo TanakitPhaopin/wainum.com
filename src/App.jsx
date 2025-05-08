@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import './App.css'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Home from './pages/Home.jsx'
 import { Navbar } from './components/Navbar.jsx'
@@ -11,6 +11,7 @@ import { ToastContainer, Slide } from 'react-toastify';
 import Redirect from './pages/Redirect.jsx'
 import Profile from './pages/teacher/Profile.jsx'
 import Teacher from './pages/teacher/Teacher.jsx'
+import TermsOfService from './pages/TermsOfService.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -44,6 +45,7 @@ function App() {
             {/* Public auth routes */}
             <Route path="/" element={<Home />} />
             <Route path='/search' element={<Search />} />
+            <Route path='/termsofservice' element={<TermsOfService />} />
             <Route path='/teacher/:id' element={<Teacher />} />
 
             {/* Private - All */}
@@ -87,6 +89,22 @@ function App() {
           </Routes>
         </div>
       </div>
+      <footer className='bg-[#F0F9FA] w-full p-8 text-center text-black space-y-4'>
+        <p>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
+        <div className='flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-x-4'>
+          <Link to="/termsofservice" className='hover:underline'>
+            ข้อตกลงและเงื่อนไขการใช้งาน
+          </Link>
+          <Link to="/contact" className=' hover:underline'>
+            ติดต่อเรา
+          </Link>
+          <Link to="/faq" className='hover:underline'>
+            คำถามที่พบบ่อย
+          </Link>
+        </div>
+        <p className='text-sm'>เนื้อหาทั้งหมดในเว็บไซต์นี้มีวัตถุประสงค์เพื่อการให้ข้อมูลเท่านั้น</p>
+        <p className='text-sm'>หากมีข้อสงสัย กรุณาติดต่อเราที่ tphaopin@gmail.com</p>
+    </footer>
     </BrowserRouter>
   )
 }
