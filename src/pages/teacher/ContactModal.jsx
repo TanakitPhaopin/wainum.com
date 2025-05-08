@@ -65,7 +65,7 @@ export default function ContactModal({open, handleClose, contacts}) {
                         break;
                     case 'line link':
                         displayValue = 'Line';
-                        href = `https://line.me/ti/p/${contact.value}`;
+                        href = contact.value;
                         break;
                     case 'facebook link':
                         displayValue = 'Facebook';
