@@ -104,7 +104,7 @@ export default function ContactModal({open, handleClose, contacts}) {
                 <div className='flex flex-col gap-4'>
                     <Button variant="outlined" color="primary" className="w-full mt-2 mb-2" disabled={!phone} onClick={() => {
                                 if (phone) {
-                                    window.open(`tel:${phone}`);
+                                    window.location.href = `tel:${phone}`;
                                 }
                             }
                         }
