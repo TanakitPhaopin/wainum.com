@@ -149,6 +149,7 @@ export default function Search() {
         <div className="relative">
             <div className="pb-4">
                 <SearchFilter open={openFilter} handleClose={handleCloseFilter} setFiltered={setFiltered}/>
+                {/* Search */}
                 <div className="mb-2">
                     <MySelectionBox 
                         options={provinces} 
@@ -161,6 +162,7 @@ export default function Search() {
                     />
                 </div>
                 <div className="flex flex-row gap-2">
+                    {/* Filter */}
                     <Button 
                         variant="contained" 
                         sx={{
@@ -175,6 +177,7 @@ export default function Search() {
                     >
                         <span className="break-words line-clamp-1">{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}</span>
                     </Button>
+                    {/* Sort */}
                     <div className="w-1/2">
                       <MySelect 
                           label={'เรียงลำดับ'}

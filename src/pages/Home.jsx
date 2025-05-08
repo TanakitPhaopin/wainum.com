@@ -6,6 +6,7 @@ import provinces_th from '../assets/geography_th/provinces.json';
 import { useNavigate, useLocation } from 'react-router';
 import getCurrentAddress from '../services/location.js';
 import { toast } from 'react-toastify';
+import HomeContent from './HomeContent.jsx';
 
 
 export default function Home() {
@@ -14,9 +15,30 @@ export default function Home() {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "instant" });
     }, [location.pathname]);
+    const [deviceType, setDeviceType] = useState("desktop");
+    const updateDeviceType = () => {
+        const width = window.innerWidth;
+        if (width < 464) {
+          setDeviceType("mobile");
+        } else if (width < 1024) {
+          setDeviceType("tablet");
+        } else {
+          setDeviceType("desktop");
+        }
+      };
+    
+      useEffect(() => {
+        updateDeviceType(); // Set initial device type
+        window.addEventListener("resize", updateDeviceType);
+    
+        return () => {
+          window.removeEventListener("resize", updateDeviceType);
+        };
+      }, []);
 
     const [province, setProvince] = useState(null);
     const [provinceCode, setProvinceCode] = useState(null);
+    
 
     const getLocation = async () => {
         try {
@@ -87,6 +109,7 @@ export default function Home() {
                 </div>
             </div>
             <div className=''>
+                <HomeContent deviceType={deviceType}/>
             </div>
         </div>
     );
