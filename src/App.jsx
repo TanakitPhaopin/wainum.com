@@ -22,7 +22,7 @@ function App() {
   const closeSignup  = () => setSignupOpen(false);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
       <ToastContainer
         position="bottom-left"
@@ -89,21 +89,21 @@ function App() {
           </Routes>
         </div>
       </div>
-      <footer className='bg-[#F0F9FA] w-full p-8 text-center text-black space-y-4'>
-        <p>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
-        <div className='flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-x-4'>
-          <Link to="/termsofservice" className='hover:underline'>
-            ข้อตกลงและเงื่อนไขการใช้งาน
-          </Link>
-          <Link to="/contact" className=' hover:underline'>
-            ติดต่อเรา
-          </Link>
-          <Link to="/faq" className='hover:underline'>
-            คำถามที่พบบ่อย
-          </Link>
+      <footer className='bg-white w-full p-8 text-center text-black '>
+        <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
+          <p className='text-gray-600'>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
+          <div className='flex flex-col gap-2 sm:flex-row sm:justify-center sm:space-x-6'>
+            <Link to="/termsofservice" className='hover:underline'>
+              ข้อตกลงและเงื่อนไขการใช้งาน
+            </Link>
+            <Link to="/contact" className=' hover:underline'>
+              ติดต่อเรา
+            </Link>
+            <Link to="/faq" className='hover:underline'>
+              คำถามที่พบบ่อย
+            </Link>
+          </div>
         </div>
-        <p className='text-sm'>เนื้อหาทั้งหมดในเว็บไซต์นี้มีวัตถุประสงค์เพื่อการให้ข้อมูลเท่านั้น</p>
-        <p className='text-sm'>หากมีข้อสงสัย กรุณาติดต่อเราที่ tphaopin@gmail.com</p>
     </footer>
     </BrowserRouter>
   )

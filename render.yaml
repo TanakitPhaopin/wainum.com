@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: waaynam-com
+    env: static
+    staticPublishPath: /dist
+    routes:
+      - type: rewrite
+        source: /.* # Redirect all requests
+        destination: /index.html
