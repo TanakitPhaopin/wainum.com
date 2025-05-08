@@ -31,70 +31,77 @@ const style = {
   };
 
 export default function ContactModal({open, handleClose, contacts}) {
-  return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <div>
-            <h1>ข้อมูลการติดต่อ</h1>
-            <Box display="flex" flexDirection="column" gap={2}>
-            {contacts.map((contact, index) => {
-              let href = '';
-              let displayValue = '';
+    const isLink = (text) => {
+        const urlPattern = new RegExp(
+            /^(https?:\/\/)?((([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})|(localhost))(:\d+)?(\/.*)?$/i
+        );
+        return urlPattern.test(text);
+        };
+    
+    return (
+        <div>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+            <div>
+                <h1>ข้อมูลการติดต่อ</h1>
+                <Box display="flex" flexDirection="column" gap={2}>
+                {contacts.map((contact, index) => {
+                let href = '';
+                let displayValue = '';
 
-              switch (contact.type) {
-                case 'phone':
-                    displayValue = contact.value;
-                    href = `tel:${contact.value}`;
-                    break;
-                case 'email':
-                    displayValue = 'Email';
-                    href = `mailto:${contact.value}`;
-                    break;
-                case 'facebook link':
-                    displayValue = 'Facebook';
-                    href = contact.value;
-                    break;
-                case 'instagram link':
-                    displayValue = 'Instagram';
-                    href = contact.value;
-                    break;
-                case 'line id':
-                    displayValue = 'Line';
-                    href = `https://line.me/ti/p/${contact.value}`;
-                    break;
-                default:
-                    href = '#';
-              }
+                switch (contact.type) {
+                    case 'phone':
+                        displayValue = contact.value;
+                        href = `tel:${contact.value}`;
+                        break;
+                    case 'email':
+                        displayValue = 'Email';
+                        href = `mailto:${contact.value}`;
+                        break;
+                    case 'line link':
+                        displayValue = 'Line';
+                        href = `https://line.me/ti/p/${contact.value}`;
+                        break;
+                    case 'facebook link':
+                        displayValue = 'Facebook';
+                        href = contact.value;
+                        break;
+                    case 'instagram link':
+                        displayValue = 'Instagram';
+                        href = contact.value;
+                        break;
+                    default:
+                        href = '#';
+                }
 
-              return (
-                <Button
-                  key={index}
-                  variant="contained"
-                  onClick={() => {
-                    if (href !== '#') window.open(href, '_blank', 'noopener,noreferrer');
-                  }}
-                  sx={{
-                    backgroundColor: '#007bff',
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: '#0056b3',
-                    },
-                  }}
-                >
-                  {contact.type === 'phone' ? `โทร: ${displayValue}` : displayValue}
-                </Button>
-              );
-            })}
-          </Box>
-          </div>
-        </Box>
-      </Modal>
-    </div>
-  );
+                return (
+                    <Button
+                    key={index}
+                    variant="contained"
+                    onClick={() => {
+                        if (href !== '#') window.open(href, '_blank', 'noopener,noreferrer');
+                    }}
+                    sx={{
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        '&:hover': {
+                        backgroundColor: '#0056b3',
+                        },
+                    }}
+                    >
+                    {contact.type === 'phone' ? `โทร: ${displayValue}` : displayValue}
+                    </Button>
+                );
+                })}
+            </Box>
+            </div>
+            </Box>
+        </Modal>
+        </div>
+    );
 }

@@ -101,6 +101,7 @@ export default function Search() {
             newParams.set('sort', 'popularity');
             setSearchParams(newParams);
           }
+          console.log('results', results);
           setProfiles(results);
           setLoading(false);
         };

@@ -20,7 +20,7 @@ export default function Profile() {
   const [contacts, setContacts] = useState([
     { type: 'phone', value: '' },
     { type: 'email', value: '' },
-    { type: 'line id', value: '' },
+    { type: 'line link', value: '' },
     { type: 'facebook link', value: '' },
     { type: 'instagram link', value: '' },
   ]);
@@ -78,7 +78,7 @@ export default function Profile() {
           setContacts(data.contacts || [
             { type: 'phone', value: '' },
             { type: 'email', value: '' },
-            { type: 'line id', value: '' },
+            { type: 'line link', value: '' },
             { type: 'facebook link', value: '' },
             { type: 'instagram link', value: '' },
           ]);
@@ -394,7 +394,7 @@ export default function Profile() {
               onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
               multiline={false} // No need for multiline unless required
               maxLength={100} // Adjust maxLength as needed
-              required={contact.type !== 'line id' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
+              required={contact.type !== 'line link' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
           </div>
         ))}
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
