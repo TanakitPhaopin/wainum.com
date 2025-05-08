@@ -198,7 +198,7 @@ export default function Search() {
                                 can_online={profile.can_online}
                                 hourly_rate={profile.hourly_rate}
                                 province_code={profile.swim_teacher_locations}
-                                handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }}); window.scrollTo({ top: 0, behavior: "smooth" });}}
+                                handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }});}}
                                 levels={profile.levels}
                                 handleStarClick={() => console.log('Star clicked!', profile.id)}
                             />

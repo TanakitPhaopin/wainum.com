@@ -42,16 +42,20 @@ export default function Teacher() {
         setAnchorEl(null);
     };
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, [location.pathname]);
+
     // Adjust this value based on your navbar height
     const NAVBAR_HEIGHT = 80;
 
     const scrollToSection = (ref) => {
-    const offsetTop = ref.current.offsetTop - NAVBAR_HEIGHT;
-    
-    window.scrollTo({
-        top: offsetTop,
-        behavior: "instant",
-    });
+        const offsetTop = ref.current.offsetTop - NAVBAR_HEIGHT;
+        
+        window.scrollTo({
+            top: offsetTop,
+            behavior: "smooth",
+        });
     };
 
     useEffect(() => {
