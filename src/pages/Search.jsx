@@ -8,7 +8,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import {getAllProfiles} from "../services/search";
 import MyCard from "../components/Card";
 import MySelect from "../components/Select";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Search() {
     const navigate = useNavigate();
@@ -17,6 +19,8 @@ export default function Search() {
     const [profiles, setProfiles] = useState([]);
     const [filtered , setFiltered] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 16; // Adjust this value as needed
     const provinceCodes = useMemo(() => {
         const rawCode = searchParams.getAll('code').join(',');
         return rawCode ? rawCode.split(',') : [];
@@ -30,106 +34,116 @@ export default function Search() {
         value: String(p.provinceCode),
       })), []);
 
-      useEffect(() => {
-        const fetchAndFilter = async () => {
-          setLoading(true);
-          const data = await getAllProfiles();
-          if (!data) {
-            console.error("Error fetching profiles");
-            setProfiles([]);
-            setLoading(false);
-            return;
-          }
-          let results = [...data];      
-          // --- Filter by province
-          const rawCode = searchParams.getAll('code').join(',');
-          const provinceCodes = rawCode ? rawCode.split(',') : [];
+    const handlePageChange = (event, value) => {
+      setCurrentPage(value);
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top on page change
+    };
       
-          if (provinceCodes.length > 0) {
-            results = results.filter((profile) => {
-              const profileCodes = profile.swim_teacher_locations.map(loc => String(loc.province_code));
-              return provinceCodes.some(code => profileCodes.includes(code));
-            });
-          }
-      
-          // --- Filter by price
-          const minPrice = Number(searchParams.get('minPrice')) || 0;
-          const maxPrice = Number(searchParams.get('maxPrice')) || 1500;
-          results = results.filter((profile) => {
-            const price = Number(profile.hourly_rate);
-            return price >= minPrice && price <= maxPrice;
-          });
-      
-          // --- Filter by travel
-          if (searchParams.get('travel') === 'true') {
-            results = results.filter((profile) => profile.can_travel);
-          }
-      
-          // --- Filter by online
-          if (searchParams.get('online') === 'true') {
-            results = results.filter((profile) => profile.can_online);
-          }
 
-          if (searchParams.get('levels')) {
-            const levels = searchParams.get('levels').split(',');
-          
-            results = results.filter((profile) => {
-              const profileLevels = Array.isArray(profile.levels)
-                ? profile.levels.map(String)
-                : [];
-          
-              return levels.some(level => profileLevels.includes(level));
-            });
-          }
-          const newParams = new URLSearchParams(searchParams);
-          if (searchParams.get('sort')) {
-            const sortBy = searchParams.get('sort');
-            if (sortBy === 'popularity') {
-              results.sort((a, b) => b.created_at - a.created_at);
-            } else if (sortBy === 'newest') {
-              results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            } else if (sortBy === 'price_asc') {
-              results.sort((a, b) => a.hourly_rate - b.hourly_rate);
-            } else if (sortBy === 'price_desc') {
-              results.sort((a, b) => b.hourly_rate - a.hourly_rate);
-            } else {
-              newParams.set('sort', 'popularity');
-              setSearchParams(newParams);
-              results.sort((a, b) => b.popularity - a.popularity);
-            }
+    useEffect(() => {
+      const fetchAndFilter = async () => {
+        setLoading(true);
+        const data = await getAllProfiles();
+        if (!data) {
+          console.error("Error fetching profiles");
+          setProfiles([]);
+          setLoading(false);
+          return;
+        }
+        let results = [...data];      
+        // --- Filter by province
+        const rawCode = searchParams.getAll('code').join(',');
+        const provinceCodes = rawCode ? rawCode.split(',') : [];
+    
+        if (provinceCodes.length > 0) {
+          results = results.filter((profile) => {
+            const profileCodes = profile.swim_teacher_locations.map(loc => String(loc.province_code));
+            return provinceCodes.some(code => profileCodes.includes(code));
+          });
+        }
+    
+        // --- Filter by price
+        const minPrice = Number(searchParams.get('minPrice')) || 0;
+        const maxPrice = Number(searchParams.get('maxPrice')) || 1500;
+        results = results.filter((profile) => {
+          const price = Number(profile.hourly_rate);
+          return price >= minPrice && price <= maxPrice;
+        });
+    
+        // --- Filter by travel
+        if (searchParams.get('travel') === 'true') {
+          results = results.filter((profile) => profile.can_travel);
+        }
+    
+        // --- Filter by online
+        if (searchParams.get('online') === 'true') {
+          results = results.filter((profile) => profile.can_online);
+        }
+
+        if (searchParams.get('levels')) {
+          const levels = searchParams.get('levels').split(',');
+        
+          results = results.filter((profile) => {
+            const profileLevels = Array.isArray(profile.levels)
+              ? profile.levels.map(String)
+              : [];
+        
+            return levels.some(level => profileLevels.includes(level));
+          });
+        }
+        const newParams = new URLSearchParams(searchParams);
+        if (searchParams.get('sort')) {
+          const sortBy = searchParams.get('sort');
+          if (sortBy === 'popularity') {
+            results.sort((a, b) => b.created_at - a.created_at);
+          } else if (sortBy === 'newest') {
+            results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          } else if (sortBy === 'price_asc') {
+            results.sort((a, b) => a.hourly_rate - b.hourly_rate);
+          } else if (sortBy === 'price_desc') {
+            results.sort((a, b) => b.hourly_rate - a.hourly_rate);
           } else {
             newParams.set('sort', 'popularity');
             setSearchParams(newParams);
+            results.sort((a, b) => b.popularity - a.popularity);
           }
-          console.log('results', results);
-          setProfiles(results);
-          setLoading(false);
-        };
-        fetchAndFilter();
-      }, [searchParams]);
-      
-      
-
-      useEffect(() => {
-        if (provinceCodes.length === 0) return;
-      
-        const selectedOptions = provinceCodes
-          .map((code) => provinces.find((province) => String(province.value) === code))
-          .filter(Boolean);
-        setSelectedProvinces(selectedOptions);
-      }, [provinceCodes, provinces]);
-
-      const handleProvinceChange = (selectedOptions) => {
-        setSelectedProvinces(selectedOptions);
-        const selectedCodes = selectedOptions.map((option) => option.value);
-      
-        // Merge existing searchParams with the new 'code' parameter
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('code'); // Remove existing 'code' parameters
-        selectedCodes.forEach((code) => newParams.append('code', code)); // Add new 'code' parameters
-      
-        setSearchParams(newParams); // Update the URL with merged parameters
+        } else {
+          newParams.set('sort', 'popularity');
+          setSearchParams(newParams);
+        }
+        setProfiles(results);
+        setLoading(false);
       };
+      fetchAndFilter();
+    }, [searchParams]);
+
+    // Calculate the index range for current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentProfiles = profiles.slice(startIndex, endIndex);
+
+      
+
+    useEffect(() => {
+      if (provinceCodes.length === 0) return;
+    
+      const selectedOptions = provinceCodes
+        .map((code) => provinces.find((province) => String(province.value) === code))
+        .filter(Boolean);
+      setSelectedProvinces(selectedOptions);
+    }, [provinceCodes, provinces]);
+
+    const handleProvinceChange = (selectedOptions) => {
+      setSelectedProvinces(selectedOptions);
+      const selectedCodes = selectedOptions.map((option) => option.value);
+    
+      // Merge existing searchParams with the new 'code' parameter
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('code'); // Remove existing 'code' parameters
+      selectedCodes.forEach((code) => newParams.append('code', code)); // Add new 'code' parameters
+    
+      setSearchParams(newParams); // Update the URL with merged parameters
+    };
 
     return (
         <div className="relative">
@@ -157,8 +171,9 @@ export default function Search() {
                         }}
                         onClick={handleOpenFilter} className="w-1/2"
                         size="large"
+                        startIcon={<FilterListIcon />}
                     >
-                        <FilterListIcon className="mr-2" />{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}
+                        <span className="break-words line-clamp-1">{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}</span>
                     </Button>
                     <div className="w-1/2">
                       <MySelect 
@@ -184,11 +199,22 @@ export default function Search() {
                 <div></div>
             ) : (
                 <div>
-                    <div className="flex flex-start mb-2">
-                        <h1 className="text-xs font-normal">ผลการค้นหา - {profiles.length === 0 ?  'ไม่พบผู้สอน' : profiles.length}</h1>
-                    </div>
+                       {profiles.length > 0 ? (
+                          <div className="flex flex-start mb-2">
+                            <h1 className="text-xs font-normal">ผลการค้นหา - {profiles.length}</h1>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-2 items-center justify-center my-12">
+                              <SearchIcon 
+                                className="mx-auto" 
+                                fontSize="large" 
+                                sx={{width: 100, height: 100}}/>
+                              <h1 className="text-md font-normal">ไม่พบผู้สอน</h1>
+                              <h1 className="text-md font-normal">กรุณาลองใหม่อีกครั้ง</h1>
+                          </div>
+                       )}                    
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
-                        {profiles.map((profile) => (
+                        {currentProfiles.map((profile) => (
                             <MyCard 
                                 display_name={profile.display_name} 
                                 bio={profile.bio} 
@@ -204,6 +230,19 @@ export default function Search() {
                             />
                         ))}
                     </div>
+                    {currentProfiles.length > 0 && (
+                    <Stack spacing={2} className="mt-8" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Pagination
+                            count={Math.ceil(profiles.length / itemsPerPage)}
+                            page={currentPage}
+                            onChange={handlePageChange}
+                            color="primary"
+                            size="large"
+                            showFirstButton
+                            showLastButton
+                        />
+                    </Stack>
+                    )}
                 </div>
             )}
         </div>

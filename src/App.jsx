@@ -22,88 +22,88 @@ function App() {
   const closeSignup  = () => setSignupOpen(false);
   return (
     <BrowserRouter >
-      <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        transition={Slide}
-      />
-      <div className='flex justify-center p-4 w-full min-h-screen bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]'>
-        <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
-        <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
-        <div className='w-full md:w-11/12 xl:w-2/3 2xl:w-1/2'>
-          <Routes>
-            {/* Public auth routes */}
-            <Route path="/" element={<Home />} />
-            <Route path='/search' element={<Search />} />
-            <Route path='/terms-of-service' element={<TermsOfService />} />
-            <Route path='/teacher/:id' element={<Teacher />} />
+      <div className="min-h-screen flex flex-col">
+        <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={Slide}
+        />
+        <div className="flex-grow flex justify-center p-4 w-full bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]">
+          <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
+          <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
+          <div className='w-full md:w-11/12 xl:w-2/3 2xl:w-1/2'>
+            <Routes>
+              {/* Public auth routes */}
+              <Route path="/" element={<Home />} />
+              <Route path='/search' element={<Search />} />
+              <Route path='/terms-of-service' element={<TermsOfService />} />
+              <Route path='/teacher/:id' element={<Teacher />} />
 
-            {/* Private - All */}
-            <Route path="/redirect"
-              element={
-                <ProtectedRoute>
-                  <Redirect />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/settings"
-              element={
-                <ProtectedRoute>
-                  <div className='text-black text-3xl'>Settings</div>
-                </ProtectedRoute>
-              }
-            />
-            {/* Private - Teacher */}
-            <Route
-              path="/teacher/profile"
-              element={
-                <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            {/* Private - Student */}
-            <Route
-              path="/student/favorites"
-              element={
-                <ProtectedRoute requiredRole={'นักเรียน'}>
-                  <div className='text-black text-3xl'>Student Favourites</div>
-                </ProtectedRoute>
-              }
-            />
+              {/* Private - All */}
+              <Route path="/redirect"
+                element={
+                  <ProtectedRoute>
+                    <Redirect />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <div className='text-black text-3xl'>Settings</div>
+                  </ProtectedRoute>
+                }
+              />
+              {/* Private - Teacher */}
+              <Route
+                path="/teacher/profile"
+                element={
+                  <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Private - Student */}
+              <Route
+                path="/student/favorites"
+                element={
+                  <ProtectedRoute requiredRole={'นักเรียน'}>
+                    <div className='text-black text-3xl'>Student Favourites</div>
+                  </ProtectedRoute>
+                }
+              />
 
-
-
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-      </div>
-      <footer className='bg-white w-full mt-12 p-8 text-center text-black bottom-0'>
-        <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
-          <p className='text-gray-600'>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
-          <div className='flex flex-col gap-2 sm:flex-row sm:justify-center sm:space-x-6'>
-            <Link to="/terms-of-service" state={window.scroll({top: 0, behavior: "smooth"})} className='hover:underline'>
-              ข้อตกลงและเงื่อนไขการใช้งาน
-            </Link>
-            <Link to="/contact" className=' hover:underline'>
-              ติดต่อเรา
-            </Link>
-            <Link to="/faq" className='hover:underline'>
-              คำถามที่พบบ่อย
-            </Link>
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </div>
         </div>
-    </footer>
+        <footer className='bg-white w-full mt-4 p-4 sm:p-8 text-center text-black'>
+          <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
+            <p className='text-gray-600'>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
+            <div className='flex flex-col gap-2 sm:flex-row sm:justify-center sm:space-x-6'>
+              <Link to="/terms-of-service" className='hover:underline'>
+                ข้อตกลงและเงื่อนไขการใช้งาน
+              </Link>
+              <Link to="/contact" className=' hover:underline'>
+                ติดต่อเรา
+              </Link>
+              <Link to="/faq" className='hover:underline'>
+                คำถามที่พบบ่อย
+              </Link>
+            </div>
+          </div>
+        </footer>
+      </div>
     </BrowserRouter>
   )
 }
