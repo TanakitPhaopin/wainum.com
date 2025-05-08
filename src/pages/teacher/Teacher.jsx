@@ -50,7 +50,7 @@ export default function Teacher() {
     
     window.scrollTo({
         top: offsetTop,
-        behavior: "smooth",
+        behavior: "instant",
     });
     };
 

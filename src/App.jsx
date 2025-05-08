@@ -20,7 +20,6 @@ function App() {
   const [signupOpen, setSignupOpen] = useState(false);
   const openSignup   = () =>  { setLoginOpen(false); setSignupOpen(true);}
   const closeSignup  = () => setSignupOpen(false);
-
   return (
     <BrowserRouter >
       <Navbar onLoginClick={openLogin} openSignupClick={openSignup}/>
@@ -45,7 +44,7 @@ function App() {
             {/* Public auth routes */}
             <Route path="/" element={<Home />} />
             <Route path='/search' element={<Search />} />
-            <Route path='/termsofservice' element={<TermsOfService />} />
+            <Route path='/terms-of-service' element={<TermsOfService />} />
             <Route path='/teacher/:id' element={<Teacher />} />
 
             {/* Private - All */}
@@ -89,11 +88,11 @@ function App() {
           </Routes>
         </div>
       </div>
-      <footer className='bg-white w-full p-8 text-center text-black '>
+      <footer className='bg-white w-full mt-12 p-8 text-center text-black bottom-0'>
         <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
           <p className='text-gray-600'>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
           <div className='flex flex-col gap-2 sm:flex-row sm:justify-center sm:space-x-6'>
-            <Link to="/termsofservice" className='hover:underline'>
+            <Link to="/terms-of-service" state={window.scroll({top: 0, behavior: "smooth"})} className='hover:underline'>
               ข้อตกลงและเงื่อนไขการใช้งาน
             </Link>
             <Link to="/contact" className=' hover:underline'>

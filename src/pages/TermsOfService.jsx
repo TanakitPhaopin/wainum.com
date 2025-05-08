@@ -1,6 +1,12 @@
-import React from 'react';
+import {useEffect} from 'react';
+import { useLocation } from 'react-router';
 
 export default function TermsOfService() {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location.pathname]);
+
   return (
     <div className="p-8 bg-white text-gray-800">
       <h1 className="text-2xl font-bold mb-4">ข้อตกลงและเงื่อนไขการใช้งาน</h1>

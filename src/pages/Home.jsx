@@ -3,20 +3,20 @@ import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import provinces_th from '../assets/geography_th/provinces.json';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import getCurrentAddress from '../services/location.js';
 import { toast } from 'react-toastify';
 
 
 export default function Home() {
     const navigate = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, [location.pathname]);
+
     const [province, setProvince] = useState(null);
     const [provinceCode, setProvinceCode] = useState(null);
-
-    // Scroll to top
-    useEffect(() => 
-        window.scrollTo(0, 0), []
-    );
 
     const getLocation = async () => {
         try {
