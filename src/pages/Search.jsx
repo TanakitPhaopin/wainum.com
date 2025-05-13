@@ -44,6 +44,7 @@ export default function Search() {
       const fetchAndFilter = async () => {
         setLoading(true);
         const data = await getAllProfiles();
+        console.log(data);
         if (!data) {
           console.error("Error fetching profiles");
           setProfiles([]);
@@ -234,6 +235,7 @@ export default function Search() {
                                 province_code={profile.swim_teacher_locations}
                                 handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }});}}
                                 levels={profile.levels}
+                                is_subscribed={profile.is_subscribed}
                                 handleStarClick={() => console.log('Star clicked!', profile.id)}
                             />
                         ))}

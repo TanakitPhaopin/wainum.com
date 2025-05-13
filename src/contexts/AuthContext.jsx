@@ -26,7 +26,6 @@ export function AuthProvider({ children }) {
         "get-stripe-customer-id",
         { body: { email } }
       );
-      console.log("Customer Data:", customerData);
 
       if (customerError) {
         console.error("Error fetching customer ID:", customerError);
@@ -46,7 +45,6 @@ export function AuthProvider({ children }) {
         "get-user-subscription",
         { body: { customerId, priceId } }
       );
-      console.log("Subscription Data:", subscriptionData);
       if (subscriptionError) {
         console.error("Error fetching subscription:", subscriptionError);
         setIsSubscribed(false);
@@ -54,14 +52,12 @@ export function AuthProvider({ children }) {
 
       setIsSubscribed(!!subscriptionData);
 
-      if (subscriptionData !== null) {
-        console.log("User is subscribed");
+      if (subscriptionData) {
         await supabase
           .from("swim_teacher_profiles")
           .update({ is_subscribed: true })
           .eq("id", id);
       } else {
-        console.log("User is not subscribed");
         await supabase
           .from("swim_teacher_profiles")
           .update({ is_subscribed: false })
@@ -88,7 +84,6 @@ export function AuthProvider({ children }) {
         const id = data.session.user.id;
         checkSubscriptionStatus(email, id);
       } else {
-        console.log("No user session found");
         setLoading(false);
       }
     });
@@ -103,7 +98,6 @@ export function AuthProvider({ children }) {
           const id = newSession.user.id;
           checkSubscriptionStatus(email, id);
         } else {
-          console.log("User logged out or session expired");
           setIsSubscribed(false);
           setCustomerId(null);
           setLoading(false);
@@ -112,7 +106,6 @@ export function AuthProvider({ children }) {
     );
 
     return () => {
-      console.log("Cleaning up auth listener");
       listener.subscription.unsubscribe();
     };
   }, []);

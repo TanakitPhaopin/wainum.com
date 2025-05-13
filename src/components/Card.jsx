@@ -11,7 +11,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import RecommendIcon from '@mui/icons-material/Recommend';
 
-export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, handleStarClick }) {
+export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick }) {
   const provinceLabels = province_code
   .map(loc => province_th.find(p => String(p.provinceCode) === String(loc.province_code)))
   .filter(Boolean)
@@ -19,7 +19,13 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
 
   return (
     <div className='w-full' onClick={handleClick}>
-      <Card sx={{ width: 1 , ':hover': { boxShadow: 20, cursor: 'pointer' }, borderRadius: 2, }}>
+      <Card 
+        sx={{ 
+          width: 1 , 
+          ':hover': { boxShadow: 20, cursor: 'pointer' }, 
+          borderRadius: 2,
+        }}      
+      >
           <div className='relative'>
             <Box
               sx={{
@@ -80,18 +86,20 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
                 <StarOutlineIcon sx={{ color: 'white'}} fontSize='large'/>
               </IconButton>
             </div>
-            <div className='absolute top-2 left-2 z-10'>
-              <MyChip
-                label="แนะนำ"
-                icon={<RecommendIcon sx={{color: '#0070ff'}}/>}
-                variant='filled'
-                size="medium"
-                color="primary"
-                sx={{
-                  backgroundColor: '#FF6600',
-                }}
-              />
-            </div>
+            {is_subscribed && (
+              <div className='absolute top-2 left-2 z-10'>
+                <MyChip
+                  label="แนะนำ"
+                  icon={<RecommendIcon sx={{color: '#0070ff'}}/>}
+                  variant='filled'
+                  size="medium"
+                  color="primary"
+                  sx={{
+                    backgroundColor: '#FF6600',
+                  }}
+                />
+              </div>
+            )}
           </div>  
         <CardContent className='w-full flex flex-col justify-between h-50'>
           {provinceLabels.length > 0 && (
@@ -100,7 +108,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
               {provinceLabels.length > 2 && ` +${provinceLabels.length - 2} อื่นๆ`}
             </p>
           )}
-          <h5 className='text-2xl font-semibold break-words line-clamp-1'>{<VerifiedIcon sx={{color: '#0070ff'}}/>} {display_name}</h5>
+          <h5 className='text-2xl font-semibold break-words line-clamp-1'>{is_subscribed && (<VerifiedIcon sx={{color: '#0070ff'}} className='animate-pulse'/>)} {display_name}</h5>
           <div className='block'>
             <div className="break-words line-clamp-2">{bio}</div>
           </div>
