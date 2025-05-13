@@ -61,14 +61,19 @@ export default function Search() {
             return provinceCodes.some(code => profileCodes.includes(code));
           });
         }
-    
         // --- Filter by price
-        const minPrice = Number(searchParams.get('minPrice')) || 0;
-        const maxPrice = Number(searchParams.get('maxPrice')) || 1500;
-        results = results.filter((profile) => {
-          const price = Number(profile.hourly_rate);
-          return price >= minPrice && price <= maxPrice;
-        });
+        const minPriceParam = searchParams.get('minPrice');
+        const maxPriceParam = searchParams.get('maxPrice');
+
+        if (minPriceParam !== null || maxPriceParam !== null) {
+          const minPrice = minPriceParam !== null ? Number(minPriceParam) : -Infinity;
+          const maxPrice = maxPriceParam !== null ? Number(maxPriceParam) : Infinity;
+
+          results = results.filter((profile) => {
+            const price = Number(profile.hourly_rate);
+            return price >= minPrice && price <= maxPrice;
+          });
+        }
     
         // --- Filter by travel
         if (searchParams.get('travel') === 'true') {
