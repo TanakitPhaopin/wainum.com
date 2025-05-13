@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
   const priceId = 'price_1RMevXAlnDo7ux3vKn9XwLxT';
 
   // Todo: Update Subscribtion status in the database
-  const checkSubscriptionStatus = async (email) => {
+  const checkSubscriptionStatus = async (email, id) => {
     try {
       setLoading(true);
       // Fetch Customer ID
@@ -26,12 +26,12 @@ export function AuthProvider({ children }) {
         "get-stripe-customer-id",
         { body: { email } }
       );
+      console.log("Customer Data:", customerData);
 
       if (customerError) {
         console.error("Error fetching customer ID:", customerError);
         setIsSubscribed(false);
         setCustomerId(null);
-        return;
       }
 
       const customerId = customerData?.customerId;
@@ -39,7 +39,6 @@ export function AuthProvider({ children }) {
 
       if (!customerId) {
         setIsSubscribed(false);
-        return;
       }
 
       // Fetch Subscription Data
@@ -47,16 +46,33 @@ export function AuthProvider({ children }) {
         "get-user-subscription",
         { body: { customerId, priceId } }
       );
-
+      console.log("Subscription Data:", subscriptionData);
       if (subscriptionError) {
         console.error("Error fetching subscription:", subscriptionError);
         setIsSubscribed(false);
-        return;
       }
 
       setIsSubscribed(!!subscriptionData);
+
+      if (subscriptionData !== null) {
+        console.log("User is subscribed");
+        await supabase
+          .from("swim_teacher_profiles")
+          .update({ is_subscribed: true })
+          .eq("id", id);
+      } else {
+        console.log("User is not subscribed");
+        await supabase
+          .from("swim_teacher_profiles")
+          .update({ is_subscribed: false })
+          .eq("id", id);
+      }
     } catch (error) {
       console.error("Error checking subscription:", error);
+      await supabase
+          .from("swim_teacher_profiles")
+          .update({ is_subscribed: false })
+          .eq("id", id);
       setIsSubscribed(false);
     } finally {
       setLoading(false);
@@ -69,7 +85,8 @@ export function AuthProvider({ children }) {
       setSession(data.session);
       if (data.session?.user) {
         const email = data.session.user.email;
-        checkSubscriptionStatus(email);
+        const id = data.session.user.id;
+        checkSubscriptionStatus(email, id);
       } else {
         console.log("No user session found");
         setLoading(false);
@@ -83,7 +100,8 @@ export function AuthProvider({ children }) {
 
         if (newSession?.user) {
           const email = newSession.user.email;
-          checkSubscriptionStatus(email);
+          const id = newSession.user.id;
+          checkSubscriptionStatus(email, id);
         } else {
           console.log("User logged out or session expired");
           setIsSubscribed(false);
