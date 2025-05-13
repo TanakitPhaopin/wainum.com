@@ -59,6 +59,8 @@ export function Navbar({onLoginClick, openSignupClick}) {
     const teacherMenu = [
         { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity') },
         { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile') },
+        { text: 'Subscription',      icon: <PersonIcon />,    onClick: () => navigate('/subscription') },
+
     ];
     const secondaryTeacherStudent = [
         { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings') },
@@ -81,6 +83,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     const teacherMenuLaptop = [
         { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'โปรไฟล์',      icon: <PersonIcon />,    onClick: () => navigate('/teacher/profile'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'Subscription',      icon: <PersonIcon />,    onClick: () => navigate('/subscription'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
     ]

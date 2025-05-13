@@ -9,7 +9,7 @@ import provinces_th from '../../assets/geography_th/provinces.json';
 import placeholder_image from '../../assets/placeholder_image.jpg';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, isSubscribed } = useAuth();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   // Form
@@ -329,7 +329,12 @@ export default function Profile() {
   if (loading) return null;
 
   return (
-
+  <>
+    {isSubscribed ? (
+      <div>I am member</div>
+    ) : (
+      <div>I am not member</div>
+    )}
     <form
     onSubmit={handleSubmit}
     className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
@@ -505,7 +510,7 @@ export default function Profile() {
             </Button>
         </div>
     </form>
-
+  </>
 
   );
 }
