@@ -52,6 +52,9 @@ export default function Search() {
           return;
         }
         let results = [...data];      
+        results.sort((a, b) => {
+        return (b.is_subscribed ? 1 : 0) - (a.is_subscribed ? 1 : 0);
+      });
         // --- Filter by province
         const rawCode = searchParams.getAll('code').join(',');
         const provinceCodes = rawCode ? rawCode.split(',') : [];
@@ -255,6 +258,12 @@ export default function Search() {
                     )}
                 </div>
             )}
+            <div>
+              <p>Suggestions</p>
+              <p>If no filter - show all premium profile</p>
+              <p>If province - show surrounding areas  +- 2 from current code</p>
+
+            </div>
         </div>
     );
 }
