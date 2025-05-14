@@ -345,7 +345,7 @@ export default function Profile() {
           </Button>
         ) : (
           <Button
-            variant="contained" size="small" color='warning' onClick={() => navigate('/subscription')}>พรีเมี่ยม</Button>
+            variant="contained" size="small" color='inherit' onClick={() => navigate('/subscription')}>สมัครพรีเมี่ยม</Button>
         )}
         <FormControlLabel control={<Switch checked={is_public} onChange={handleChange('is_public')} />} label="เผยแพร่"  className='flex justify-end'/>
       </div>
