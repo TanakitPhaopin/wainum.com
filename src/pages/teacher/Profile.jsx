@@ -272,6 +272,7 @@ export default function Profile() {
         experience,
         qualification,
         levels,
+        email: user.email,
       };
   
       // Upsert the profile data
