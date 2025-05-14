@@ -7,9 +7,11 @@ import MyTextField from '../../components/TextField';
 import MySelectionBox from '../../components/SelectionBox';
 import provinces_th from '../../assets/geography_th/provinces.json';
 import placeholder_image from '../../assets/placeholder_image.jpg';
+import { useNavigate } from 'react-router';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   // Form
@@ -331,17 +333,22 @@ export default function Profile() {
 
   return (
   <>
-    {isSubscribed ? (
-      <div>I am member</div>
-    ) : (
-      <div>I am not member</div>
-    )}
     <form
     onSubmit={handleSubmit}
     className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
     noValidate
     >
+      <div className='flex flex-row justify-between items-center'>
+        {isSubscribed ? (
+          <Button
+            variant="contained" size="small" color='inherit' onClick={() => navigate('/subscription')}>จัดการซับสคริปชั่น
+          </Button>
+        ) : (
+          <Button
+            variant="contained" size="small" color='warning' onClick={() => navigate('/subscription')}>พรีเมี่ยม</Button>
+        )}
         <FormControlLabel control={<Switch checked={is_public} onChange={handleChange('is_public')} />} label="เผยแพร่"  className='flex justify-end'/>
+      </div>
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
         <div className="w-full bg-white p-4 rounded-xl shadow-sm">
           <div className="mt-6 flex justify-center">
