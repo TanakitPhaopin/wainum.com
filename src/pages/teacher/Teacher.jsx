@@ -15,6 +15,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ContactModal from "./ContactModal";
+import VerifiedIcon from '@mui/icons-material/Verified';
+import RecommendIcon from '@mui/icons-material/Recommend';
+import MyChip from "../../components/Chip";
 
 
 export default function Teacher() {
@@ -63,6 +66,7 @@ export default function Teacher() {
             const teacherId = id; // Replace with actual teacher ID
             const data = await getTeacherById(teacherId);
             if (data) {
+                console.log(data);
                 setTeacher(data);
             } else {
                 console.error("Error fetching teacher data");
@@ -122,8 +126,23 @@ export default function Teacher() {
                         />
                     </Box>
                     <div className="mt-4 mb-4 flex flex-col gap-1 md:flex-1 lg:w-1/3">
+                       <div className="flex items-center justify-center sm:justify-start">
+                            {teacher.is_subscribed && (
+                                <MyChip
+                                    label="แนะนำ"
+                                    icon={<VerifiedIcon color='primary'/>}
+                                    variant='filled'
+                                    size="small"
+                                    color="primary"
+                                    sx={{
+                                        backgroundColor: '#FF6600',
+                                    }}
+                                    className={'w-max animate-pulse'}
+                                />
+                            )}
+                       </div>
                         <div className="md:flex md:flex-row md:items-center md:justify-start gap-2">
-                            <h1 className='text-center text-2xl font-bold text-wrap'>{teacher.display_name}</h1>
+                            <h1 className='text-center text-2xl font-bold text-wrap'><span>{teacher.is_subscribed && (<VerifiedIcon color='primary'/>)}</span> {teacher.display_name}</h1>
                             <p className="text-center">{<StarRateIcon color='warning'/>}4.6 (123)</p>
                         </div>
                         <div className="flex flex-col gap-2">
