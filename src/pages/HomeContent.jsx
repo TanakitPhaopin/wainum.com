@@ -4,8 +4,12 @@ import "react-multi-carousel/lib/styles.css";
 import { getAllPremiumProfiles } from "../services/home";
 import MyCard from "../components/Card";
 import { useNavigate } from "react-router";
+import {toggleFavorite} from "../services/search";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 export default function HomeContent({ deviceType }) {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,6 +62,46 @@ export default function HomeContent({ deviceType }) {
     useEffect(() => {
         fetchProfiles();
     }, []);
+
+    // Handle star click
+    const handleStarClick = async (teacher_id, student_id) => {
+        try {
+          if (!user) {
+            toast.error("กรุณาเข้าสู่ระบบก่อน");
+            return;
+          }
+          if (user.user_metadata.role !== "นักเรียน") {
+          toast.error("คุณไม่มีสิทธิ์ในการบันทึกผู้สอน");
+          return;
+        }
+          const result = await toggleFavorite(teacher_id, student_id);
+          if (result) {
+            if (result.status === 'added') {
+              setMyFavorites(prev => [...prev, teacher_id]);
+            } else if (result.status === 'removed') {
+              setMyFavorites(prev => prev.filter(id => id !== teacher_id));
+            }
+          }
+        } catch (error) {
+          console.error("Error toggling favorite:", error);
+        }
+    }
+    
+        // Get my favorites
+        const [myFavorites, setMyFavorites] = useState([]);
+        useEffect(() => {
+            if (user && user.user_metadata.role === "นักเรียน") {
+              getMyFavorites();
+            }
+        }, [user]);
+    
+        const getMyFavorites = async () => {
+            if (user && user.user_metadata.role === "นักเรียน") {
+              const favorites = await getStudentFavorites(user.id);
+              const favoriteIds = favorites.map(fav => fav.teacher_id);
+              setMyFavorites(favoriteIds);
+            }
+        }
       
 
   return (
@@ -95,6 +139,8 @@ export default function HomeContent({ deviceType }) {
                 province_code={profile.swim_teacher_locations}
                 can_online={profile.can_online}
                 can_travel={profile.can_travel}
+                isFavorite={myFavorites.includes(profile.id)}
+                handleStarClick={() => handleStarClick(profile.id, user?.id)}
                 handleClick={() => navigate(`/teacher/${profile.id}`)}
               />
           ))}

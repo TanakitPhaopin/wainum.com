@@ -11,7 +11,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import RecommendIcon from '@mui/icons-material/Recommend';
 
-export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick }) {
+export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite }) {
   const provinceLabels = province_code
   .map(loc => province_th.find(p => String(p.provinceCode) === String(loc.province_code)))
   .filter(Boolean)
@@ -83,7 +83,11 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
                   handleStarClick();
                 }}
               >
-                <StarOutlineIcon sx={{ color: 'white'}} fontSize='large'/>
+                {isFavorite ? (
+                  <StarRateIcon sx={{ color: 'gold' }} fontSize='large' />
+                ) : (
+                  <StarOutlineIcon sx={{ color: 'white' }} fontSize='large'/>
+                )}
               </IconButton>
             </div>
             {is_subscribed && (

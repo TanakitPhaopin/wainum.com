@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase.js';
 
+
 // Get all profiles
 export async function getAllProfiles() {
     try {
@@ -41,3 +42,73 @@ export async function getTeacherById(id) {
         return null;
     }
 }
+
+// Student favorite
+export async function toggleFavorite(teacher_id, student_id) {
+  try {
+    if (!student_id) {
+      throw new Error('User not authenticated');
+    }
+
+    // First, check if the favorite already exists
+    const { data: existing, error: fetchError } = await supabase
+      .from('student_favorite_teacher')
+      .select('id')
+      .eq('teacher_id', teacher_id)
+      .eq('student_id', student_id)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Error fetching favorite:', fetchError);
+      throw fetchError;
+    }
+    console.log('Existing favorite:', existing);
+
+    if (existing) {
+      // ✅ Exists — delete it
+      console.log('Deleting favorite:', existing.id);
+      const { error: deleteError } = await supabase
+        .from('student_favorite_teacher')
+        .delete()
+        .eq('id', existing.id);
+
+      if (deleteError) throw deleteError;
+      return { status: 'removed' };
+    } else {
+        console.log('Inserting favorite:', { teacher_id, student_id });
+        // ✅ Does not exist — insert it
+        const { data: newFavorite, error: insertError } = await supabase
+            .from('student_favorite_teacher')
+            .insert({ teacher_id, student_id })
+            .single();
+
+      if (insertError) throw insertError;
+      return { status: 'added', data: newFavorite };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get student favorites
+export async function getStudentFavorites(student_id) {
+    try {
+        if (!student_id) {
+        throw new Error('User not authenticated');
+        }
+    
+        const { data, error } = await supabase
+        .from('student_favorite_teacher')
+        .select('teacher_id')
+        .eq('student_id', student_id);
+    
+        if (error) {
+        throw error;
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching student favorites:', error);
+        return [];
+    }
+    }
+

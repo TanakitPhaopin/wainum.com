@@ -66,7 +66,6 @@ export default function Teacher() {
             const teacherId = id; // Replace with actual teacher ID
             const data = await getTeacherById(teacherId);
             if (data) {
-                console.log(data);
                 setTeacher(data);
             } else {
                 console.error("Error fetching teacher data");

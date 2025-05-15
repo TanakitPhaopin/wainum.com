@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [customerId, setCustomerId] = useState(null);
-  const priceId = 'price_1RMevXAlnDo7ux3vKn9XwLxT';
+  const priceId = import.meta.env.VITE_SUBSCRIPTION_PRICE_ID;
 
   // Todo: Update Subscribtion status in the database
   const checkSubscriptionStatus = async (email, id) => {
@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
       );
 
       if (customerError) {
-        console.error("Error fetching customer ID:", customerError);
+        // console.error("Error fetching customer ID:", customerError);
         setIsSubscribed(false);
         setCustomerId(null);
       }
@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
         { body: { customerId, priceId } }
       );
       if (subscriptionError) {
-        console.error("Error fetching subscription:", subscriptionError);
+        // console.error("Error fetching subscription:", subscriptionError);
         setIsSubscribed(false);
       }
 
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
           .eq("id", id);
       }
     } catch (error) {
-      console.error("Error checking subscription:", error);
+      // console.error("Error checking subscription:", error);
       await supabase
           .from("swim_teacher_profiles")
           .update({ is_subscribed: false })
@@ -82,7 +82,9 @@ export function AuthProvider({ children }) {
       if (data.session?.user) {
         const email = data.session.user.email;
         const id = data.session.user.id;
-        checkSubscriptionStatus(email, id);
+        if (data.session.user.user_metadata.role === "ครูสอนว่ายน้ำ") {
+          checkSubscriptionStatus(email, id);
+        }
       } else {
         setLoading(false);
       }
@@ -96,7 +98,9 @@ export function AuthProvider({ children }) {
         if (newSession?.user) {
           const email = newSession.user.email;
           const id = newSession.user.id;
-          checkSubscriptionStatus(email, id);
+          if (newSession.user.user_metadata.role === "ครูสอนว่ายน้ำ") {
+            checkSubscriptionStatus(email, id);
+          }
         } else {
           setIsSubscribed(false);
           setCustomerId(null);

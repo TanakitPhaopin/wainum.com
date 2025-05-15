@@ -9,7 +9,7 @@ export function Subscription() {
     const { user, isSubscribed } = useAuth();
 
     const email = user?.email || '';
-    const stripeLoginLink = "https://billing.stripe.com/p/login/test_fZu5kCa5ZfM9dbjeTQ1VK00";
+    const stripeLoginLink = import.meta.env.VITE_STRIPE_LOGIN_LINK;
     const encodedEmail = encodeURIComponent(email);
     const loginUrl = `${stripeLoginLink}?prefilled_email=${encodedEmail}`;
 

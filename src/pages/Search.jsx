@@ -11,8 +11,13 @@ import MySelect from "../components/Select";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import SearchIcon from '@mui/icons-material/Search';
+import { toggleFavorite } from "../services/search";
+import { useAuth } from "../contexts/AuthContext";
+import { getStudentFavorites } from "../services/search";
+import { toast } from "react-toastify";
 
 export default function Search() {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -44,7 +49,6 @@ export default function Search() {
       const fetchAndFilter = async () => {
         setLoading(true);
         const data = await getAllProfiles();
-        console.log(data);
         if (!data) {
           console.error("Error fetching profiles");
           setProfiles([]);
@@ -154,6 +158,46 @@ export default function Search() {
       setSearchParams(newParams); // Update the URL with merged parameters
     };
 
+    // Handle star click
+    const handleStarClick = async (teacher_id, student_id) => {
+        if (!user) {
+          toast.error("กรุณาเข้าสู่ระบบก่อน");
+          return;
+        }
+        if (user.user_metadata.role !== "นักเรียน") {
+          toast.error("คุณไม่มีสิทธิ์ในการบันทึกผู้สอน");
+          return;
+        }
+        try {
+          const result = await toggleFavorite(teacher_id, student_id);
+          if (result) {
+            if (result.status === 'added') {
+              setMyFavorites(prev => [...prev, teacher_id]);
+            } else if (result.status === 'removed') {
+              setMyFavorites(prev => prev.filter(id => id !== teacher_id));
+            }
+          }
+        } catch (error) {
+          console.error("Error toggling favorite:", error);
+        }
+    }
+
+    // Get my favorites
+    const [myFavorites, setMyFavorites] = useState([]);
+    useEffect(() => {
+        if (user && user.user_metadata.role === "นักเรียน") {
+          getMyFavorites();
+        }
+    }, [user]);
+
+    const getMyFavorites = async () => {
+        if (user && user.user_metadata.role === "นักเรียน") {
+          const favorites = await getStudentFavorites(user.id);
+          const favoriteIds = favorites.map(fav => fav.teacher_id);
+          setMyFavorites(favoriteIds);
+        }
+    }
+
     return (
         <div className="relative">
             <div className="pb-4">
@@ -239,7 +283,8 @@ export default function Search() {
                                 handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }});}}
                                 levels={profile.levels}
                                 is_subscribed={profile.is_subscribed}
-                                handleStarClick={() => console.log('Star clicked!', profile.id)}
+                                handleStarClick={() => handleStarClick(profile.id, user?.id)}
+                                isFavorite={myFavorites.includes(profile.id)}
                             />
                         ))}
                     </div>
