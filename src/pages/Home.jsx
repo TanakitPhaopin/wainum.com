@@ -108,7 +108,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className=''>
+            <div className='w-full mt-4'>
                 <HomeContent deviceType={deviceType}/>
             </div>
         </div>
