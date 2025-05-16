@@ -85,6 +85,7 @@ export function AuthProvider({ children }) {
         if (data.session.user.user_metadata.role === "ครูสอนว่ายน้ำ") {
           checkSubscriptionStatus(email, id);
         }
+        setLoading(false);
       } else {
         setLoading(false);
       }
@@ -101,6 +102,7 @@ export function AuthProvider({ children }) {
           if (newSession.user.user_metadata.role === "ครูสอนว่ายน้ำ") {
             checkSubscriptionStatus(email, id);
           }
+          setLoading(false);
         } else {
           setIsSubscribed(false);
           setCustomerId(null);

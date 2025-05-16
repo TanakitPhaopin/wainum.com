@@ -4,7 +4,6 @@ import { Navigate } from 'react-router';
 
 export default function ProtectedRoute({ children, requiredRole = null }) {
   const { user, loading } = useAuth();
-
   if (loading) return null;
 
   if (!user) {

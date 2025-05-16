@@ -95,7 +95,9 @@ function App() {
                 path="/student/favorites"
                 element={
                   <ProtectedRoute requiredRole={'นักเรียน'}>
-                    <div className='text-black text-3xl'>Student Favourites</div>
+                    <div>
+                      <p className='text-black'>Student Favourites</p>
+                    </div>
                   </ProtectedRoute>
                 }
               />
