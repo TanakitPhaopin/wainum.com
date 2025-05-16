@@ -194,6 +194,7 @@ export default function Search() {
         if (user && user.user_metadata.role === "นักเรียน") {
           const favorites = await getStudentFavorites(user.id);
           const favoriteIds = favorites.map(fav => fav.teacher_id);
+          console.log("My favorites", favoriteIds);
           setMyFavorites(favoriteIds);
         }
     }

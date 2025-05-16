@@ -14,6 +14,7 @@ import Teacher from './pages/teacher/Teacher.jsx'
 import TermsOfService from './pages/TermsOfService.jsx'
 import Checkout from './pages/Checkout.jsx'
 import { Subscription } from './pages/Subscription.jsx'
+import Favourite from './pages/student/Favourite.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -95,9 +96,7 @@ function App() {
                 path="/student/favorites"
                 element={
                   <ProtectedRoute requiredRole={'นักเรียน'}>
-                    <div>
-                      <p className='text-black'>Student Favourites</p>
-                    </div>
+                    <Favourite />
                   </ProtectedRoute>
                 }
               />
