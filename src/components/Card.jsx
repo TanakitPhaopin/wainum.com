@@ -64,7 +64,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
                         icon={<CheckIcon/>} 
                         variant='filled' 
                         size="small"
-                        color="secondary"
+                        color="info"
                     />
                 )}
             </div>
