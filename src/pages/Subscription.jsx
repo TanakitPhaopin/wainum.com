@@ -17,7 +17,7 @@ export function Subscription() {
         <div className="mt-4 flex flex-col items-center justify-center h-max sm:p-4">
             <div className="flex flex-col items-center justify-center h-max w-auto gap-4 bg-gray-50 rounded-2xl p-4 shadow-md">
                 <h1 className="text-4xl">Premium</h1>
-                <h2 className="text-xl">99 บาท/เดือน</h2>
+                <h2 className="text-xl">149 บาท/เดือน</h2>
                 <div className="flex flex-col items-start gap-2">
                     <div className="flex flex-row items-center gap-2">
                         <VerifiedIcon />

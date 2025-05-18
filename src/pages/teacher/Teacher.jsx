@@ -1,8 +1,10 @@
-import { getTeacherById } from "../../services/search"
+import { getTeacherById, toggleFavorite } from "../../services/search"
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Divider, Tab } from "@mui/material";
 import StarRateIcon from '@mui/icons-material/StarRate';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import IconButton from '@mui/material/IconButton';
 import province_th from "../../assets/geography_th/provinces.json";
 import PlaceIcon from '@mui/icons-material/Place';
 import SellIcon from '@mui/icons-material/Sell';
@@ -16,11 +18,13 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ContactModal from "./ContactModal";
 import VerifiedIcon from '@mui/icons-material/Verified';
-import RecommendIcon from '@mui/icons-material/Recommend';
 import MyChip from "../../components/Chip";
-
+import { IsMyFavorite } from "../../services/student";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Teacher() {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from || '/search?sort=popularity';
@@ -37,6 +41,7 @@ export default function Teacher() {
     const section3Ref = useRef(null);
     const section4Ref = useRef(null);
     const section5Ref = useRef(null);
+    const [myFavorite, setMyFavorite] = useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -61,8 +66,7 @@ export default function Teacher() {
         });
     };
 
-    useEffect(() => {
-        const fetchTeacher = async () => {
+    const fetchTeacher = async () => {
             const teacherId = id; // Replace with actual teacher ID
             const data = await getTeacherById(teacherId);
             if (data) {
@@ -72,18 +76,54 @@ export default function Teacher() {
             }
             setLoading(false);
         }
-        fetchTeacher();
+    const checkFavorite = async () => {
+        if (user) {
+            const isFavorite = await IsMyFavorite(teacher.id, user.id);
+            setMyFavorite(isFavorite);
+        }
+        setLoading(false);
     }
-    , []);
+
+    useEffect(() => {
+    fetchTeacher();
+    }, []); // just fetch once initially
+
+    useEffect(() => {
+    if (user && teacher) {
+        checkFavorite();
+    }
+    }, [user, teacher]);
+
     if (loading) {
-        return  null;
+        return null;
     }
-    if (!teacher) {
-        navigate('/search');
+    
+    const handleStarClick = async (teacher_id, student_id) => {
+        try {
+            if (!user) {
+            toast.error("กรุณาเข้าสู่ระบบก่อน");
+            return;
+            }
+            if (user.user_metadata.role !== "นักเรียน") {
+            toast.error("คุณไม่มีสิทธิ์ในการบันทึกผู้สอน");
+            return;
+        }
+            const result = await toggleFavorite(teacher_id, student_id);
+            if (result) {
+                console.log(result);
+            if (result.status === 'added') {
+                setMyFavorite(true);
+            } else if (result.status === 'removed') {
+                setMyFavorite(false);
+            }
+            }
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+        }
     }
 
     return (
-        <div className='w-full min-h-screen'>
+        <div className='min-h-screen w-full'>
             <ContactModal open={openModal} handleClose={handleCloseModal} contacts={teacher.contacts}/>
             <div className="mb-4 flex justify-between items-center">
                 <Button onClick={() => navigate(from)} variant="contained" color="inherit" startIcon={<ArrowBackIcon />}>กลับ</Button>
@@ -114,7 +154,30 @@ export default function Teacher() {
                     </Menu>
                 </div>
             </div>
-            <div ref={section1Ref} className="container mx-auto p-4 border-2 border-black rounded-lg shadow-lg bg-[#F8F8FF]">
+            <div ref={section1Ref} className="relative container mx-auto p-4 border-1 border-black rounded-lg shadow-lg bg-[#ffffff]">
+                {/* ⭐ Favorite Star - Top Right */}
+                <div className="absolute top-2 right-2 z-10">
+                    <IconButton
+                    size="small"
+                    sx={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                        transition: 'background-color 0.3s ease-in-out',
+                        '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        },
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation(); // prevent click interference
+                        handleStarClick(teacher.id, user?.id); // pass id and user
+                    }}
+                    >
+                    {myFavorite ? (
+                        <StarRateIcon sx={{ color: 'gold' }} fontSize="large" />
+                    ) : (
+                        <StarOutlineIcon sx={{ color: 'white' }} fontSize="large" />
+                    )}
+                    </IconButton>
+                </div>
                 {/* General Info */}
                 <div className="md:flex md:grid-cols-2 md:gap-2 md:justify-evenly md:items-center">
                     <Box className="flex justify-center items-center mb-4 lg:w-1/3">
@@ -193,13 +256,13 @@ export default function Teacher() {
                     </div>
                 </div>
             </div>
-            {/* Bio + Who I teacher */}
-            <div ref={section2Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#F8F8FF]">
+            {/* <MyTabs tabs={tabItems} defaultTab={tab} handleChangeTab={handleChangeTab} />                       Bio + Who I teacher */}
+            <div ref={section2Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
                 <h2 className='text-xl font-bold'>เกี่ยวกับ {teacher.display_name}</h2>
                 <p className="text-start text-wrap">{teacher.bio}</p>
             </div>
              {/* About lesson */}
-             <div ref={section3Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#F8F8FF]">
+             <div ref={section3Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สอนใครบ้าง</h2>
                     <p className="text-start text-wrap">
@@ -231,7 +294,7 @@ export default function Teacher() {
                 </div>
             </div>
             {/* Location */}
-            <div ref={section4Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#F8F8FF]">
+            <div ref={section4Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สถานที่สอน</h2>
                     <p className="text-start line-clamp-4 break-words">{teacher.swim_teacher_locations
@@ -286,7 +349,7 @@ export default function Teacher() {
                 </div>
             </div>
             {/* Experience and Qualifications */}
-            <div ref={section5Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#F8F8FF]">
+            <div ref={section5Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>ประสบการณ์</h2>
                     <p className="text-start text-wrap">{teacher.experience}</p>

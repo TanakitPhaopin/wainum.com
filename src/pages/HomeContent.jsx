@@ -49,7 +49,6 @@ export default function HomeContent({ deviceType }) {
       try {
           setLoading(true);
           const profiles = await getAllPremiumProfiles();
-          console.log(profiles);
           setProfiles(profiles);
           setLoading(false);
       }

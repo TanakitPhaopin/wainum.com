@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
     "@mui/icons-material": "^7.0.2",
+    "@mui/lab": "^7.0.0-beta.12",
     "@mui/material": "^7.0.2",
     "@mui/x-date-pickers": "^8.0.0-beta.3",
     "@stripe/react-stripe-js": "^3.7.0",
