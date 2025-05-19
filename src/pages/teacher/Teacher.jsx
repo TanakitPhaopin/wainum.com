@@ -22,6 +22,7 @@ import MyChip from "../../components/Chip";
 import { IsMyFavorite } from "../../services/student";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import Review from "./Review";
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -126,7 +127,7 @@ export default function Teacher() {
         <div className='min-h-screen w-full'>
             <ContactModal open={openModal} handleClose={handleCloseModal} contacts={teacher.contacts}/>
             <div className="mb-4 flex justify-between items-center">
-                <Button onClick={() => navigate(from)} variant="contained" color="inherit" startIcon={<ArrowBackIcon />}>กลับ</Button>
+                <Button onClick={() => navigate(from)} variant="contained" color="inherit">กลับ</Button>
                 <div>
                     <Button
                         id="section-button"
@@ -136,9 +137,8 @@ export default function Teacher() {
                         onClick={handleClick}
                         variant="outlined"
                         color="inherit"
-                        startIcon={<ArrowDownwardIcon />}
                     >
-                        ไปที่
+                        <ArrowDownwardIcon />
                     </Button>
                     <Menu
                         id="section-menu"
@@ -154,7 +154,7 @@ export default function Teacher() {
                     </Menu>
                 </div>
             </div>
-            <div ref={section1Ref} className="relative container mx-auto p-4 border-1 border-black rounded-lg shadow-lg bg-[#ffffff]">
+            <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
                 {/* ⭐ Favorite Star - Top Right */}
                 <div className="absolute top-2 right-2 z-10">
                     <IconButton
@@ -257,12 +257,12 @@ export default function Teacher() {
                 </div>
             </div>
             {/* <MyTabs tabs={tabItems} defaultTab={tab} handleChangeTab={handleChangeTab} />                       Bio + Who I teacher */}
-            <div ref={section2Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
+            <div ref={section2Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <h2 className='text-xl font-bold'>เกี่ยวกับ {teacher.display_name}</h2>
                 <p className="text-start text-wrap">{teacher.bio}</p>
             </div>
              {/* About lesson */}
-             <div ref={section3Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
+             <div ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สอนใครบ้าง</h2>
                     <p className="text-start text-wrap">
@@ -294,7 +294,7 @@ export default function Teacher() {
                 </div>
             </div>
             {/* Location */}
-            <div ref={section4Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
+            <div ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สถานที่สอน</h2>
                     <p className="text-start line-clamp-4 break-words">{teacher.swim_teacher_locations
@@ -349,7 +349,7 @@ export default function Teacher() {
                 </div>
             </div>
             {/* Experience and Qualifications */}
-            <div ref={section5Ref} className="container mx-auto p-4 mt-4 border-2 border-black rounded-lg shadow-lg bg-[#ffffff]">
+            <div ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>ประสบการณ์</h2>
                     <p className="text-start text-wrap">{teacher.experience}</p>
@@ -359,6 +359,9 @@ export default function Teacher() {
                     <p className="text-start text-wrap">{teacher.qualification}</p>
                 </div>
             </div>
+
+            {/* Reviews */}
+            <Review />
         </div>
     )
 }
