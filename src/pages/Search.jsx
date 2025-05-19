@@ -15,6 +15,9 @@ import { toggleFavorite } from "../services/search";
 import { useAuth } from "../contexts/AuthContext";
 import { getStudentFavorites } from "../services/search";
 import { toast } from "react-toastify";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { Divider } from "@mui/material";
 
 export default function Search() {
     const { user } = useAuth();
@@ -22,6 +25,8 @@ export default function Search() {
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const [profiles, setProfiles] = useState([]);
+    const [surroundingTeachers, setSurroundingTeachers] = useState([]);
+    const [premiumProfiles, setPremiumProfiles] = useState([]);
     const [filtered , setFiltered] = useState(false);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +44,59 @@ export default function Search() {
         value: String(p.provinceCode),
       })), []);
 
+    const itemsToShow_large = premiumProfiles.length < 4 ? premiumProfiles.length : 4;
+    const itemsToShow_desktop = premiumProfiles.length < 3 ? premiumProfiles.length : 3;
+    const itemsToShow_tablet = premiumProfiles.length < 2 ? premiumProfiles.length : 2;
+    const itemsToShow_mobile = premiumProfiles.length < 1 ? premiumProfiles.length : 1;
+    const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 1536 },
+            items: itemsToShow_large,
+            slidesToSlide: 1,
+        },
+        largeDesktop: {
+            breakpoint: { max: 1536, min: 1280 },
+            items: itemsToShow_large,
+            slidesToSlide: 1,
+        },
+        desktop: {
+            breakpoint: { max: 1280, min: 1024 },
+            items: itemsToShow_desktop,
+            slidesToSlide: 1,
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 640 },
+            items: itemsToShow_tablet,
+            slidesToSlide: 1,
+        },
+        mobile: {
+            breakpoint: { max: 640, min: 0 },
+            items: itemsToShow_mobile,
+            slidesToSlide: 1,
+        },
+    };
+
+    const [deviceType, setDeviceType] = useState("desktop");
+    const updateDeviceType = () => {
+        const width = window.innerWidth;
+        if (width < 464) {
+          setDeviceType("mobile");
+        } else if (width < 1024) {
+          setDeviceType("tablet");
+        } else {
+          setDeviceType("desktop");
+        }
+      };
+    
+      useEffect(() => {
+        updateDeviceType(); // Set initial device type
+        window.addEventListener("resize", updateDeviceType);
+    
+        return () => {
+          window.removeEventListener("resize", updateDeviceType);
+        };
+      }, []);
+
     const handlePageChange = (event, value) => {
       setCurrentPage(value);
       window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top on page change
@@ -55,6 +113,8 @@ export default function Search() {
           setLoading(false);
           return;
         }
+        const premiumData = data.filter(profile => profile.is_subscribed);
+        setPremiumProfiles(premiumData);
         let results = [...data];      
         results.sort((a, b) => {
         return (b.is_subscribed ? 1 : 0) - (a.is_subscribed ? 1 : 0);
@@ -64,6 +124,21 @@ export default function Search() {
         const provinceCodes = rawCode ? rawCode.split(',') : [];
     
         if (provinceCodes.length > 0) {
+          const expandedProvinceCodes = provinceCodes.flatMap(code => {
+            const num = parseInt(code, 10);
+            return [num - 2, num - 1, num + 1, num + 2];
+          }).map(String);
+
+          const uniqueCodes = Array.from(new Set(expandedProvinceCodes));
+
+          // Separate out matching teachers
+          const matched = results.filter(profile => {
+            const profileCodes = profile.swim_teacher_locations.map(loc => String(loc.province_code));
+            return uniqueCodes.some(code => profileCodes.includes(code));
+          });
+          // Store surrounding teachers
+          setSurroundingTeachers(matched);
+
           results = results.filter((profile) => {
             const profileCodes = profile.swim_teacher_locations.map(loc => String(loc.province_code));
             return provinceCodes.some(code => profileCodes.includes(code));
@@ -138,7 +213,10 @@ export default function Search() {
       
 
     useEffect(() => {
-      if (provinceCodes.length === 0) return;
+      if (provinceCodes.length === 0) {
+        setSurroundingTeachers([]);
+        return;
+      }
     
       const selectedOptions = provinceCodes
         .map((code) => provinces.find((province) => String(province.value) === code))
@@ -254,6 +332,7 @@ export default function Search() {
             { loading ? (
                 <div></div>
             ) : (
+              <div className="flex flex-col gap-4">
                 <div>
                        {profiles.length > 0 ? (
                           <div className="flex flex-start mb-2">
@@ -302,13 +381,96 @@ export default function Search() {
                     </Stack>
                     )}
                 </div>
+                <Divider sx={{marginY: 4}}/>
+                <div className="p-4">
+                  {surroundingTeachers.length > 0 ? (
+                  <div className="mb-4">
+                    <h1 className="text-lg font-semibold mb-4">บริเวณใกล้เคียง</h1>
+                    <Carousel
+                      swipeable={true}
+                      draggable={true}
+                      showDots={true}
+                      responsive={responsive}
+                      ssr={true} 
+                      infinite={true}
+                      autoPlay={true}
+                      autoPlaySpeed={3000}
+                      keyBoardControl={false}
+                      customTransition="transform 300ms ease-in-out"
+                      transitionDuration={500}
+                      containerClass="carousel-container"
+                      deviceType={deviceType}
+                      dotListClass="custom-dot-list-style"
+                      itemClass="px-0 sm:px-2"
+                    >
+                    {surroundingTeachers.map((profile) => (
+                        <MyCard 
+                            display_name={profile.display_name} 
+                            bio={profile.bio} 
+                            key={profile.id} 
+                            image={profile.profile_picture}
+                            can_travel={profile.can_travel}
+                            can_online={profile.can_online}
+                            hourly_rate={profile.hourly_rate}
+                            province_code={profile.swim_teacher_locations}
+                            handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }});}}
+                            levels={profile.levels}
+                            is_subscribed={profile.is_subscribed}
+                            handleStarClick={() => handleStarClick(profile.id, user?.id)}
+                            isFavorite={myFavorites.includes(profile.id)}
+                        />                  
+                      ))}
+                    </Carousel>
+                    <Divider sx={{marginTop: 4}}/>
+                  </div>
+                  ) : (
+                    <div></div>
+                  )}
+                  {premiumProfiles.length > 0 ? (
+                  <div className="mb-2">
+                    <h1 className="text-lg font-semibold mb-4">สปอนเซอร์</h1>
+                    <Carousel
+                      swipeable={true}
+                      draggable={true}
+                      showDots={true}
+                      responsive={responsive}
+                      ssr={true} 
+                      infinite={true}
+                      autoPlay={true}
+                      autoPlaySpeed={5000}
+                      keyBoardControl={false}
+                      customTransition="transform 300ms ease-in-out"
+                      transitionDuration={500}
+                      containerClass="carousel-container"
+                      deviceType={deviceType}
+                      dotListClass="custom-dot-list-style"
+                      itemClass="px-0 sm:px-2"
+                    >
+                    {premiumProfiles.map((profile) => (
+                        <MyCard 
+                            display_name={profile.display_name} 
+                            bio={profile.bio} 
+                            key={profile.id} 
+                            image={profile.profile_picture}
+                            can_travel={profile.can_travel}
+                            can_online={profile.can_online}
+                            hourly_rate={profile.hourly_rate}
+                            province_code={profile.swim_teacher_locations}
+                            handleClick={() => {navigate(`/teacher/${profile.id}`, { state: { from: location.pathname + location.search }});}}
+                            levels={profile.levels}
+                            is_subscribed={profile.is_subscribed}
+                            handleStarClick={() => handleStarClick(profile.id, user?.id)}
+                            isFavorite={myFavorites.includes(profile.id)}
+                        />                  
+                      ))}
+                    </Carousel>
+                  </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+              </div>
             )}
-            <div>
-              <p>Suggestions</p>
-              <p>If no filter - show all premium profile</p>
-              <p>If province - show surrounding areas  +- 2 from current code</p>
-
-            </div>
         </div>
     );
 }
