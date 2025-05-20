@@ -32,7 +32,13 @@ export default function Teacher() {
     const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
-    const handleOpenModal = () => setOpenModal(true);
+    const handleOpenModal = () => {
+        if (!user) {
+            toast.error("กรุณาเข้าสู่ระบบก่อน");
+            return;
+        }
+        setOpenModal(true);
+    }
     const handleCloseModal = () => setOpenModal(false);
     const { id } = useParams();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -242,7 +248,7 @@ export default function Teacher() {
                                 variant="contained"
                                 color="primary"
                                 className="w-full"
-                                onClick={handleOpenModal}
+                                onClick={() => handleOpenModal()}
                                 sx={{
                                     backgroundColor: 'primary.main',
                                     '&:hover': {
@@ -361,7 +367,9 @@ export default function Teacher() {
             </div>
 
             {/* Reviews */}
-            <Review />
+            <div className="container mt-4">
+                <Review />
+            </div>
         </div>
     )
 }
