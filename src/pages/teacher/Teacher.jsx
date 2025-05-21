@@ -119,8 +119,10 @@ export default function Teacher() {
             if (result) {
                 console.log(result);
             if (result.status === 'added') {
+                toast.success("บันทึกผู้สอนเรียบร้อย");
                 setMyFavorite(true);
             } else if (result.status === 'removed') {
+                toast.success("ลบผู้สอนออกจากรายการโปรดเรียบร้อย");
                 setMyFavorite(false);
             }
             }
@@ -368,7 +370,7 @@ export default function Teacher() {
 
             {/* Reviews */}
             <div className="container mt-4">
-                <Review />
+                <Review teacher_id={teacher?.id}/>
             </div>
         </div>
     )

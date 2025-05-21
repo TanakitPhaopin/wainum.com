@@ -208,9 +208,7 @@ export default function Search() {
     // Calculate the index range for current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentProfiles = profiles.slice(startIndex, endIndex);
-
-      
+    const currentProfiles = profiles.slice(startIndex, endIndex);  
 
     useEffect(() => {
       if (provinceCodes.length === 0) {
@@ -250,8 +248,10 @@ export default function Search() {
           const result = await toggleFavorite(teacher_id, student_id);
           if (result) {
             if (result.status === 'added') {
+              toast.success("บันทึกผู้สอนเรียบร้อย");
               setMyFavorites(prev => [...prev, teacher_id]);
             } else if (result.status === 'removed') {
+              toast.success("ลบผู้สอนออกจากรายการโปรดเรียบร้อย");
               setMyFavorites(prev => prev.filter(id => id !== teacher_id));
             }
           }

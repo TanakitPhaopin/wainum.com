@@ -76,8 +76,10 @@ export default function HomeContent({ deviceType }) {
           const result = await toggleFavorite(teacher_id, student_id);
           if (result) {
             if (result.status === 'added') {
+              toast.success("บันทึกผู้สอนเรียบร้อย");
               setMyFavorites(prev => [...prev, teacher_id]);
             } else if (result.status === 'removed') {
+              toast.success("ลบผู้สอนออกจากรายการโปรดเรียบร้อย");
               setMyFavorites(prev => prev.filter(id => id !== teacher_id));
             }
           }
