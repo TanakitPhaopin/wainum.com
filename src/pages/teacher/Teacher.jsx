@@ -211,10 +211,14 @@ export default function Teacher() {
                                 />
                             )}
                        </div>
-                        <div className="md:flex md:flex-row md:items-center md:justify-start gap-2">
+                        <div className="flex flex-col md:flex-row items-center md:justify-start md:gap-2">
                             <h1 className='text-center text-2xl font-bold text-wrap'><span>{teacher.is_subscribed && (<VerifiedIcon color='primary'/>)}</span> {teacher.display_name}</h1>
-                            <p className="text-center">{<StarRateIcon color='warning'/>}4.6 (123)</p>
+                            <div className='flex flex-row items-center gap-0.5'>
+                                <StarRateIcon color='warning'/>
+                                <span className="text-md">4.6 (123)</span> 
+                            </div>
                         </div>
+
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-row justify-start items-center gap-2">
                                 <PlaceIcon/>
