@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import {toggleFavorite} from "../services/search";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { getStudentFavorites } from "../services/search";
 
 export default function HomeContent({ deviceType }) {
     const { user } = useAuth();

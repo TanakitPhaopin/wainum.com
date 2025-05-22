@@ -33,3 +33,28 @@ export async function IsMyFavorite(teacher_id, student_id) {
         return false;
     }
 }
+
+// Create student profile
+export async function createStudentProfile(studentData) {
+    const { student_id, full_name, initial, email, profile_color } = studentData;
+    try {
+        const { error } = await supabase
+            .from('student_profiles')
+            .insert([
+                {
+                    student_id,
+                    full_name,
+                    initial,
+                    email,
+                    profile_color,
+                },
+            ]);
+        if (error) {
+            throw error;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error creating student profile:', error);
+        return false;
+    }
+}

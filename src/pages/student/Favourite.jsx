@@ -20,12 +20,10 @@ export default function Favourite() {
             const rawFavorites = await getMyFavorites(user?.id);
             const favouriteIds = rawFavorites.map((favourite) => favourite.teacher_id);
             const allProfiles = await getAllProfiles();
-            console.log(allProfiles);
             if (allProfiles) {
                 const filteredFavourites = allProfiles.filter((profile) =>
                 favouriteIds.includes(profile.id)
             );
-            console.log("Fav", filteredFavourites);
             setFavourites(filteredFavourites);
             }
             setLoading(false);

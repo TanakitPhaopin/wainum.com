@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import CloseIcon from '@mui/icons-material/Close';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
+import { createStudentProfile } from '../services/student.js';
 
   const style = {
     position: 'absolute',
@@ -80,17 +81,58 @@ import moment from 'moment';
         return;
       }
       const { data, error } = await signUp(email, password, role, username, dob);
-    
       if (error) {
         toast.error('เกิดข้อผิดพลาด: กรุณาตรวจสอบข้อมูลของคุณ');
         console.error('Error signing up:', error);
-      } else {
-        toast.success('ส่งอีเมลยืนยันแล้ว กรุณาตรวจสอบกล่องจดหมายของคุณ');
+      }
+      if (data) {
+        const userId = data?.user?.id;
+        const fullName = data?.user?.user_metadata?.full_name;
+        const email = data?.user?.user_metadata?.email;
+        const initial = getThaiInitial(fullName);
+        const color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        const studentData = {
+          student_id: userId,
+          full_name: fullName,
+          initial: initial,
+          email: email,
+          profile_color: color
+        }
+        const result = await createStudentProfile(studentData);
+        if (result) {
+          toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
+          toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
+        }
+        else {
+          console.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
+        }
+        // toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
+        // toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
         handleClose();
         setSearchParams({});
       }
     }
-    
+
+    function getThaiInitial(name) {
+      const vowels = [
+        'ะ', 'า', 'ิ', 'ี', 'ึ', 'ื', 'ุ', 'ู',
+        'เ', 'แ', 'โ', 'ใ', 'ไ',
+        'ๅ', '็', '๋', '๊', 'ํ', '์',
+        'ฤ', 'ฦ', 'ำ'
+      ];
+
+      const trimmed = name?.trim();
+      if (!trimmed) return '';
+
+      for (const char of trimmed) {
+        if (!vowels.includes(char)) {
+          return char;
+        }
+      }
+
+      return ''; // fallback if no consonant found
+    }
+
   return (
     <div>
       <Modal
