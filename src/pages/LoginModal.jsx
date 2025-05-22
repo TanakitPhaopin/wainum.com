@@ -46,6 +46,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
     if (open) {
       setEmail('');
       setPassword('');
+      localStorage.setItem("redirectAfterLogin", window.location.pathname + window.location.search);
     }
   }, [open]);
   
@@ -57,7 +58,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
       console.error('Error login', error.message);
     } else {
       handleClose();
-      navigate('/redirect', { replace: true });
+      navigate('/redirect');
       toast.success('เข้าสู่ระบบสำเร็จ');
     }
   }
