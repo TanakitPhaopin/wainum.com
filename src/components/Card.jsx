@@ -144,7 +144,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
           )}
           <div className='mt-auto flex flex-row justify-between items-center'>
             <p className="font-semibold">{hourly_rate} บาท / ชั่วโมง</p>
-            <p className='flex flex-row'>{<StarRateIcon color='warning'/>}{averageRating} ({ratingCount})</p>
+            <p className='flex flex-row'>{<StarRateIcon color='warning'/>}{isNaN(averageRating) ? 'ไม่มีรีวิว' : averageRating} ({ratingCount})</p>
           </div>
         </CardContent>
       </Card>

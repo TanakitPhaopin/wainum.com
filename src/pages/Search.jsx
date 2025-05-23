@@ -183,7 +183,32 @@ export default function Search() {
         if (searchParams.get('sort')) {
           const sortBy = searchParams.get('sort');
           if (sortBy === 'popularity') {
-            results.sort((a, b) => b.created_at - a.created_at);
+            results = results.map(profile => {
+                const ratings = profile.teacher_reviews?.map(r => Number(r.overall_rating)) || [];
+                const ratingCount = ratings.length;
+                const overallRating = ratings.reduce((a, b) => a + b, 0) / (ratings.length || 1);
+                return { ...profile, overallRating, ratingCount };
+              }
+            );
+            results.sort((a, b) => {
+              // 1. Get ranges
+              const getRange = (rating) => {
+                if (rating >= 4) return 3;
+                if (rating >= 2) return 2;
+                if (rating > 0) return 1;
+                return 0; // No rating
+              };
+
+              const rangeA = getRange(a.overallRating);
+              const rangeB = getRange(b.overallRating);
+              // 2. Sort by range first (higher range = higher priority)
+              if (rangeA !== rangeB) {
+                return rangeB - rangeA;
+              }
+
+              // 3. Then sort by rating count (descending)
+              return b.ratingCount - a.ratingCount;
+            });
           } else if (sortBy === 'newest') {
             results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           } else if (sortBy === 'price_asc') {
@@ -193,11 +218,64 @@ export default function Search() {
           } else {
             newParams.set('sort', 'popularity');
             setSearchParams(newParams);
-            results.sort((a, b) => b.popularity - a.popularity);
+            results = results.map(profile => {
+                const ratings = profile.teacher_reviews?.map(r => Number(r.overall_rating)) || [];
+                const ratingCount = ratings.length;
+                const overallRating = ratings.reduce((a, b) => a + b, 0) / (ratings.length || 1);
+                return { ...profile, overallRating, ratingCount };
+              }
+            );
+            results.sort((a, b) => {
+              // 1. Get ranges
+              const getRange = (rating) => {
+                if (rating >= 4) return 3;
+                if (rating >= 2) return 2;
+                if (rating > 0) return 1;
+                return 0; // No rating
+              };
+
+              const rangeA = getRange(a.overallRating);
+              const rangeB = getRange(b.overallRating);
+
+              // 2. Sort by range first (higher range = higher priority)
+              if (rangeA !== rangeB) {
+                return rangeB - rangeA;
+              }
+
+              // 3. Then sort by rating count (descending)
+              return b.ratingCount - a.ratingCount;
+            });
           }
         } else {
           newParams.set('sort', 'popularity');
           setSearchParams(newParams);
+          results = results.map(profile => {
+                const ratings = profile.teacher_reviews?.map(r => Number(r.overall_rating)) || [];
+                const ratingCount = ratings.length;
+                const overallRating = ratings.reduce((a, b) => a + b, 0) / (ratings.length || 1);
+                return { ...profile, overallRating, ratingCount };
+              }
+            );
+            results.sort((a, b) => {
+              // 1. Get ranges
+              const getRange = (rating) => {
+                if (rating >= 4) return 3;
+                if (rating >= 2) return 2;
+                if (rating > 0) return 1;
+                return 0; // No rating
+              };
+
+              const rangeA = getRange(a.overallRating);
+              const rangeB = getRange(b.overallRating);
+
+              // 2. Sort by range first (higher range = higher priority)
+              if (rangeA !== rangeB) {
+                return rangeB - rangeA;
+              }
+
+              // 3. Then sort by rating count (descending)
+              return b.ratingCount - a.ratingCount;
+            });
         }
         setProfiles(results);
         setLoading(false);
