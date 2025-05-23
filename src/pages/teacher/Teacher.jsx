@@ -373,8 +373,8 @@ export default function Teacher() {
             </div>
 
             {/* Reviews */}
-            <div className="container mt-4">
-                <Review teacher_id={teacher?.id}/>
+            <div className="container mt-4 mx-auto">
+                <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture}/>
             </div>
         </div>
     )

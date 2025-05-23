@@ -104,6 +104,7 @@ import { createStudentProfile } from '../services/student.js';
           toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
         }
         else {
+          toast.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
           console.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
         }
         // toast.success('สมัครสมาชิกเรียบร้อยแล้ว');

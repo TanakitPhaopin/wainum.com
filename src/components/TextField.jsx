@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 export default function MyTextField({
   label,
   value,
+  defaultValue,
   onChange,
   multiline = false,
   rows = 1,
@@ -20,6 +21,7 @@ export default function MyTextField({
       id={id}
       label={label}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
       type={type}
       required={required}
