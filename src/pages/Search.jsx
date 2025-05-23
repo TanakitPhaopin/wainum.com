@@ -417,13 +417,16 @@ export default function Search() {
                             <h1 className="text-xs font-normal">ผลการค้นหา - {profiles.length}</h1>
                           </div>
                         ) : (
-                          <div className="flex flex-col gap-2 items-center justify-center my-12">
-                              <SearchIcon 
-                                className="mx-auto" 
-                                fontSize="large" 
-                                sx={{width: 100, height: 100}}/>
-                              <h1 className="text-md font-normal">ไม่พบผู้สอน</h1>
-                              <h1 className="text-md font-normal">กรุณาลองใหม่อีกครั้ง</h1>
+                          // <div className="flex flex-col gap-2 items-center justify-center my-12">
+                          //     <SearchIcon 
+                          //       className="mx-auto" 
+                          //       fontSize="large" 
+                          //       sx={{width: 100, height: 100}}/>
+                          //     <h1 className="text-md font-normal">ไม่พบผู้สอน</h1>
+                          //     <h1 className="text-md font-normal">กรุณาลองใหม่อีกครั้ง</h1>
+                          // </div>
+                          <div>
+                            <h1 className="text-md font-normal text-center">ไม่พบผู้สอน</h1>
                           </div>
                        )}                    
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
@@ -460,11 +463,11 @@ export default function Search() {
                     </Stack>
                     )}
                 </div>
-                <Divider sx={{marginY: 4}}/>
+                <Divider/>
                 <div className="p-4">
                   {surroundingTeachers.length > 0 ? (
                   <div className="mb-4">
-                    <h1 className="text-lg font-semibold mb-4">บริเวณใกล้เคียง</h1>
+                    <h1 className="text-lg font-semibold mb-2">📍 บริเวณใกล้เคียง</h1>
                     <Carousel
                       swipeable={true}
                       draggable={true}
@@ -501,14 +504,13 @@ export default function Search() {
                         />                  
                       ))}
                     </Carousel>
-                    <Divider sx={{marginTop: 4}}/>
                   </div>
                   ) : (
                     <div></div>
                   )}
                   {premiumProfiles.length > 0 ? (
-                  <div className="mb-2">
-                    <h1 className="text-lg font-semibold mb-4">สปอนเซอร์</h1>
+                  <div className="mb-2 p-2 md:p-4 rounded-xl shadow-[0_0_20px] shadow-black/30">
+                    <h1 className="text-lg font-semibold mb-2">สปอนเซอร์</h1>
                     <Carousel
                       swipeable={true}
                       draggable={true}
