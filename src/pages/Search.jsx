@@ -364,6 +364,7 @@ export default function Search() {
                                 is_subscribed={profile.is_subscribed}
                                 handleStarClick={() => handleStarClick(profile.id, user?.id)}
                                 isFavorite={myFavorites.includes(profile.id)}
+                                teacher_reviews={profile.teacher_reviews}
                             />
                         ))}
                     </div>
@@ -418,6 +419,7 @@ export default function Search() {
                             is_subscribed={profile.is_subscribed}
                             handleStarClick={() => handleStarClick(profile.id, user?.id)}
                             isFavorite={myFavorites.includes(profile.id)}
+                            teacher_reviews={profile.teacher_reviews}
                         />                  
                       ))}
                     </Carousel>
@@ -461,6 +463,7 @@ export default function Search() {
                             is_subscribed={profile.is_subscribed}
                             handleStarClick={() => handleStarClick(profile.id, user?.id)}
                             isFavorite={myFavorites.includes(profile.id)}
+                            teacher_reviews={profile.teacher_reviews}
                         />                  
                       ))}
                     </Carousel>

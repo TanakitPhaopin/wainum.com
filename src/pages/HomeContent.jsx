@@ -144,6 +144,7 @@ export default function HomeContent({ deviceType }) {
                 isFavorite={myFavorites.includes(profile.id)}
                 handleStarClick={() => handleStarClick(profile.id, user?.id)}
                 handleClick={() => navigate(`/teacher/${profile.id}`)}
+                teacher_reviews={profile.teacher_reviews}
               />
           ))}
         </Carousel>

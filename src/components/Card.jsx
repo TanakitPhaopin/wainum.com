@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import MyChip from './Chip';
@@ -11,11 +11,25 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import RecommendIcon from '@mui/icons-material/Recommend';
 
-export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite }) {
+export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite, teacher_reviews }) {
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+
   const provinceLabels = province_code
   .map(loc => province_th.find(p => String(p.provinceCode) === String(loc.province_code)))
   .filter(Boolean)
   .map(p => p.provinceNameTh);
+
+  useEffect(() => {
+    if (teacher_reviews) {
+      const averageRatings = teacher_reviews?.map(r => Number(r.overall_rating));
+      const overallRating = averageRatings.reduce((a, b) => a + b, 0) / averageRatings.length;
+      setAverageRating(overallRating);
+      const allRatingCount = teacher_reviews?.length;
+      setRatingCount(allRatingCount);
+    }
+  }
+  , [ teacher_reviews ]);
 
   return (
     <div className='w-full' onClick={handleClick}>
@@ -130,7 +144,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
           )}
           <div className='mt-auto flex flex-row justify-between items-center'>
             <p className="font-semibold">{hourly_rate} บาท / ชั่วโมง</p>
-            <p className='flex flex-row'>{<StarRateIcon color='warning'/>}4.6 (123)</p>
+            <p className='flex flex-row'>{<StarRateIcon color='warning'/>}{averageRating} ({ratingCount})</p>
           </div>
         </CardContent>
       </Card>

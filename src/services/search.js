@@ -8,7 +8,8 @@ export async function getAllProfiles() {
             .from('swim_teacher_profiles')
             .select(`
                 *,
-                swim_teacher_locations (province_code)
+                swim_teacher_locations (province_code),
+                teacher_reviews (id, teacher_id, overall_rating, created_at)
             `)
             .eq('is_public', true)
             .order('created_at', { ascending: false });
