@@ -163,6 +163,7 @@ export default function Teacher() {
                     </Menu>
                 </div>
             </div>
+            <div>
             <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
                 {/* ⭐ Favorite Star - Top Right */}
                 <div className="absolute top-2 right-2 z-10">
@@ -269,10 +270,11 @@ export default function Teacher() {
                     </div>
                 </div>
             </div>
-            {/* <MyTabs tabs={tabItems} defaultTab={tab} handleChangeTab={handleChangeTab} />                       Bio + Who I teacher */}
+            {/* Bio + Who I teacher */}
             <div ref={section2Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
-                <h2 className='text-xl font-bold'>เกี่ยวกับ {teacher.display_name}</h2>
+                <h2 className='text-xl font-bold'>📘 เกี่ยวกับ {teacher.display_name}</h2>
                 <p className="text-start text-wrap">{teacher.bio}</p>
+            </div>
             </div>
              {/* About lesson */}
              <div ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
@@ -287,17 +289,17 @@ export default function Teacher() {
                     </p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
-                    <h2 className='text-xl font-bold'>เกี่ยวกับการสอน</h2>
-                    <p className="text-start text-wrap">{teacher.about_lesson}</p>
+                    <h2 className='text-xl font-bold'> 🧑‍🏫 เกี่ยวกับการสอน</h2>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.about_lesson}</p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
-                    <h2 className='text-xl font-bold'>ค่าเรียน</h2>
+                    <h2 className='text-xl font-bold'>💰 ค่าเรียน</h2>
                     <p className="text-start text-wrap">{teacher.hourly_rate} บาท / ชั่วโมง</p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>แพ็คเกจการเรียน</h2>
                     {teacher.lesson_package ? (
-                     <p>{teacher.lesson_package}</p>   
+                     <p className="h-auto max-h-[200px] overflow-y-scroll">{teacher.lesson_package}</p>   
                     ) : (
                         <div className="flex items-center">
                             <CloseIcon className="mr-1" sx={{ color: 'red' }} />
@@ -309,7 +311,7 @@ export default function Teacher() {
             {/* Location */}
             <div ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
-                    <h2 className='text-xl font-bold'>สถานที่สอน</h2>
+                    <h2 className='text-xl font-bold'>📍 สถานที่สอน</h2>
                     <p className="text-start line-clamp-4 break-words">{teacher.swim_teacher_locations
                         .map(code => {
                         const match = province_th.find(location => String(code.province_code) === String(location.provinceCode));
@@ -322,7 +324,7 @@ export default function Teacher() {
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>เกี่ยวกับสถานที่สอน</h2>
-                    <p className="text-start text-wrap">{teacher.about_location}</p>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.about_location}</p>
                 </div>
                 <Divider sx={{marginBottom: 2}}/>
                 <div className="flex flex-col gap-2 mb-4">
@@ -341,7 +343,7 @@ export default function Teacher() {
                         )}
                     </div>
                     {teacher.can_travel && teacher.travel_note && (
-                        <p className="text-start text-wrap"><span className="font-semibold">Note: </span>{teacher.travel_note}</p>
+                        <p className="text-start text-wrap h-auto max-h-[200px] overflow-y-scroll"><span className="font-semibold">Note: </span>{teacher.travel_note}</p>
                     )}
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
@@ -364,12 +366,12 @@ export default function Teacher() {
             {/* Experience and Qualifications */}
             <div ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
-                    <h2 className='text-xl font-bold'>ประสบการณ์</h2>
-                    <p className="text-start text-wrap">{teacher.experience}</p>
+                    <h2 className='text-xl font-bold'>💼 ประสบการณ์</h2>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.experience}</p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
-                    <h2 className='text-xl font-bold'>ใบรับรองคุณวุฒิ</h2>
-                    <p className="text-start text-wrap">{teacher.qualification}</p>
+                    <h2 className='text-xl font-bold'>🎓 ใบรับรองคุณวุฒิ</h2>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.qualification}</p>
                 </div>
             </div>
 
