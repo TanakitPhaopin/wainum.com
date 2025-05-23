@@ -62,11 +62,9 @@ export async function toggleFavorite(teacher_id, student_id) {
       console.error('Error fetching favorite:', fetchError);
       throw fetchError;
     }
-    console.log('Existing favorite:', existing);
 
     if (existing) {
       // ✅ Exists — delete it
-      console.log('Deleting favorite:', existing.id);
       const { error: deleteError } = await supabase
         .from('student_favorite_teacher')
         .delete()
@@ -75,7 +73,6 @@ export async function toggleFavorite(teacher_id, student_id) {
       if (deleteError) throw deleteError;
       return { status: 'removed' };
     } else {
-        console.log('Inserting favorite:', { teacher_id, student_id });
         // ✅ Does not exist — insert it
         const { data: newFavorite, error: insertError } = await supabase
             .from('student_favorite_teacher')

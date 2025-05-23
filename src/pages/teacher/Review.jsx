@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LinearProgress from '@mui/material/LinearProgress';
 import ReplyIcon from '@mui/icons-material/Reply';
 
-export default function Review({teacher_id, teacher_picture}) {
+export default function Review({teacher_id, teacher_picture, setRatingInTeacherPage, setReviewCountInTeacherPage}) {
     const { user } = useAuth();
     const [openReview, setOpenReview] = useState(false);
     const [reviewComment, setReviewComment] = useState('');
@@ -61,7 +61,9 @@ export default function Review({teacher_id, teacher_picture}) {
         setOverallOnTimeRating(onTimeRating);
         setOverallCommunicationRating(communicationRating);
         setOverallRating(overallRating);
+        setRatingInTeacherPage(overallRating);
         setReviewCount(reviews.length);
+        setReviewCountInTeacherPage(reviews.length);
     }
 
 
@@ -201,7 +203,7 @@ export default function Review({teacher_id, teacher_picture}) {
     return (
         <div className="flex flex-col p-2 items-center justify-center h-auto bg-white rounded-xl shadow-[0_0_20px] shadow-black/30">
             <h1 className="text-xl font-semibolds">รีวิว</h1>
-            <p className="text-3xl font-semibold">{overall_rating}</p>
+            <p className="text-3xl font-semibold">{isNaN(overall_rating) ? 'ไม่มีรีวิว' : overall_rating}</p>
             <Rating name="rating-read" value={overall_rating} precision={0.5} readOnly />
             <p className="text-sm font-normal">{reviewCount} รีวิว</p>
             <div className='w-full px-2'>
@@ -209,21 +211,21 @@ export default function Review({teacher_id, teacher_picture}) {
                     <p className="text-sm font-semibold whitespace-nowrap w-[150px]">ทักษะการสอน</p>
                     <div className='flex flex-row items-center gap-2 w-full'>
                         <LinearProgress variant="determinate" value={overall_teaching_skill_rating * 20} className="w-full" />
-                        <span>{(overall_teaching_skill_rating).toFixed(1)}</span>
+                        <span>{isNaN(overall_teaching_skill_rating) ? '0' : (overall_teaching_skill_rating).toFixed(1)}</span>
                     </div>                
                 </div>
                 <div className='flex flex-row items-center gap-2 justify-between'>
                     <p className="text-sm font-semibold whitespace-nowrap w-[150px]">ตรงต่อเวลา</p>
                     <div className='flex flex-row items-center gap-2 w-full'>
                         <LinearProgress variant="determinate" value={overall_on_time_rating * 20} className="w-full" />
-                        <span>{(overall_on_time_rating).toFixed(1)}</span>
+                        <span>{isNaN(overall_on_time_rating) ? '0' : (overall_on_time_rating).toFixed(1)}</span>
                     </div>                    
                 </div>
                 <div className='flex flex-row items-center gap-2 justify-between'>
                     <p className="text-sm font-semibold whitespace-nowrap w-[150px]">การสื่อสาร</p>
                     <div className='flex flex-row items-center gap-2 w-full'>
                         <LinearProgress variant="determinate" value={overall_communication_rating * 20} className="w-full" />
-                        <span>{(overall_communication_rating).toFixed(1)}</span>
+                        <span>{isNaN(overall_communication_rating) ? '0' : (overall_communication_rating).toFixed(1)}</span>
                     </div>                    
                     </div>
             </div>

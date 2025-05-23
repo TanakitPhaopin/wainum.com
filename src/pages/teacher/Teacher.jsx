@@ -49,6 +49,8 @@ export default function Teacher() {
     const section4Ref = useRef(null);
     const section5Ref = useRef(null);
     const [myFavorite, setMyFavorite] = useState(false);
+    const [ratingInTeacherPage, setRatingInTeacherPage] = useState(0);
+    const [reviewCountInTeacherPage, setReviewCountInTeacherPage] = useState(0);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -117,14 +119,13 @@ export default function Teacher() {
         }
             const result = await toggleFavorite(teacher_id, student_id);
             if (result) {
-                console.log(result);
-            if (result.status === 'added') {
-                toast.success("บันทึกผู้สอนเรียบร้อย");
-                setMyFavorite(true);
-            } else if (result.status === 'removed') {
-                toast.success("ลบผู้สอนออกจากรายการโปรดเรียบร้อย");
-                setMyFavorite(false);
-            }
+                if (result.status === 'added') {
+                    toast.success("บันทึกผู้สอนเรียบร้อย");
+                    setMyFavorite(true);
+                } else if (result.status === 'removed') {
+                    toast.success("ลบผู้สอนออกจากรายการโปรดเรียบร้อย");
+                    setMyFavorite(false);
+                }
             }
         } catch (error) {
             console.error("Error toggling favorite:", error);
@@ -215,7 +216,7 @@ export default function Teacher() {
                             <h1 className='text-center text-2xl font-bold text-wrap'><span>{teacher.is_subscribed && (<VerifiedIcon color='primary'/>)}</span> {teacher.display_name}</h1>
                             <div className='flex flex-row items-center gap-0.5'>
                                 <StarRateIcon color='warning'/>
-                                <span className="text-md">4.6 (123)</span> 
+                                <span className="text-md">{isNaN(ratingInTeacherPage) ? 'ไม่มีรีวิว' : ratingInTeacherPage} ({reviewCountInTeacherPage})</span> 
                             </div>
                         </div>
 
@@ -374,7 +375,7 @@ export default function Teacher() {
 
             {/* Reviews */}
             <div className="container mt-4 mx-auto">
-                <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture}/>
+                <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture} setRatingInTeacherPage={setRatingInTeacherPage} setReviewCountInTeacherPage={setReviewCountInTeacherPage}/>
             </div>
         </div>
     )
