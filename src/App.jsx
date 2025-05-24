@@ -15,6 +15,7 @@ import TermsOfService from './pages/TermsOfService.jsx'
 import Checkout from './pages/Checkout.jsx'
 import { Subscription } from './pages/Subscription.jsx'
 import Favourite from './pages/student/Favourite.jsx'
+import Settings from './pages/Settings.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -62,7 +63,7 @@ function App() {
               <Route path="/settings"
                 element={
                   <ProtectedRoute>
-                    <div className='text-black text-3xl'>Settings</div>
+                    <Settings />
                   </ProtectedRoute>
                 }
               />
