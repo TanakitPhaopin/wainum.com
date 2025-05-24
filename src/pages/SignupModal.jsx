@@ -86,29 +86,34 @@ import { createStudentProfile } from '../services/student.js';
         console.error('Error signing up:', error);
       }
       if (data) {
-        const userId = data?.user?.id;
-        const fullName = data?.user?.user_metadata?.full_name;
-        const email = data?.user?.user_metadata?.email;
-        const initial = getThaiInitial(fullName);
-        const color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-        const studentData = {
-          student_id: userId,
-          full_name: fullName,
-          initial: initial,
-          email: email,
-          profile_color: color
+        console.log('Signup successful:', data);
+        if (data?.user?.user_metadata?.role === 'นักเรียน') {
+          const userId = data?.user?.id;
+          const fullName = data?.user?.user_metadata?.full_name;
+          const email = data?.user?.user_metadata?.email;
+          const initial = getThaiInitial(fullName);
+          const color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+          const studentData = {
+            student_id: userId,
+            full_name: fullName,
+            initial: initial,
+            email: email,
+            profile_color: color
+          }
+          const result = await createStudentProfile(studentData);
+          if (result) {
+            toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
+            toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
+          }
+          else {
+            toast.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
+            console.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
+          }
         }
-        const result = await createStudentProfile(studentData);
-        if (result) {
+        else if (data?.user?.user_metadata?.role === 'ครูสอนว่ายน้ำ') {
           toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
           toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
         }
-        else {
-          toast.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
-          console.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
-        }
-        // toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
-        // toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
         handleClose();
         setSearchParams({});
       }

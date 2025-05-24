@@ -54,7 +54,15 @@ export default function LoginModal({open, handleClose, openSignup}) {
     e.preventDefault();
     const { error } = await signIn(email, password);
     if (error) {
-      toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+      if (error.code === 'email_not_confirmed') {
+        toast.error('กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ');
+        return;
+      }
+      if (error.code === 'invalid_credentials') {
+        toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+        return;
+      }
+      toast.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
       console.error('Error login', error.message);
     } else {
       handleClose();

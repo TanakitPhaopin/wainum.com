@@ -12,7 +12,6 @@ import Redirect from './pages/Redirect.jsx'
 import Profile from './pages/teacher/Profile.jsx'
 import Teacher from './pages/teacher/Teacher.jsx'
 import TermsOfService from './pages/TermsOfService.jsx'
-import Checkout from './pages/Checkout.jsx'
 import { Subscription } from './pages/Subscription.jsx'
 import Favourite from './pages/student/Favourite.jsx'
 import Settings from './pages/Settings.jsx'
@@ -73,14 +72,6 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
                     <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/checkout"
-                element={
-                  <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
-                    <Checkout />
                   </ProtectedRoute>
                 }
               />

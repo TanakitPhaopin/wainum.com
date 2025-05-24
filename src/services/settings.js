@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase.js';
+import { signOut } from '../lib/auth.js';
 
 // Update password for the current user
 export async function updatePassword(newPassword) {
@@ -28,4 +29,19 @@ export async function updateUserName(newName) {
     }
 
     return data.user;
+}
+
+// Delete the current user account
+export async function deleteUserAccount(userId) {
+    await signOut(); // Sign out the user before deletion
+    const { error } = await supabase.functions.invoke('delete-user', {
+        body: {
+            userId
+        },
+    });
+    if (error) {
+        console.error('Error deleting user account:', error);
+        throw error;
+    }
+    return true; // Return true if deletion was successful
 }

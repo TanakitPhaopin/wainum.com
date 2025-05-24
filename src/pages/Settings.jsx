@@ -3,7 +3,7 @@ import MyTextField from "../components/TextField";
 import { Divider, Button } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { updatePassword, updateUserName } from "../services/settings";
+import { updatePassword, updateUserName, deleteUserAccount } from "../services/settings";
 
 export default function Settings() {
     const { user } = useAuth();
@@ -83,9 +83,25 @@ export default function Settings() {
         }
     }
 
+    const handleDeleteAccount = async () => {
+        if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีของคุณ? การดำเนินการนี้ไม่สามารถย้อนกลับได้.")) {
+            try {
+                const result = await deleteUserAccount(user?.id);
+                if (result) {
+                    toast.success("บัญชีของคุณถูกลบเรียบร้อยแล้ว");
+                    // Optionally, redirect to home or login page
+                } else {
+                    toast.error("เกิดข้อผิดพลาดในการลบบัญชี");
+                }
+            } catch (error) {
+                console.error("Error deleting account:", error);
+                toast.error("เกิดข้อผิดพลาดในการลบบัญชี");
+            }
+        }
+    }
 
     return (
-        <div className="flex flex-col items-center justify-center h-auto">
+        <div className="flex flex-col gap-4 items-center justify-center h-auto">
             <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
                 <h1 className="text-2xl font-bold mb-4">ตั้งค่าบัญชี</h1>
                 {/* Email */}
@@ -224,7 +240,21 @@ export default function Settings() {
                     <p className="font-normal text-gray-500 text-sm text-end">ไม่สามารถเปลี่ยนได้</p>
                 </div>
             </div>
-            {/* Add more settings options here */}
+
+            {/* Delete Account */}
+            <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+                <h1 className="text-2xl font-bold mb-4">ลบบัญชี</h1>
+                <div className="flex flex-col gap-1 mb-2">
+                    <Button 
+                        variant="contained" 
+                        color="error" 
+                        onClick={() => handleDeleteAccount()}
+                    >
+                        ลบบัญชีของฉัน
+                    </Button>
+                </div>
+            </div>
+            
         </div>
     );
 }
