@@ -23,7 +23,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
   useEffect(() => {
     if (teacher_reviews) {
       const averageRatings = teacher_reviews?.map(r => Number(r.overall_rating));
-      const overallRating = averageRatings.reduce((a, b) => a + b, 0) / averageRatings.length;
+      const overallRating = (averageRatings.reduce((a, b) => a + b, 0) / averageRatings.length).toFixed(1);
       setAverageRating(overallRating);
       const allRatingCount = teacher_reviews?.length;
       setRatingCount(allRatingCount);
