@@ -67,7 +67,7 @@ export default function TermsOfService() {
 
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2">9. ติดต่อเรา</h2>
-        <p>หากมีข้อสงสัยเกี่ยวกับข้อตกลงและเงื่อนไขการใช้งาน กรุณาติดต่อเราที่ tpahopin@gmail.com</p>
+        <p>หากมีข้อสงสัยเกี่ยวกับข้อตกลงและเงื่อนไขการใช้งาน กรุณาติดต่อเราที่ tphaopin@gmail.com</p>
       </section>
 
       <section className="mb-6">
