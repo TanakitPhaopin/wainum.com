@@ -25,7 +25,7 @@ export default function ReviewSection() {
 
     const Content = () => {
         return reviews.map((review) => (
-            <div key={review.id} className="flex flex-col justify-between p-4 embla__slide border-2 border-gray-500/10 rounded-2xl max-h-[300px] cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
+            <div key={review.id} className="bg-white flex flex-col justify-between p-4 embla__slide border-2 border-gray-500/10 rounded-2xl max-h-[300px] cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out"
                 onClick={() => {navigate(`/teacher/${review.teacher_id}`)}}
             >   
                 <div>
@@ -42,7 +42,7 @@ export default function ReviewSection() {
                         </div>
                     </div>
                     <p className='text-lg text-gray-600 text-wrap break-words line-clamp-4'>"{review.review_comment}"</p>
-                    <Rating name="read-only" value={review.overall_rating} precision={0.5} readOnly sx={{bottom: 0}}/>
+                    <Rating name="read-only" value={review.overall_rating} precision={0.5} readOnly size='small'/>
                 </div>
                 <div>
                     <p className='text-sm text-gray-500'>รีวิวจากผู้เรียน: {review.student_profiles.full_name}</p>
@@ -57,9 +57,8 @@ export default function ReviewSection() {
     }
 
     return (
-        <>
         <div 
-            className="bg-white p-6 rounded-4xl shadow-md w-full flex flex-col items-center
+            className="p-6 w-full flex flex-col items-center
             md:flex-row
             ">
             <div className='flex flex-col items-center justify-center mb-4 
@@ -76,11 +75,10 @@ export default function ReviewSection() {
                     startDelay={1000}
                     backDelay={3000}
                     loop
-                    className='text-2xl font-semibold'
+                    className='text-2xl font-semibold md:text-3xl'
                 />
-                <div className='p-2 flex items-center justify-center rounded-xl shadow-[0_0_10px] shadow-black/10 mt-2'>
-                    <Rating name="read-only" value={5} precision={0.5} readOnly/>
-                </div>
+                <Rating name="read-only" value={5} precision={0.5} readOnly size='large'/>
+                <p className='text-gray-500 text-sm mt-2 md:text-lg'>รีวิวจากผู้เรียนที่พึงพอใจมากที่สุด</p>
             </div>
             <div className='w-full
             md:w-1/2
@@ -90,7 +88,5 @@ export default function ReviewSection() {
                 </div>
             </div>
         </div>
-        </>
-        
     );
 }

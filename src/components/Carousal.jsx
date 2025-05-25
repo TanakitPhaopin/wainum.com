@@ -3,7 +3,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 
 export function MyCarousel({Content, container_style}) {
-  const [emblaRef] = useEmblaCarousel({ loop: false }, [Autoplay()])
+  const [emblaRef] = useEmblaCarousel({ loop: false }, [Autoplay({delay: 4000})])
 
   return (
     <div className={`embla ${container_style}`} ref={emblaRef}>
