@@ -15,6 +15,8 @@ import TermsOfService from './pages/TermsOfService.jsx'
 import { Subscription } from './pages/Subscription.jsx'
 import Favourite from './pages/student/Favourite.jsx'
 import Settings from './pages/Settings.jsx'
+import ForgetPassword from './pages/ForgetPassword.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -50,6 +52,8 @@ function App() {
               <Route path='/search' element={<Search />} />
               <Route path='/terms-of-service' element={<TermsOfService />} />
               <Route path='/teacher/:id' element={<Teacher />} />
+              <Route path="/forget-password" element={<ForgetPassword/>} />
+              
 
               {/* Private - All */}
               <Route path="/redirect"
@@ -63,6 +67,13 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/reset-password"
+                element={
+                  <ProtectedRoute>
+                    <ResetPassword />
                   </ProtectedRoute>
                 }
               />

@@ -101,7 +101,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
               ดำเนินการต่อ
             </Button>
             <div className='mt-8 flex flex-col items-center gap-4'>
-              <p className='text-sm text-gray-500 font-sans'><a href="/reset-password" className='hover:underline'>ลืมรหัสผ่าน?</a></p>
+              <p className='text-sm text-gray-500 font-sans'><a href="/forget-password" className='hover:underline'>ลืมรหัสผ่าน?</a></p>
               <p className='text-sm text-gray-500 font-sans'>ยังไม่มีบัญชี? <span className='text-blue-500 hover:underline cursor-pointer' onClick={openSignup}>สร้างบัญชี</span></p>          
             </div>
           </div>
