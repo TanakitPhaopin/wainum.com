@@ -7,6 +7,8 @@ import { useNavigate, useLocation } from 'react-router';
 import getCurrentAddress from '../services/location.js';
 import { toast } from 'react-toastify';
 import HomeContent from './HomeContent.jsx';
+import { ReactTyped } from "react-typed";
+import ReviewSection from './ReviewSection.jsx';
 
 
 export default function Home() {
@@ -73,7 +75,22 @@ export default function Home() {
         <div className="h-full w-full">
             <div className="flex flex-col items-center justify-center py-0 lg:py-8">
                 <h1 className="text-4xl lg:text-5xl 2xl:text-6xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ</h1>
-                {/* Search Box */}
+                <div className='flex items-center justify-center my-1'>
+                    <ReactTyped 
+                        strings={[
+                            "ครูสอนว่ายน้ำทั่วไทย 77 จังหวัด",
+                            "สอนว่ายน้ำสำหรับทุกวัย",
+                            "สอนออนไลน์หรือสอนที่บ้านก็ได้",
+                            "เปรียบเทียบราคาและรีวิวได้",
+                        ]} 
+                        typeSpeed={40} 
+                        backSpeed={30}
+                        backDelay={2000}
+                        loop
+                        className='text-xl lg:text-3xl 2xl:text-4xl text-[#023047] break-words line-clamp-1'
+                    /> 
+                </div>
+               {/* Search Box */}
                 <div className="w-full items-center flex flex-col mt-4">
                     <div className="relative w-full">
                         <Autocomplete
@@ -116,6 +133,15 @@ export default function Home() {
             </div>
             <div className='w-full mt-4'>
                 <HomeContent deviceType={deviceType}/>
+            </div>
+            <div className='w-full mt-4'>
+                <ReviewSection />
+            </div>
+            <div>
+                Become a Teacher
+            </div>
+            <div>
+                77 Provinces
             </div>
         </div>
     );

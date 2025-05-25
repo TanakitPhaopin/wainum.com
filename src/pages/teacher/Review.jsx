@@ -289,7 +289,7 @@ export default function Review({teacher_id, teacher_picture, setRatingInTeacherP
                                     <p className="text-xs">{new Date(review.created_at).toLocaleString()}</p>   
                                 </div>
                             </div>
-                            <p className="text-sm">{review.review_comment}</p>
+                            <p className="text-sm break-words whitespace-pre-line">{review.review_comment}</p>
                             {user && review.student_id === user.id && (
                                 <div className='absolute top-2 right-2 z-30'>
                                     <MyTooltip

@@ -42,7 +42,7 @@ function App() {
           theme="colored"
           transition={Slide}
         />
-        <div className="flex-grow flex justify-center p-4 w-full bg-gradient-to-b from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]">
+        <div className="flex-grow flex justify-center p-4 w-full bg-gradient-to-b animated-background from-[#F0F9FA] via-[#A4D8E1] to-[#F0F9FA]">
           <LoginModal open={loginOpen} handleClose={closeLogin} openSignup={openSignup}/>
           <SignupModal open={signupOpen} handleClose={closeSignup} openLogin={openLogin}/>
           <div className='w-full md:w-11/12 xl:w-2/3 2xl:w-1/2'>
@@ -109,7 +109,7 @@ function App() {
             </Routes>
           </div>
         </div>
-        <footer className='bg-white w-full mt-4 p-4 sm:p-8 text-center text-black'>
+        <footer className='bg-white w-full p-4 sm:p-8 text-center text-black'>
           <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
             <p className='text-gray-600'>© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
             <div className='flex flex-col gap-2 sm:flex-row sm:justify-center sm:space-x-6'>
