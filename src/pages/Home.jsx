@@ -9,9 +9,10 @@ import { toast } from 'react-toastify';
 import HomeContent from './HomeContent.jsx';
 import { ReactTyped } from "react-typed";
 import ReviewSection from './ReviewSection.jsx';
+import BecomeTeacher from './BecomeTeacher.jsx';
 
 
-export default function Home() {
+export default function Home({openSignupClick}) {
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
@@ -72,7 +73,7 @@ export default function Home() {
 
 
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full mb-8">
             <div className="flex flex-col items-center justify-center py-0 lg:py-8">
                 <h1 className="text-4xl lg:text-5xl 2xl:text-6xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ</h1>
                 <div className='flex items-center justify-center my-1'>
@@ -137,11 +138,8 @@ export default function Home() {
             <div className='w-full mt-4'>
                 <ReviewSection />
             </div>
-            <div>
-                Become a Teacher
-            </div>
-            <div>
-                77 Provinces
+            <div className='w-full mt-4'>
+                <BecomeTeacher openSignupClick={openSignupClick}/>
             </div>
         </div>
     );

@@ -509,7 +509,7 @@ export default function Search() {
                     <div></div>
                   )}
                   {premiumProfiles.length > 0 ? (
-                  <div className="mb-2 p-2 md:p-4 rounded-xl shadow-[0_0_20px] shadow-black/30">
+                  <div className="mb-2 p-2 md:p-4 rounded-xl bg-gray-100 shadow-[0_0_20px] shadow-black/30">
                     <h1 className="text-lg font-semibold mb-2">สปอนเซอร์</h1>
                     <Carousel
                       swipeable={true}

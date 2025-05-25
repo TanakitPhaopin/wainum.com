@@ -13,7 +13,6 @@ export default function ReviewSection() {
     const fetchReviews = async () => {
         try {
             const reviews = await getFiveStarReviews();
-            console.log("Fetched reviews:", reviews);
             setReviews(reviews);
         } catch (error) {
             console.error("Error fetching reviews:", error);

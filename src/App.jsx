@@ -48,7 +48,7 @@ function App() {
           <div className='w-full md:w-11/12 xl:w-2/3 2xl:w-1/2'>
             <Routes>
               {/* Public auth routes */}
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home openSignupClick={openSignup}/>} />
               <Route path='/search' element={<Search />} />
               <Route path='/terms-of-service' element={<TermsOfService />} />
               <Route path='/teacher/:id' element={<Teacher />} />
