@@ -47,6 +47,7 @@ export default function BecomeTeacher({openSignupClick}) {
                     '&:hover': {
                         backgroundColor: '#023047',
                     },
+                    borderRadius: '50px',
                 }}
             >
                 สมัครเป็นครู

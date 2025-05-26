@@ -1,0 +1,22 @@
+export default function Contact() {
+    return (
+        <div className="flex flex-col items-start justify-center h-auto bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto mb-4">
+            <h1 className="text-3xl font-bold mb-4">ติดต่อเรา</h1>
+            <p className="text-lg text-gray-600 mb-6">
+            หากคุณมีคำถามหรือข้อสงสัยใด ๆ หรือต้องการรายงานสแปมหรือร้องเรียน สามารถติดต่อเราผ่านช่องทางด้านล่างนี้ได้เลย
+            </p>
+            <div className="flex flex-col items-start space-y-4">
+                <p className="text-md">อีเมล: <a href="mailto:tphaopin@gmail.com"
+                 className="text-blue-500 hover:underline"
+                 target="_blank" rel="noopener noreferrer"
+                 >Email Us</a></p>
+                <p className="text-md">เวลาทำการ:<span className="font-semibold"> จันทร์ - ศุกร์ 9:00 - 17:00 น.</span></p>
+                <p className="text-md">เรายินดีให้บริการและตอบคำถามของคุณเสมอ</p>
+            </div>
+            <div className="mt-8 text-center w-full">
+                <p className="text-sm text-gray-500">© {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์</p>
+            </div>
+        </div>
+    );
+}
+

@@ -17,6 +17,7 @@ import Favourite from './pages/student/Favourite.jsx'
 import Settings from './pages/Settings.jsx'
 import ForgetPassword from './pages/ForgetPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import Contact from './pages/Contact.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -53,6 +54,7 @@ function App() {
               <Route path='/terms-of-service' element={<TermsOfService />} />
               <Route path='/teacher/:id' element={<Teacher />} />
               <Route path="/forget-password" element={<ForgetPassword/>} />
+              <Route path="/contact" element={<Contact />} />
               
 
               {/* Private - All */}
