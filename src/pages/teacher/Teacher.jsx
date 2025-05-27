@@ -1,7 +1,7 @@
 import { getTeacherById, toggleFavorite } from "../../services/search"
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { Box, Button, Divider, Tab } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import StarRateIcon from '@mui/icons-material/StarRate';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import IconButton from '@mui/material/IconButton';
@@ -15,13 +15,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ContactModal from "./ContactModal";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import MyChip from "../../components/Chip";
 import { IsMyFavorite } from "../../services/student";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Review from "./Review";
+import SendRequestModal from "./SendRequestModal";
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -34,6 +34,10 @@ export default function Teacher() {
     const handleOpenModal = () => {
         if (!user) {
             toast.error("กรุณาเข้าสู่ระบบก่อน");
+            return;
+        }
+        if (user.user_metadata.role !== "นักเรียน") {
+            toast.error("คุณไม่มีสิทธิ์ในการติดต่อผู้สอน");
             return;
         }
         setOpenModal(true);
@@ -133,7 +137,7 @@ export default function Teacher() {
 
     return (
         <div className='min-h-screen w-full'>
-            <ContactModal open={openModal} handleClose={handleCloseModal} contacts={teacher.contacts}/>
+            <SendRequestModal open={openModal} handleClose={handleCloseModal} teacherId={teacher.id}/>
             <div className="mb-4 flex justify-between items-center">
                 <Button onClick={() => navigate(from)} variant="contained" color="inherit">กลับ</Button>
                 <div>
