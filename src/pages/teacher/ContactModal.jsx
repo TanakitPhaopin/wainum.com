@@ -119,7 +119,7 @@ export default function ContactModal({open, handleClose, contacts}) {
                     >
                         <div className='w-full grid grid-cols-2'>
                             <LocalPhoneIcon />
-                            <span className="text-lg">{phone}</span>
+                            <span className="text-lg">โทรศัพท์</span>
                         </div>
                     </Button>
                     <Button variant="outlined" color="primary" className="w-full mt-2 mb-2" disabled={!email} onClick={() => {
