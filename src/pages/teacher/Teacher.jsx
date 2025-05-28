@@ -28,7 +28,6 @@ export default function Teacher() {
     const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from || '/search?sort=popularity';
     const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
@@ -155,7 +154,7 @@ export default function Teacher() {
         <div className='min-h-screen w-full'>
             <SendRequestModal open={openModal} handleClose={handleCloseModal} teacherId={teacher.id}/>
             <div className="mb-4 flex justify-between items-center">
-                <Button onClick={() => navigate(from)} variant="contained" color="inherit">กลับ</Button>
+                <Button onClick={() => navigate(-1)} variant="contained" color="inherit">กลับ</Button>
                 <div>
                     <Button
                         id="section-button"
