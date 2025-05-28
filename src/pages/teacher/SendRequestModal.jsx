@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import MyTextField from '../../components/TextField';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import { sendRequestToTeacher, checkExistingRequest } from '../../services/request';
+import { sendRequestToTeacher } from '../../services/request';
 
 const style = {
     position: 'absolute',
@@ -67,11 +67,6 @@ export default function SendRequestModal({open, handleClose, teacherId}) {
         };
 
         try {
-            const existingRequest = await checkExistingRequest(user?.id, teacherId);
-            if (existingRequest) {
-                toast.error('คุณได้ส่งคำขอไปยังครูท่านนี้แล้ว');
-                return;
-            }
             const success = await sendRequestToTeacher(data);
             if (success) {
                 toast.success('ส่งคำขอเรียบร้อยแล้ว');
@@ -129,7 +124,7 @@ export default function SendRequestModal({open, handleClose, teacherId}) {
                                     onClick={() => handleSendRequest()}
                                     className="w-full"
                                 >
-                                    ดำเนินการต่อ
+                                    ส่งคำขอ
                                 </Button>
                             </div>
                         </div>

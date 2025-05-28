@@ -22,6 +22,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Review from "./Review";
 import SendRequestModal from "./SendRequestModal";
+import { checkExistingRequest } from "../../services/request";
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -31,7 +32,7 @@ export default function Teacher() {
     const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
-    const handleOpenModal = () => {
+    const handleOpenModal = async () => {
         if (!user) {
             toast.error("กรุณาเข้าสู่ระบบก่อน");
             return;
@@ -40,8 +41,23 @@ export default function Teacher() {
             toast.error("คุณไม่มีสิทธิ์ในการติดต่อผู้สอน");
             return;
         }
+
+        const isRequestExists = await existingRequest();
+        if (isRequestExists) {
+            toast.error("คุณได้ส่งคำขอไปยังผู้สอนนี้แล้ว");
+            return;
+        }
         setOpenModal(true);
     }
+
+    const existingRequest = async () => {
+        const requestExists = await checkExistingRequest(user.id,teacher.id);
+        if (requestExists) {
+            return true;
+        }
+        return false;
+    }
+
     const handleCloseModal = () => setOpenModal(false);
     const { id } = useParams();
     const [anchorEl, setAnchorEl] = useState(null);

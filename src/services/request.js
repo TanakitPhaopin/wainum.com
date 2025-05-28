@@ -40,7 +40,7 @@ export async function checkExistingRequest(student_id, teacher_id) {
         }
         return true;
     } catch (error) {
-        console.error('Error checking existing request:', error);
+        // console.error('Error checking existing request:', error);
         return false;
     }
 }
