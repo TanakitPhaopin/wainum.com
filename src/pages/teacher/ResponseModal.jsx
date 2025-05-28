@@ -144,7 +144,7 @@ export default function ResponseModal({open, handleClose, requestData, refresh})
                     />
                     <MyCheckBox
                         label="แสดงข้อมูลการติดต่อกับนักเรียน"
-                        checked={check}
+                        check={check}
                         onChange={(e) => setCheck(e.target.checked)}
                     />
                     { check && (
