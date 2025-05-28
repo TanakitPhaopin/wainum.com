@@ -112,3 +112,29 @@ export async function updateRequest(request_id, data) {
         return false;
     }
 }
+
+// Calculate average response time
+export function calculateAverageResponseTime(requests) {
+    if (!requests || requests.length === 0) {
+        return 0;
+    }
+
+    // Filter requests where both times exist and calculate total difference
+    const validResponseTimes = requests
+        .filter(request => request.teacher_response_time && request.created_at)
+        .map(request => new Date(request.teacher_response_time) - new Date(request.created_at)
+);
+
+    if (validResponseTimes.length === 0) {
+        return 0;
+    }
+
+    const totalResponseTime = validResponseTimes.reduce((total, diff) => total + diff, 0);
+
+    const averageResponseTime = totalResponseTime / validResponseTimes.length;
+
+    // Convert to minutes and round to nearest whole minute
+    const averageMinutes = Math.round(averageResponseTime / (1000 * 60));
+
+    return averageMinutes;
+}

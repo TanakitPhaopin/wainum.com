@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import MyChip from "../../components/Chip";
 import { IsMyFavorite } from "../../services/student";
@@ -22,7 +23,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Review from "./Review";
 import SendRequestModal from "./SendRequestModal";
-import { checkExistingRequest } from "../../services/request";
+import { checkExistingRequest, calculateAverageResponseTime } from "../../services/request";
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -95,7 +96,8 @@ export default function Teacher() {
 
     const fetchTeacher = async () => {
             const teacherId = id; // Replace with actual teacher ID
-            const data = await getTeacherById(teacherId);
+            const data = await getTeacherById(teacherId);       
+            console.log("Teacher data:", data);
             if (data) {
                 setTeacher(data);
             } else {
@@ -268,6 +270,10 @@ export default function Teacher() {
                                     <p className="text-center text-wrap">สอนออนไลน์ได้</p>
                                 </div>
                             )}
+                            <div className="flex flex-row justify-start items-center gap-2">
+                                <AccessTimeIcon/>
+                                <p className="text-center font-normal text-wrap">ตอบกลับภายใน ~ {teacher.average_response_time} นาที</p>
+                            </div>
                         </div>
                         <div className="mt-4">
                             <Button

@@ -11,7 +11,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import RecommendIcon from '@mui/icons-material/Recommend';
 
-export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite, teacher_reviews }) {
+export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite, teacher_reviews, average_response_time }) {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
 
@@ -126,12 +126,12 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
               {provinceLabels.length > 2 && ` +${provinceLabels.length - 2} อื่นๆ`}
             </p>
           )}
-          <h5 className='text-2xl font-semibold break-words line-clamp-1'>{is_subscribed && (<VerifiedIcon sx={{color: '#0070ff'}} className='animate-pulse'/>)} {display_name}</h5>
+          <h5 className='text-xl font-semibold break-words line-clamp-1'>{is_subscribed && (<VerifiedIcon sx={{color: '#0070ff'}} className='animate-pulse'/>)} {display_name}</h5>
           <div className='block'>
-            <div className="break-words line-clamp-2">{bio}</div>
+            <div className="text-md break-words line-clamp-2">{bio}</div>
           </div>
           {levels.length > 0 && (
-            <div className="flex flex-row gap-1 mt-2 overflow-x-scroll">
+            <div className="flex flex-row gap-1 overflow-x-scroll">
               {levels.map((level, index) => (
                 <MyChip 
                   label={level} 
@@ -145,6 +145,9 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
           <div className='mt-auto flex flex-row justify-between items-center'>
             <p className="font-semibold">{hourly_rate} บาท / ชั่วโมง</p>
             <p className='flex flex-row'>{<StarRateIcon color='warning'/>}{isNaN(averageRating) ? 'ไม่มีรีวิว' : averageRating} ({ratingCount})</p>
+          </div>
+          <div>
+            <p className='text-xs text-end text-gray-500'>ตอบกลับภายใน ~ {average_response_time} นาที</p>
           </div>
         </CardContent>
       </Card>

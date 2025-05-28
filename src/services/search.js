@@ -1,20 +1,34 @@
 import { supabase } from '../lib/supabase.js';
+import { calculateAverageResponseTime } from './request.js';
 
 
 // Get all profiles
 export async function getAllProfiles() {
     try {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('swim_teacher_profiles')
             .select(`
                 *,
                 swim_teacher_locations (province_code),
-                teacher_reviews (id, teacher_id, overall_rating, created_at)
+                teacher_reviews (id, teacher_id, overall_rating, created_at),
+                student_requests (*)
             `)
             .eq('is_public', true)
             .order('created_at', { ascending: false });
         if (error) {
             throw error;
+        }
+        if (data) {
+          {data = data.map(profile => {
+              // Calculate average response time for each profile
+              const averageResponseTime = calculateAverageResponseTime(profile?.student_requests);
+              return {
+                  ...profile,
+                  average_response_time: averageResponseTime,
+              };
+          }
+          );
+          }
         }
         return data;
     } catch (error) {
@@ -26,17 +40,28 @@ export async function getAllProfiles() {
 // Get Teacher by ID
 export async function getTeacherById(id) {
     try {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('swim_teacher_profiles')
             .select(`
                 *,
-                swim_teacher_locations (province_code)
+                swim_teacher_locations (province_code),
+                student_requests (*)
             `)
             .eq('id', id)
             .single();
         if (error) {
             throw error;
         }
+
+        // Calculate average response time
+        if (data) {
+            const averageResponseTime = calculateAverageResponseTime(data?.student_requests);
+            data = {
+              ...data,
+              average_response_time: averageResponseTime,
+            };
+        }
+
         return data;
     } catch (error) {
         console.error('Error fetching teacher by ID:', error);

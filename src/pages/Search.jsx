@@ -107,6 +107,7 @@ export default function Search() {
       const fetchAndFilter = async () => {
         setLoading(true);
         const data = await getAllProfiles();
+        console.log("Fetched profiles:", data);
         if (!data) {
           console.error("Error fetching profiles");
           setProfiles([]);
@@ -211,6 +212,12 @@ export default function Search() {
             });
           } else if (sortBy === 'newest') {
             results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          } else if (sortBy === 'response_time') {
+            results.sort((a, b) => {
+            const responseTimeA = a.average_response_time || 0;
+            const responseTimeB = b.average_response_time || 0;
+            return responseTimeA - responseTimeB;
+            });
           } else if (sortBy === 'price_asc') {
             results.sort((a, b) => a.hourly_rate - b.hourly_rate);
           } else if (sortBy === 'price_desc') {
@@ -393,6 +400,7 @@ export default function Search() {
                           menuItems={[
                               { label: 'ยอดนิยม', value: 'popularity' },
                               { label: 'ใหม่ล่าสุด', value: 'newest' },
+                              { label: 'ตอบกลับเร็วที่สุด', value: 'response_time' },
                               { label: 'ราคา (น้อยไปมาก)', value: 'price_asc' },
                               { label: 'ราคา (มากไปน้อย)', value: 'price_desc' },
                           ]}
@@ -446,6 +454,7 @@ export default function Search() {
                                 handleStarClick={() => handleStarClick(profile.id, user?.id)}
                                 isFavorite={myFavorites.includes(profile.id)}
                                 teacher_reviews={profile.teacher_reviews}
+                                average_response_time={profile.average_response_time}
                             />
                         ))}
                     </div>
@@ -501,6 +510,7 @@ export default function Search() {
                             handleStarClick={() => handleStarClick(profile.id, user?.id)}
                             isFavorite={myFavorites.includes(profile.id)}
                             teacher_reviews={profile.teacher_reviews}
+                            average_response_time={profile.average_response_time}
                         />                  
                       ))}
                     </Carousel>
@@ -544,6 +554,7 @@ export default function Search() {
                             handleStarClick={() => handleStarClick(profile.id, user?.id)}
                             isFavorite={myFavorites.includes(profile.id)}
                             teacher_reviews={profile.teacher_reviews}
+                            average_response_time={profile.average_response_time}
                         />                  
                       ))}
                     </Carousel>

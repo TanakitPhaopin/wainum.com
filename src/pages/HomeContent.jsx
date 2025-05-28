@@ -145,6 +145,7 @@ export default function HomeContent({ deviceType }) {
                 handleStarClick={() => handleStarClick(profile.id, user?.id)}
                 handleClick={() => navigate(`/teacher/${profile.id}`)}
                 teacher_reviews={profile.teacher_reviews}
+                average_response_time={profile.average_response_time}
               />
           ))}
         </Carousel>
