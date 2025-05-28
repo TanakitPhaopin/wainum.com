@@ -5,12 +5,25 @@ import { Avatar, Button, Divider } from '@mui/material';
 import MyAccordion  from '../../components/Accordion';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import ContactModal from '../teacher/ContactModal';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 export default function StudentRequests() {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [openContactModal, setOpenContactModal] = useState(false);
+    const [teacherContacts, setTeacherContacts] = useState(null);
+    const handleCloseContactModal = () => {
+        setOpenContactModal(false);
+    }
+
+    const handleOpenContactModal = (contacts) => {
+        setTeacherContacts(contacts);
+        setOpenContactModal(true);
+    }
+
     const fetchRequests = async () => {
             if (user) {
                 setLoading(true);
@@ -63,6 +76,7 @@ export default function StudentRequests() {
 
     return (
         <div className="flex flex-col items-center justify-start min-h-screen">
+            <ContactModal open={openContactModal} handleClose={handleCloseContactModal} contacts={teacherContacts} />
             <h1 className="flex text-2xl font-semibold self-start mb-4">รายการคำขอของคุณ</h1>
             <Divider className="w-full" />
             <div className="w-full max-w-2xl my-4">
@@ -82,7 +96,7 @@ export default function StudentRequests() {
                                     onClick={() => navigate(`/teacher/${request.teacher_id}`)}
                                 />
                                 <div className='w-full'>
-                                    <h2 className="text-lg font-semibold break-words line-clamp-1">{request.swim_teacher_profiles.display_name}</h2>
+                                    <h2 className="text-lg font-semibold break-words line-clamp-1">{request.swim_teacher_profiles.display_name} {request.swim_teacher_profiles.is_subscribed && (<VerifiedIcon fontSize='small' sx={{color: '#0070ff'}} className='animate-pulse'/>)}</h2>
                                     <span className={`${statusStyle(request.request_status)} text-sm`}>{request.request_status}</span>
                                 </div>
                             </div>
@@ -90,7 +104,7 @@ export default function StudentRequests() {
                             <div className='w-full'>
                                 <p className='text-md text-black break-words whitespace-normal'>{!request.teacher_response_comment ? "ยังไม่มีการตอบกลับ" : request.teacher_response_comment}</p>
                                 { request.teacher_response_comment && (
-                                    <p className='text-xs text-gray-500'>ตอบกลับเมื่อ: {new Date(request.teacher_response_at).toLocaleString()}</p>
+                                    <p className='text-xs text-gray-500'>ตอบกลับเมื่อ: {new Date(request.teacher_response_time).toLocaleString()}</p>
                                 )}
                             </div>
                             {/* Third Section */}
@@ -113,7 +127,7 @@ export default function StudentRequests() {
                                 />
                             </div>
                             {/* Fourth Section */}
-                            <div className='w-full flex justify-start mt-2'>
+                            <div className='w-full flex justify-between mt-2'>
                                 {request.request_status === 'pending' ? (
                                     <Button 
                                         variant="contained" 
@@ -126,10 +140,20 @@ export default function StudentRequests() {
                                 ) : (
                                     <Button 
                                         variant="outlined" 
-                                        color="primary" 
+                                        color="inherit" 
                                         onClick={() => navigate(`/teacher/${request.teacher_id}`)}
                                     >
-                                        ดูโปรไฟล์ครู
+                                        โปรไฟล์ครู
+                                    </Button>
+                                )}
+                                { request.show_teacher_contacts && (
+                                    <Button 
+                                        variant="contained" 
+                                        color="primary" 
+                                        className="ml-2"
+                                        onClick={() => handleOpenContactModal(request.swim_teacher_profiles.contacts)}
+                                    >
+                                        ข้อมูลการติดต่อ
                                     </Button>
                                 )}
                             </div>

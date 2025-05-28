@@ -54,10 +54,11 @@ export async function getMyRequests(student_id) {
                 swim_teacher_profiles (
                     id,
                     display_name,
-                    profile_picture)`
+                    profile_picture,
+                    contacts,
+                    is_subscribed)`
                 )
             .eq('student_id', student_id)
-            .eq('is_archived', false)
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -84,6 +85,30 @@ export async function deleteRequest(request_id) {
         return true;
     } catch (error) {
         console.error('Error deleting request:', error);
+        return false;
+    }
+}
+
+// Update the request (request status, teacher response comment, teacher response time, show_teacher_contacts)
+export async function updateRequest(request_id, data) {
+    const { request_status, teacher_response_comment, teacher_response_time, show_teacher_contacts } = data;
+    try {
+        const { error } = await supabase
+            .from('student_requests')
+            .update({
+                request_status,
+                teacher_response_comment,
+                teacher_response_time,
+                show_teacher_contacts,
+            })
+            .eq('request_id', request_id);
+
+        if (error) {
+            throw error;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error updating request:', error);
         return false;
     }
 }
