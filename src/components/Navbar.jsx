@@ -22,6 +22,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import RequestPageIcon from '@mui/icons-material/RequestPage';
 
 
 export function Navbar({onLoginClick, openSignupClick}) {
@@ -70,6 +71,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
     // Logged in - Student
     const studentMenu = [
         { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity') },
+        { text: 'คำขอเรียนว่ายน้ำ',        icon: <RequestPageIcon />,   onClick: () => navigate('/student/requests') },
         { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites') },
     ];
 
@@ -92,6 +94,7 @@ export function Navbar({onLoginClick, openSignupClick}) {
      // Logged in - Student
      const studentMenuLaptop = [
         { text: 'ค้นหา',       icon: <SearchIcon />,   onClick: () => navigate('/search?sort=popularity'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
+        { text: 'คำขอเรียนว่ายน้ำ',        icon: <RequestPageIcon />,   onClick: () => navigate('/student/requests'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ครูที่ชื่นชอบ',        icon: <FavoriteIcon />,   onClick: () => navigate('/student/favorites'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ตั้งค่า',        icon: <SettingsIcon />,   onClick: () => navigate('/settings'), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },
         { text: 'ออกจากระบบ',         icon: <LogoutIcon />,    onClick: () => handleSignOut(), className: 'cursor-pointer text-gray-800 hover:bg-[#023047] hover:text-white px-4 py-2 rounded-lg duration-300 ease-in-out' },

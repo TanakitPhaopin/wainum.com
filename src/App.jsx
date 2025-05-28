@@ -19,6 +19,7 @@ import ForgetPassword from './pages/ForgetPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
 import Contact from './pages/Contact.jsx'
 import FAQ from './pages/FAQ.jsx'
+import StudentRequests from './pages/student/StudentRequests.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -104,6 +105,14 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={'นักเรียน'}>
                     <Favourite />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/student/requests"
+                element={
+                  <ProtectedRoute requiredRole={'นักเรียน'}>
+                    <StudentRequests />
                   </ProtectedRoute>
                 }
               />
