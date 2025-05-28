@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import MyTextField from '../../components/TextField';
-import MyCheckBox from '../../components/Checkbox';
+import MyCheckBox from '../../components/CheckBox';
 import { toast } from 'react-toastify';
 import { updateRequest } from '../../services/request';
 
