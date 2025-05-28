@@ -6,6 +6,7 @@ import MyAccordion from '../../components/Accordion';
 import { toast } from 'react-toastify';
 import CallIcon from '@mui/icons-material/Call';
 import ResponseModal from './ResponseModal';
+import MyChip from '../../components/Chip';
 
 export default function TeacherRequests() {
     const { user } = useAuth();
@@ -13,6 +14,12 @@ export default function TeacherRequests() {
     const [openResponseModal, setOpenResponseModal] = useState(false);
     const [requestData, setRequestData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedStatus, setSelectedStatus] = useState('pending');
+    const [statusCounts, setStatusCounts] = useState({
+        pending: 0,
+        accepted: 0,
+        rejected: 0,
+    });
     const handleCloseResponseModal = () => {
         setOpenResponseModal(false);
     }
@@ -25,6 +32,8 @@ export default function TeacherRequests() {
         try {
             setLoading(true);
             const data = await getTeacherRequests(user.id);
+            const getStatusCounts = statusCount(data);
+            setStatusCounts(getStatusCounts);
             setRequests(data);
             setLoading(false);
         } catch (error) {
@@ -33,6 +42,13 @@ export default function TeacherRequests() {
             setLoading(false);
         }
     }
+
+    // Function to count the number of requests by status
+    const statusCount = (data) => data.reduce((acc, req) => {
+        acc[req.request_status] = (acc[req.request_status] || 0) + 1;
+        return acc;
+    }, {});
+
     useEffect(() => {
         fetchRequests();
     }, [user]);
@@ -49,6 +65,10 @@ export default function TeacherRequests() {
         }
     }
 
+    const handleStatusChange = (status) => {
+        setSelectedStatus(status);
+    }
+
     if (loading) {
         return <div></div>;
     }
@@ -58,9 +78,63 @@ export default function TeacherRequests() {
             <ResponseModal open={openResponseModal} handleClose={handleCloseResponseModal} requestData={requestData} refresh={fetchRequests}/>
             <h1 className="flex text-2xl font-semibold self-start mb-4">รายการคำขอจากนักเรียน</h1>
             <Divider className="w-full" />
+            <div className='w-full flex flex-row items-center justify-start gap-2 mt-4 overflow-auto'>
+                <MyChip 
+                    label={`pending (${statusCounts.pending || 0})`}
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                        backgroundColor: selectedStatus === 'pending' ? '#ff9800' : '#e5e7eb',
+                        color: selectedStatus === 'pending' ? '#ffffff' : '#1f2937',          
+                        border: '1px solid',
+                        borderColor: selectedStatus === 'pending' ? '#ff9800' : '#d1d5db',
+                        borderRadius: '0.5rem',
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease-in-out',
+                    }}
+                    className={`cursor-pointer`}
+
+                    onClick={() => handleStatusChange('pending')}
+                />
+                <MyChip 
+                    label={`accepted (${statusCounts.accepted || 0})`}
+                    variant="outlined"
+                    size="small"
+                    onClick={() => handleStatusChange('accepted')}
+                    sx={{
+                        backgroundColor: selectedStatus === 'accepted' ? 'green' : '#e5e7eb',
+                        color: selectedStatus === 'accepted' ? '#ffffff' : '#1f2937',          
+                        border: '1px solid',
+                        borderColor: selectedStatus === 'accepted' ? 'green' : '#d1d5db',
+                        borderRadius: '0.5rem', // rounded-md
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease-in-out',
+                    }}
+                />
+                <MyChip 
+                    label={`rejected (${statusCounts.rejected || 0})`}
+                    variant="outlined"
+                    size="small"
+                    onClick={() => handleStatusChange('rejected')}
+                    sx={{
+                        backgroundColor: selectedStatus === 'rejected' ? 'red' : '#e5e7eb',
+                        color: selectedStatus === 'rejected' ? '#ffffff' : '#1f2937',          
+                        border: '1px solid',
+                        borderColor: selectedStatus === 'rejected' ? 'red' : '#d1d5db',
+                        borderRadius: '0.5rem', // rounded-md
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease-in-out',
+                    }}
+                />
+            </div>
             <div className="w-full max-w-2xl my-4">
-                {requests.length > 0 ? (
-                    requests.map((request) => (
+                {requests.filter((request) => request.request_status === selectedStatus).length > 0 ? (
+                    requests
+                        .filter((request) => request.request_status === selectedStatus)
+                        .map((request) => (
                         // Display each request
                         <div 
                             key={request.request_id} 
@@ -126,7 +200,7 @@ export default function TeacherRequests() {
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500">คุณยังไม่มีคำขอใด ๆ</p>
+                    <p className="text-gray-500">ไม่มีคำขอในสถานะนี้</p>
                 )}
             </div>
         </div>

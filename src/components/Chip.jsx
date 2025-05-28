@@ -1,7 +1,16 @@
 import Chip from '@mui/material/Chip';
 
-export default function MyChip({ label, icon, variant, size, color, sx, className }) {
+export default function MyChip({ label, icon, variant, size, color, sx, className, onClick }) {
     return (
-        <Chip icon={icon} label={label} variant={variant} size={size} color={color} sx={sx} className={className}/>   
+        <Chip 
+            icon={icon} 
+            label={label} 
+            variant={variant}
+            size={size} 
+            color={color} 
+            sx={sx} 
+            className={className}
+            onClick={onClick}
+        />   
     );
 }
