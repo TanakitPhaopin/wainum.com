@@ -314,7 +314,7 @@ export default function Teacher() {
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'> 🧑‍🏫 เกี่ยวกับการสอน</h2>
-                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.about_lesson}</p>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.about_lesson}</p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>💰 ค่าเรียน</h2>
@@ -348,7 +348,7 @@ export default function Teacher() {
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>เกี่ยวกับสถานที่สอน</h2>
-                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.about_location}</p>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.about_location}</p>
                 </div>
                 <Divider sx={{marginBottom: 2}}/>
                 <div className="flex flex-col gap-2 mb-4">
@@ -391,11 +391,11 @@ export default function Teacher() {
             <div ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>💼 ประสบการณ์</h2>
-                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.experience}</p>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.experience}</p>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>🎓 ใบรับรองคุณวุฒิ</h2>
-                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll">{teacher.qualification}</p>
+                    <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.qualification}</p>
                 </div>
             </div>
 

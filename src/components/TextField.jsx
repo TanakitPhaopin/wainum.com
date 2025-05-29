@@ -14,6 +14,7 @@ export default function MyTextField({
   required = false,
   disabled = false,
   showCounter = false,
+  onBlur,
 }) {
   return (
     <div>
@@ -34,6 +35,7 @@ export default function MyTextField({
         { htmlInput: { maxLength } }
       }
       helperText={showCounter ? `${value.length}/${maxLength}` : ''}
+      onBlur={onBlur}
     />
     </div>
   );

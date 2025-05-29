@@ -385,6 +385,7 @@ export default function Profile() {
           maxLength={16}
           showCounter={true}
           required={true}
+          onBlur={() => {console.log('Display name field blurred');}}
         />        
         <MyTextField
           id={'แนะนำตัว'}
@@ -396,6 +397,7 @@ export default function Profile() {
           maxLength={150}
           showCounter={true}
           required={true}
+          onBlur={() => {console.log('Bio field blurred');}}
         />
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">รายละเอียดการติดต่อ</h4>
         {contacts.map((contact, index) => (
@@ -425,7 +427,7 @@ export default function Profile() {
           value={about_location}
           onChange={handleChange('about_location')}
           multiline
-          rows={4}
+          rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
@@ -460,7 +462,7 @@ export default function Profile() {
           value={about_lesson}
           onChange={handleChange('about_lesson')}
           multiline
-          rows={4}
+          rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
@@ -491,7 +493,7 @@ export default function Profile() {
           value={experience}
           onChange={handleChange('experience')}
           multiline
-          rows={4}
+          rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
@@ -502,7 +504,7 @@ export default function Profile() {
           value={qualification}
           onChange={handleChange('qualification')}
           multiline
-          rows={4}
+          rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
