@@ -8,35 +8,43 @@ import MySelectionBox from '../../components/SelectionBox';
 import provinces_th from '../../assets/geography_th/provinces.json';
 import placeholder_image from '../../assets/placeholder_image.jpg';
 import { useNavigate } from 'react-router';
+import { upsertTeacherProfileField, upsertTeacherLocation } from '../../services/teacher';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+  const [saving, setSaving] = useState(false);
   // Form
-  const [is_public, setIs_public] = useState(false);
-  const [profile_picture, setProfile_picture] = useState('');
-  const [display_name, setDisplay_name] = useState('');
-  const [bio, setBio] = useState('');
-  const [contacts, setContacts] = useState([
-    { type: 'phone', value: '' },
-    { type: 'email', value: '' },
-    { type: 'line link', value: '' },
-    { type: 'facebook link', value: '' },
-    { type: 'instagram link', value: '' },
-  ]);
-  const [selectedProvinces, setSelectedProvinces] = useState([]);
-  const [about_location, setAbout_location] = useState('');
-  const [can_travel, setCan_travel] = useState(false);
-  const [travel_note, setTravel_note] = useState('');
-  const [can_online, setCan_online] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState([]);
-  const [about_lesson, setAbout_lesson] = useState('');
-  const [hourly_rate, setHourly_rate] = useState('');
-  const [lesson_package, setLesson_package] = useState('');
-  const [experience, setExperience] = useState('');
-  const [qualification, setQualification] = useState('');
+  const [formData, setFormData] = useState({
+    is_public: false,
+    profile_picture: '',
+    display_name: '',
+    bio: '',
+    contacts: [
+      { type: 'phone', value: '' },
+      { type: 'email', value: '' },
+      { type: 'line link', value: '' },
+      { type: 'facebook link', value: '' },
+      { type: 'instagram link', value: '' },
+    ],
+    selectedProvinces: [],
+    about_location: '',
+    can_travel: false,
+    travel_note: '',
+    can_online: false,
+    selectedLevel: [],
+    about_lesson: '',
+    hourly_rate: '',
+    lesson_package: '',
+    experience: '',
+    qualification: '',
+    is_subscribed: false,
+    updated_at: '',
+  });
+
+  const [originalData, setOriginalData] = useState(formData); // initially the same
+
 
   const provinces = provinces_th.map((province) => ({
     label: province.provinceNameTh,
@@ -57,8 +65,9 @@ export default function Profile() {
 
   useEffect(() => {
     if (!user) return;
-    try {
-      const fetchData = async () => {
+
+    const fetchData = async () => {
+      try {
         const { data, error } = await supabase
           .from('swim_teacher_profiles')
           .select(`*,
@@ -68,137 +77,71 @@ export default function Profile() {
           `)
           .eq('id', user.id)
           .single();
+
         if (error) {
           console.log(error);
+          setLoading(false);
+          return;
         }
+
         if (data) {
-          // Set initial form values
-          setIs_public(data.is_public || false);
-          setProfile_picture(data.profile_picture || '');
-          setDisplay_name(data.display_name || '');
-          setBio(data.bio || '');
-          setContacts(data.contacts || [
-            { type: 'phone', value: '' },
-            { type: 'email', value: '' },
-            { type: 'line link', value: '' },
-            { type: 'facebook link', value: '' },
-            { type: 'instagram link', value: '' },
-          ]);
-          const matched = data.swim_teacher_locations
+          const matchedProvinces = data.swim_teacher_locations
             ?.map(loc => provinces.find(p => String(p.value) === String(loc.province_code)))
-            .filter(Boolean); // remove undefined
-          setSelectedProvinces(matched || []);
-          setAbout_location(data.about_location || '');
-          setCan_travel(data.can_travel || false);
-          setTravel_note(data.travel_note || '');
-          setCan_online(data.can_online || false);
+            .filter(Boolean);
+
           const matchedLevels = data.levels
             ?.map(level => levels.find(l => String(l.value) === String(level)))
-            .filter(Boolean); // remove undefined
-          setSelectedLevel(matchedLevels || []);
-          setAbout_lesson(data.about_lesson || '');
-          setHourly_rate(data.hourly_rate || '');
-          setLesson_package(data.lesson_package || '');
-          setExperience(data.experience || '');
-          setQualification(data.qualification || '');
+            .filter(Boolean);
+
+          const newFormData = {
+            is_public: data.is_public || false,
+            profile_picture: data.profile_picture || '',
+            display_name: data.display_name || '',
+            bio: data.bio || '',
+            contacts: data.contacts || [
+              { type: 'phone', value: '' },
+              { type: 'email', value: '' },
+              { type: 'line link', value: '' },
+              { type: 'facebook link', value: '' },
+              { type: 'instagram link', value: '' },
+            ],
+            selectedProvinces: matchedProvinces || [],
+            about_location: data.about_location || '',
+            can_travel: data.can_travel || false,
+            travel_note: data.travel_note || '',
+            can_online: data.can_online || false,
+            selectedLevel: matchedLevels || [],
+            about_lesson: data.about_lesson || '',
+            hourly_rate: data.hourly_rate || '',
+            lesson_package: data.lesson_package || '',
+            experience: data.experience || '',
+            qualification: data.qualification || '',
+            is_subscribed: data.is_subscribed || false,
+            updated_at: data.updated_at || '',
+          };
+          console.log('New form data:', newFormData);
+
+          setFormData(newFormData);
+          setOriginalData(newFormData); // store original for comparison
         }
+
         setLoading(false);
-      };
-      fetchData();
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [user]);
 
-  const validateFields = () => {
-    // Check if all required fields are filled
-    const requiredFields = [
-      display_name.trim(),
-      bio.trim(),
-      contacts.some(contact => contact.value.trim() !== ''), // At least one contact must be filled
-      selectedProvinces.length > 0, // At least one province must be selected
-      about_location.trim(),
-      selectedLevel.length > 0, // Ensure at least one valid level is selected
-      about_lesson.trim(),
-      hourly_rate,
-      experience.trim(),
-      qualification.trim(),
-    ];
-  
-    return requiredFields.every(field => Boolean(field)); // Return true if all fields are valid
-  };
-
-  const handleChange = (field) => (e) => {
-    const value = 
-      field === 'can_travel' || field === 'can_online' || field === 'is_public'
-        ? e.target.checked // For switches
-        : e.target.value;  // For text fields and other inputs
-  
-    if (field === 'is_public') {
-      if (!validateFields()) {
-        toast.error('กรุณากรอกข้อมูลให้ครบก่อนเผยแพร่');
-        return; // Prevent enabling `is_public` if validation fails
-      }
-      toast.info('ระบบจะไม่อัปเดตหากคุณลืมบันทึกข้อมูล');
-    }
-
-    // Dynamically update the state based on the field name
-    switch (field) {
-      case 'is_public':
-        setIs_public(value);
-        break;
-      case 'profile_picture':
-        setProfile_picture(value);
-        break;
-      case 'display_name':
-        setDisplay_name(value);
-        break;
-      case 'bio':
-        setBio(value);
-        break;
-      case 'selectedProvinces':
-        setSelectedProvinces(e); // Directly set the value from the selection box
-        break;
-      case 'about_location':
-        setAbout_location(value);
-        break;
-      case 'can_travel':
-        setCan_travel(value);
-        break;
-      case 'travel_note':
-        setTravel_note(value);
-        break;
-      case 'can_online':
-        setCan_online(value);
-        break;
-      case 'levels':
-        setSelectedLevel(e); // Directly set the value from the selection box
-        break;
-      case 'about_lesson':
-        setAbout_lesson(value);
-        break;
-      case 'hourly_rate':
-        setHourly_rate(value);
-        break;
-      case 'lesson_package':
-        setLesson_package(value);
-        break;
-      case 'experience':
-        setExperience(value);
-        break;
-      case 'qualification':
-        setQualification(value);
-        break;
-      default:
-        console.warn(`Unhandled field: ${field}`);
-    }
-  };
-
   const handleContactChange = (index, value) => {
-    const updatedContacts = [...contacts];
-    updatedContacts[index].value = value;
-    setContacts(updatedContacts);
+    const updatedContacts = [...formData.contacts];
+    const updatedContact = { ...updatedContacts[index], value };
+    updatedContacts[index] = updatedContact;
+    setFormData(prev => ({ ...prev, contacts: updatedContacts }));
+    console.log('Updated contacts:', updatedContacts);
+    console.log('Original contacts:', originalData.contacts);
   };
 
   const handleProfilePictureUpload = async (e) => {
@@ -227,106 +170,77 @@ export default function Profile() {
         .getPublicUrl(fileName);
   
       if (publicUrlData) {
-        setProfile_picture(publicUrlData.publicUrl); // Update the profile picture state
-        toast.success('อัปโหลดรูปโปรไฟล์สำเร็จ');
+        handleUpsert('profile_picture', publicUrlData.publicUrl);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
       toast.error('เกิดข้อผิดพลาดที่ไม่คาดคิด');
     }
   };
-  
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-  
+  const handleUpsert = async (field, value) => {
+    const fieldValue = value;
+    const fieldName = field;
+    const teacherId = user.id;
+    
     try {
-      // Validate required fields
-      if (!validateFields()) {
-        toast.error('กรุณากรอกข้อมูลให้ครบก่อนบันทึก');
-        
-        // Reset `is_public` to false if validation fails and it's trying to be enabled
-        if (is_public) {
-          setIs_public(false);
-        }
-        
-        setSubmitting(false);
-        return; // Stop execution if validation fails
+      setSaving(true);
+      const data = await upsertTeacherProfileField(fieldName, fieldValue, teacherId);
+      if (data) {
+        console.log('Field upserted successfully:', data);
+        const updatedData = data[0];
+        setOriginalData(prev => ({ ...prev, [field]: fieldValue, updated_at: updatedData.updated_at })); // Update original data
+        setFormData(prev => ({ ...prev, [field]: fieldValue, updated_at: updatedData.updated_at })); // Update form data
+        toast.success('บันทึกข้อมูลสำเร็จ');
+      } else {
+        toast.error('ไม่สามารถบันทึกข้อมูลได้');
       }
-  
-      const levels = selectedLevel.map((level) => level.value);
-      // Prepare the profile data
-      const profileData = {
-        id: user.id,
-        is_public,
-        profile_picture,
-        display_name,
-        bio,
-        contacts,
-        about_location,
-        can_travel,
-        travel_note,
-        can_online,
-        about_lesson,
-        hourly_rate: Number(hourly_rate),
-        lesson_package,
-        experience,
-        qualification,
-        levels,
-        email: user.email,
-      };
-  
-      // Upsert the profile data
-      const { error: profileError } = await supabase
-        .from('swim_teacher_profiles')
-        .upsert(profileData, { onConflict: 'id' });
-  
-      if (profileError) {
-        toast.error('เกิดข้อผิดพลาดในการบันทึกโปรไฟล์');
-        console.error(profileError);
-        return;
-      }
-
-      // Delete existing provinces for the user
-      const { error: deleteError } = await supabase
-      .from('swim_teacher_locations')
-      .delete()
-      .eq('id', user.id);
-
-      if (deleteError) {
-        toast.error('เกิดข้อผิดพลาดในการลบจังหวัดเก่า');
-        console.error(deleteError);
-        return;
-      }
-
-      // Prepare the province data
-      const provinceRows = selectedProvinces.map((p) => ({
-        id: user.id,
-        province_code: String(p.value),
-      }));
-  
-      // Upsert the province data
-      const { error: insertError } = await supabase
-        .from('swim_teacher_locations')
-        .upsert(provinceRows, {
-          onConflict: ['id', 'province_code'],
-        });
-  
-      if (insertError) {
-        toast.error('เกิดข้อผิดพลาดในการเพิ่มจังหวัด');
-        console.error(insertError);
-        return;
-      }
-  
-      toast.success('บันทึกโปรไฟล์และจังหวัดเรียบร้อยแล้ว');
+      setSaving(false);
     } catch (error) {
-      console.error('Unexpected error:', error);
-      toast.error('เกิดข้อผิดพลาดที่ไม่คาดคิด');
-    } finally {
-      setSubmitting(false);
+      console.error('Error upserting field:', error);
+      toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+      setSaving(false);
+    }
+  }
+
+  const updateField = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const isChanged = (field) => {
+    console.log('Checking if field has changed:', field);
+    console.log('Current value:', formData[field]);
+    console.log('Original value:', originalData[field]);
+    return JSON.stringify(formData[field]) !== JSON.stringify(originalData[field]);
+  };
+
+  const handleUpsertLocation = async (province_code) => {
+    const teacherId = user.id;
+    try {
+      setSaving(true);
+      const data = await upsertTeacherLocation(teacherId, province_code);
+      if (data) {
+       const provinceCodes = data.map(item => item.province_code);
+       const updated_timestamp = data.find(item => item.updated_at)?.updated_at;
+        const matchedProvinces = provinceCodes
+          .map(code => provinces.find(p => String(p.value) === String(code)))
+          .filter(Boolean); // removes any undefined
+
+        setOriginalData(prev => ({ ...prev, selectedProvinces: matchedProvinces, updated_at: updated_timestamp })); // Update original data
+        setFormData(prev => ({ ...prev, selectedProvinces: matchedProvinces, updated_at: updated_timestamp })); // Update form data
+        toast.success('บันทึกข้อมูลสถานที่สอนสำเร็จ');
+      } else {
+        toast.error('ไม่สามารถบันทึกข้อมูลสถานที่สอนได้');
+      }
+      setSaving(false);
+    } catch (error) {
+      console.error('Error upserting location:', error);
+      toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูลสถานที่สอน');
+      setSaving(false);
     }
   };
+
+
   
 
   if (loading) return null;
@@ -334,110 +248,182 @@ export default function Profile() {
   return (
   <>
     <form
-    onSubmit={handleSubmit}
-    className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
-    noValidate
+      className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
+      noValidate
     >
+      {/* Header */}
       <div className='flex flex-row justify-between items-center'>
-        {isSubscribed ? (
-          <Button
-            variant="contained" size="small" color='inherit' onClick={() => navigate('/subscription')}>จัดการซับสคริปชั่น
-          </Button>
-        ) : (
-          <Button
-            variant="contained" size="small" color='inherit' onClick={() => navigate('/subscription')}>สมัครพรีเมี่ยม</Button>
-        )}
-        <FormControlLabel control={<Switch checked={is_public} onChange={handleChange('is_public')} />} label="เผยแพร่"  className='flex justify-end'/>
+        {/* Updated at */}
+        <div className='text-xs'>
+          { saving ?
+          (
+            <div>
+              <p className='text-center text-gray-500'>กำลังบันทึกข้อมูล...</p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-center text-gray-500">
+                อัปเดตล่าสุด {new Date(formData.updated_at).toLocaleString('th-TH', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
+            </div>
+          )}
+        </div>
+        {/* Set Public */}
+        <FormControlLabel 
+          control={
+            <Switch 
+              checked={formData.is_public} 
+              onChange={(e) => {
+                const newValue = e.target.checked;
+                const oldValue = originalData.is_public;
+
+                if (newValue !== oldValue) {
+                  handleUpsert('is_public', newValue);
+                }
+
+                updateField('is_public', newValue);
+              }}
+            />
+          } 
+          label="เผยแพร่"  
+          className='flex justify-end'
+        />
       </div>
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
-        <div className="w-full bg-white p-4 rounded-xl shadow-sm">
-          <div className="mt-6 flex justify-center">
-            <img
-              src={profile_picture || placeholder_image}
-              alt="โปรไฟล์"
-              className="w-32 h-32 rounded-full object-cover border border-gray-300 shadow"
+      {/* General heading */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
+      {/* General profile image */}
+      <div className="w-full bg-white p-4 rounded-xl shadow-sm">
+        <div className="mt-6 flex justify-center">
+          <img
+            src={formData.profile_picture || placeholder_image}
+            alt="โปรไฟล์"
+            className="w-32 h-32 rounded-full object-cover border border-gray-300 shadow"
+          />
+        </div>
+        <div className="mt-6 flex justify-center">
+          <div className="relative w-fit">
+            <input
+              type="file"
+              id="profilePictureUpload"
+              accept="image/*"
+              onChange={handleProfilePictureUpload}
+              className="block w-full text-sm text-gray-700
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100
+                        overflow-hidden"
             />
           </div>
-          <div className="mt-6 flex justify-center">
-            <div className="relative w-fit">
-              <input
-                type="file"
-                id="profilePictureUpload"
-                accept="image/*"
-                onChange={handleProfilePictureUpload}
-                className="block w-full text-sm text-gray-700
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100
-                          overflow-hidden"
-              />
-            </div>
-          </div>
+        </div>
       </div>
+      {/* About teacher */}
+      <MyTextField
+        id={'ชื่อที่แสดง'}
+        label="ชื่อที่แสดง"
+        value={formData.display_name}
+        onChange={(e) => updateField('display_name', e.target.value)}
+        maxLength={16}
+        showCounter={true}
+        required={true}
+        onBlur={(e) => {
+          if (isChanged('display_name')) {
+            handleUpsert('display_name', e.target.value);
+          }
+        }}
+      />        
+      <MyTextField
+        id={'แนะนำตัว'}
+        label="แนะนำตัว"
+        value={formData.bio}
+        onChange={(e) => updateField('bio', e.target.value)}
+        multiline
+        rows={3}
+        maxLength={150}
+        showCounter={true}
+        required={true}
+        onBlur={(e) => {
+          if (isChanged('bio')) {
+            handleUpsert('bio', e.target.value);
+          }
+        }}
+      />
+      {/* Contacts */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">รายละเอียดการติดต่อ</h4>
+      {formData.contacts.map((contact, index) => (
+        <div key={index} className=" w-full">
+          <MyTextField
+            id={contact.type} // Use the contact type as the ID
+            label={contact.type.charAt(0).toUpperCase() + contact.type.slice(1)} // Capitalize the label
+            value={contact.value} // Bind the value to the contact's value
+            onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
+            onBlur={(e) => {
+              console.log('Contact field changed:', contact.type, e.target.value);
+              if (isChanged('contacts')) {
+                console.log('Contacts have changed, updating...');
+                const updatedContacts = [...formData.contacts];
+                updatedContacts[index].value = e.target.value;
+                handleUpsert('contacts', updatedContacts);
+              }
+            }}
+            multiline={false} // No need for multiline unless required
+            maxLength={100} // Adjust maxLength as needed
+            required={contact.type !== 'line link' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
+        </div>
+      ))}
 
-        <MyTextField
-          id={'ชื่อที่แสดง'}
-          label="ชื่อที่แสดง"
-          value={display_name}
-          onChange={handleChange('display_name')}
-          maxLength={16}
-          showCounter={true}
-          required={true}
-          onBlur={() => {console.log('Display name field blurred');}}
-        />        
-        <MyTextField
-          id={'แนะนำตัว'}
-          label="แนะนำตัว"
-          value={bio}
-          onChange={handleChange('bio')}
-          multiline
-          rows={3}
-          maxLength={150}
-          showCounter={true}
-          required={true}
-          onBlur={() => {console.log('Bio field blurred');}}
-        />
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">รายละเอียดการติดต่อ</h4>
-        {contacts.map((contact, index) => (
-          <div key={index} className=" w-full">
-            <MyTextField
-              id={contact.type} // Use the contact type as the ID
-              label={contact.type.charAt(0).toUpperCase() + contact.type.slice(1)} // Capitalize the label
-              value={contact.value} // Bind the value to the contact's value
-              onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
-              multiline={false} // No need for multiline unless required
-              maxLength={100} // Adjust maxLength as needed
-              required={contact.type !== 'line link' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
-          </div>
-        ))}
+       
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
         <MySelectionBox 
           options={provinces} 
           isMulti={true}
           placeholder={'จังหวัดที่สอน'}
           className={'z-10'}
-          value={selectedProvinces}
-          onChange={setSelectedProvinces}
+          value={formData.selectedProvinces}
+          onChange={(e) => {
+            const newSelectedProvinces = e.map(option => option);
+            
+            const province_codes = e.map(option => option.value);
+
+            const originalProvinces = originalData.selectedProvinces || [];
+
+
+            const isDifferent = JSON.stringify(newSelectedProvinces) !== JSON.stringify(originalProvinces);
+
+            if (isDifferent) {
+              handleUpsertLocation(province_codes);
+            }
+            console.log('Selected provinces changed:', newSelectedProvinces);
+
+            updateField('selectedProvinces', newSelectedProvinces);
+          }}
         />
+        {/* 
         <MyTextField
           id={'ข้อมูลสถานที่สอน'}
           label="ข้อมูลสถานที่สอน"
-          value={about_location}
+          value={formData.about_location}
           onChange={handleChange('about_location')}
           multiline
           rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
-        />
-        <FormControlLabel control={<Switch checked={can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
-        {can_travel && (
+        /> */}
+        {/* 
+        <FormControlLabel control={<Switch checked={formData.can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
+        {formData.can_travel && (
             <MyTextField
             id={"หมายเหตุเกี่ยวกับการเดินทาง"}
             label="หมายเหตุเกี่ยวกับการเดินทาง"
-            value={travel_note}
+            value={formData.travel_note}
             onChange={handleChange('travel_note')}
             multiline
             rows={2}
@@ -445,7 +431,7 @@ export default function Profile() {
             showCounter={true}
           />
         )}
-        <FormControlLabel control={<Switch checked={can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
+        <FormControlLabel control={<Switch checked={formData.can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
     
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลการสอน</h4>
         <MySelectionBox 
@@ -453,7 +439,7 @@ export default function Profile() {
           isMulti={true}
           placeholder={'ระดับการสอน'}
           className={'z-10'}
-          value={selectedLevel}
+          value={formData.selectedLevel}
           onChange={setSelectedLevel}
         />
         <MyTextField
@@ -508,17 +494,7 @@ export default function Profile() {
           maxLength={1500}
           showCounter={true}
           required={true}
-        />
-
-        <div className="sticky bottom-4 left-0 right-0 flex justify-center mt-10 z-20">
-            <Button
-                type="submit"
-                variant="contained"
-                className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-2 rounded-full shadow-lg hover:opacity-90"
-            >
-                บันทึกข้อมูล
-            </Button>
-        </div>
+        /> */}
     </form>
   </>
 
