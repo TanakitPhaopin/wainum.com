@@ -15,6 +15,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [packages, setPackages] = useState([]);
   // Form
   const [formData, setFormData] = useState({
     is_public: false,
@@ -36,7 +37,7 @@ export default function Profile() {
     selectedLevel: [],
     about_lesson: '',
     hourly_rate: '',
-    lesson_package: '',
+    lesson_package: [],
     experience: '',
     qualification: '',
     is_subscribed: false,
@@ -113,14 +114,14 @@ export default function Profile() {
             selectedLevel: matchedLevels || [],
             about_lesson: data.about_lesson || '',
             hourly_rate: data.hourly_rate || '',
-            lesson_package: data.lesson_package || '',
+            lesson_package: data.lesson_package || [],
             experience: data.experience || '',
             qualification: data.qualification || '',
             is_subscribed: data.is_subscribed || false,
             updated_at: data.updated_at || '',
           };
-          console.log('New form data:', newFormData);
-
+          const packagesArray = JSON.parse(data.lesson_package || '[]');
+          setPackages(packagesArray || []); // Initialize packages from data
           setFormData(newFormData);
           setOriginalData(newFormData); // store original for comparison
         }
@@ -187,7 +188,6 @@ export default function Profile() {
       setSaving(true);
       const data = await upsertTeacherProfileField(fieldName, fieldValue, teacherId);
       if (data) {
-        console.log('Field upserted successfully:', data);
         const updatedData = data[0];
         setOriginalData(prev => ({ ...prev, [field]: fieldValue, updated_at: updatedData.updated_at })); // Update original data
         setFormData(prev => ({ ...prev, [field]: fieldValue, updated_at: updatedData.updated_at })); // Update form data
@@ -208,9 +208,6 @@ export default function Profile() {
   };
 
   const isChanged = (field) => {
-    console.log('Checking if field has changed:', field);
-    console.log('Current value:', formData[field]);
-    console.log('Original value:', originalData[field]);
     return JSON.stringify(formData[field]) !== JSON.stringify(originalData[field]);
   };
 
@@ -240,6 +237,15 @@ export default function Profile() {
     }
   };
 
+  const handleAddPackage = () => {
+    setPackages(prev => [...prev, { name: '', price: '', description: '' }]);
+  };
+  const handlePackageChange = (index, field, value) => {
+    setPackages(prev => prev.map((info, i) =>
+      i === index ? { ...info, [field]: value } : info
+    ));
+  };
+
 
   
 
@@ -252,7 +258,7 @@ export default function Profile() {
       noValidate
     >
       {/* Header */}
-      <div className='flex flex-row justify-between items-center'>
+      <div className='flex flex-col items-center md:flex-row md:justify-between'>
         {/* Updated at */}
         <div className='text-xs'>
           { saving ?
@@ -365,9 +371,7 @@ export default function Profile() {
             value={contact.value} // Bind the value to the contact's value
             onChange={(e) => handleContactChange(index, e.target.value)} // Update the specific contact's value
             onBlur={(e) => {
-              console.log('Contact field changed:', contact.type, e.target.value);
               if (isChanged('contacts')) {
-                console.log('Contacts have changed, updating...');
                 const updatedContacts = [...formData.contacts];
                 updatedContacts[index].value = e.target.value;
                 handleUpsert('contacts', updatedContacts);
@@ -388,51 +392,76 @@ export default function Profile() {
           className={'z-10'}
           value={formData.selectedProvinces}
           onChange={(e) => {
-            const newSelectedProvinces = e.map(option => option);
-            
+            const newSelectedProvinces = e.map(option => option);  
             const province_codes = e.map(option => option.value);
-
             const originalProvinces = originalData.selectedProvinces || [];
-
-
             const isDifferent = JSON.stringify(newSelectedProvinces) !== JSON.stringify(originalProvinces);
-
             if (isDifferent) {
               handleUpsertLocation(province_codes);
             }
-            console.log('Selected provinces changed:', newSelectedProvinces);
-
             updateField('selectedProvinces', newSelectedProvinces);
           }}
         />
-        {/* 
         <MyTextField
           id={'ข้อมูลสถานที่สอน'}
           label="ข้อมูลสถานที่สอน"
           value={formData.about_location}
-          onChange={handleChange('about_location')}
+          onChange={(e) => updateField('about_location', e.target.value)}
+          onBlur={(e) => {
+            if (isChanged('about_location')) {
+              handleUpsert('about_location', e.target.value);
+            }
+          }}
           multiline
           rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
-        /> */}
-        {/* 
-        <FormControlLabel control={<Switch checked={formData.can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
+        />
+        <FormControlLabel control={<Switch checked={formData.can_travel} 
+          onChange={(e) => {
+                  const newValue = e.target.checked;
+                  const oldValue = originalData.can_travel;
+
+                  if (newValue !== oldValue) {
+                    handleUpsert('can_travel', newValue);
+                  }
+
+                  updateField('can_travel', newValue);
+                }} />
+        } label="สามารถเดินทางได้" />
+         
         {formData.can_travel && (
             <MyTextField
             id={"หมายเหตุเกี่ยวกับการเดินทาง"}
             label="หมายเหตุเกี่ยวกับการเดินทาง"
             value={formData.travel_note}
-            onChange={handleChange('travel_note')}
+            onChange={(e) => updateField('travel_note', e.target.value)}
+            onBlur={(e) => {
+              if (isChanged('travel_note')) {
+                handleUpsert('travel_note', e.target.value);
+              }
+            }}
             multiline
-            rows={2}
+            rows={3}
             maxLength={1000}
             showCounter={true}
           />
         )}
-        <FormControlLabel control={<Switch checked={formData.can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
-    
+        <FormControlLabel 
+        control={<Switch checked={formData.can_online} 
+          onChange={(e) => {
+                  const newValue = e.target.checked;
+                  const oldValue = originalData.can_online;
+
+                  if (newValue !== oldValue) {
+                    handleUpsert('can_online', newValue);
+                  }
+
+                  updateField('can_online', newValue);
+                }}
+        />} label="สอนออนไลน์" />
+        
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลการสอน</h4>
         <MySelectionBox 
           options={levels} 
@@ -440,13 +469,28 @@ export default function Profile() {
           placeholder={'ระดับการสอน'}
           className={'z-10'}
           value={formData.selectedLevel}
-          onChange={setSelectedLevel}
+          onChange={(e) => {
+            const newSelectedLevels = e.map(level => level);
+            const levels = e.map(level => level.value);
+            const originalLevels = originalData.selectedLevel || [];
+            const isDifferent = JSON.stringify(newSelectedLevels) !== JSON.stringify(originalLevels);
+            if (isDifferent) {
+              handleUpsert('levels', levels);
+            }
+            updateField('selectedLevel', newSelectedLevels);
+          }}
         />
+        
         <MyTextField
           id={'ข้อมูลเกี่ยวกับการสอน'}
           label="ข้อมูลเกี่ยวกับการสอน"
-          value={about_lesson}
-          onChange={handleChange('about_lesson')}
+          value={formData.about_lesson}
+          onChange={(e) => updateField('about_lesson', e.target.value)}
+          onBlur={(e) => {
+            if (isChanged('about_lesson')) {
+              handleUpsert('about_lesson', e.target.value);
+            }
+          }}
           multiline
           rows={8}
           maxLength={1500}
@@ -456,28 +500,90 @@ export default function Profile() {
         <MyTextField
           id={"ราคาต่อชั่วโมง (บาท)"}
           label="ราคาต่อชั่วโมง (บาท)"
-          value={hourly_rate}
-          onChange={handleChange('hourly_rate')}
+          value={formData.hourly_rate}
+          onChange={(e) => updateField('hourly_rate', e.target.value)}
+          onBlur={(e) => {
+            if (isChanged('hourly_rate')) {
+              handleUpsert('hourly_rate', e.target.value);
+            }
+          }}
           type='number'
           required={true}
         />
-        <MyTextField
-          id={'แพ็คเกจการสอน'}
-          label="แพ็คเกจการสอน"
-          value={lesson_package}
-          onChange={handleChange('lesson_package')}
-          multiline
-          rows={2}
-          maxLength={500}
-          showCounter={true}
-        />
-
+        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แพ็คเกจการสอน</h4>
+        {packages.map((info, idx) => (
+          <div key={idx} className="p-4 rounded-2xl border-gray-400 border-2 mb-2 flex flex-col gap-2">
+            <MyTextField
+              label="ชื่อแพ็คเกจ"
+              value={info.name}
+              onChange={e => handlePackageChange(idx, 'name', e.target.value)}
+              maxLength={64}
+              showCounter={true}
+            />
+            <MyTextField
+              label="รายละเอียด"
+              value={info.description}
+              onChange={e => handlePackageChange(idx, 'description', e.target.value)}
+              multiline
+              rows={3}
+              showCounter={true}
+              maxLength={500}
+            />
+            <MyTextField
+              label="ราคา (บาท)"
+              value={info.price}
+              onChange={e => handlePackageChange(idx, 'price', e.target.value)}
+              type='number'
+            />
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => {
+                setPackages(prev => prev.filter((_, i) => i !== idx))
+                handleUpsert('lesson_package', JSON.stringify(packages.filter((_, i) => i !== idx)))
+              }}
+            >
+              ลบแพ็คเกจ
+            </Button>
+          </div>
+        ))}
+        <div className='flex justify-between items-center'>
+          {packages.length !== 0 && (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() =>
+            {
+              if (packages.length > 0) {
+                const isDifferent = JSON.stringify(packages) !== JSON.stringify(originalData.lesson_package);
+                if (isDifferent) {
+                  handleUpsert('lesson_package', JSON.stringify(packages));
+                }
+              }
+            }}
+          >
+            บันทึกแพ็คเกจ
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          onClick={handleAddPackage}
+          >
+          เพิ่มแพ็คเกจ
+        </Button>
+        </div>
+        
         <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ประสบการณ์และคุณวุฒิ</h4>
         <MyTextField
           id={"ประสบการณ์"}
           label="ประสบการณ์"
-          value={experience}
-          onChange={handleChange('experience')}
+          value={formData.experience}
+          onChange={(e) => updateField('experience', e.target.value)}
+          onBlur={(e) => {
+            if (isChanged('experience')) {
+              handleUpsert('experience', e.target.value);
+            }
+          }}
           multiline
           rows={8}
           maxLength={1500}
@@ -487,14 +593,19 @@ export default function Profile() {
         <MyTextField
           id={"ใบรับรองคุณวุฒิ"}
           label="ใบรับรองคุณวุฒิ"
-          value={qualification}
-          onChange={handleChange('qualification')}
+          value={formData.qualification}
+          onChange={(e) => updateField('qualification', e.target.value)}
+          onBlur={(e) => {
+            if (isChanged('qualification')) {
+              handleUpsert('qualification', e.target.value);
+            }
+          }}
           multiline
           rows={8}
           maxLength={1500}
           showCounter={true}
           required={true}
-        /> */}
+        /> 
     </form>
   </>
 

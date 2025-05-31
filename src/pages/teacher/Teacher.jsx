@@ -322,8 +322,17 @@ export default function Teacher() {
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>แพ็คเกจการเรียน</h2>
-                    {teacher.lesson_package ? (
-                     <p className="h-auto max-h-[200px] overflow-y-scroll">{teacher.lesson_package}</p>   
+                    {JSON.parse(teacher.lesson_package).length > 0 ? (
+                        <div className="text-start">
+                            {JSON.parse(teacher.lesson_package).map((packageItem, index) => (
+                                <div key={index} className="flex flex-col items-start gap-2 mb-2">
+                                    <div className="flex flex-col gap-1 border-2 border-gray-300 p-2 rounded-lg w-full">
+                                        <span className="whitespace-pre-line break-words"><SellIcon fontSize="small" className="mr-1" sx={{ color: '#023047' }} />{packageItem.name} - {packageItem.price} บาท</span>
+                                        <span className="text-sm text-gray-500 whitespace-pre-line break-words">{packageItem.description}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     ) : (
                         <div className="flex items-center">
                             <CloseIcon className="mr-1" sx={{ color: 'red' }} />
