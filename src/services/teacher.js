@@ -59,3 +59,24 @@ export async function upsertTeacherLocation(teacherId, province_code) {
     return null;
   }
 }
+
+// Delete a image from swim_teacher_gallery
+export async function deleteTeacherGallery(imageURL, teacherId) {
+  try {
+    const { data, error } = await supabase
+      .from("swim_teacher_gallery")
+      .delete()
+      .eq("teacher_id", teacherId)
+      .eq("image_url", imageURL)
+      .select("*");
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error deleting teacher gallery image:", error);
+    return null;
+  }
+}

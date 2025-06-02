@@ -8,7 +8,8 @@ import MySelectionBox from '../../components/SelectionBox';
 import provinces_th from '../../assets/geography_th/provinces.json';
 import placeholder_image from '../../assets/placeholder_image.jpg';
 import { useNavigate } from 'react-router';
-import { upsertTeacherProfileField, upsertTeacherLocation } from '../../services/teacher';
+import { upsertTeacherProfileField, upsertTeacherLocation, deleteTeacherGallery } from '../../services/teacher';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -42,6 +43,7 @@ export default function Profile() {
     qualification: '',
     is_subscribed: false,
     updated_at: '',
+    swim_teacher_gallery: [],
   });
 
   const [originalData, setOriginalData] = useState(formData); // initially the same
@@ -74,7 +76,8 @@ export default function Profile() {
           .select(`*,
             swim_teacher_locations (
               province_code
-            )
+            ),
+            swim_teacher_gallery (*)
           `)
           .eq('id', user.id)
           .single();
@@ -119,6 +122,7 @@ export default function Profile() {
             qualification: data.qualification || '',
             is_subscribed: data.is_subscribed || false,
             updated_at: data.updated_at || '',
+            swim_teacher_gallery: data.swim_teacher_gallery || [],
           };
           const packagesArray = JSON.parse(data.lesson_package || '[]');
           setPackages(packagesArray || []); // Initialize packages from data
@@ -141,8 +145,6 @@ export default function Profile() {
     const updatedContact = { ...updatedContacts[index], value };
     updatedContacts[index] = updatedContact;
     setFormData(prev => ({ ...prev, contacts: updatedContacts }));
-    console.log('Updated contacts:', updatedContacts);
-    console.log('Original contacts:', originalData.contacts);
   };
 
   const handleProfilePictureUpload = async (e) => {
@@ -178,6 +180,120 @@ export default function Profile() {
       toast.error('เกิดข้อผิดพลาดที่ไม่คาดคิด');
     }
   };
+
+  const handleUploadGallery = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    if (formData.swim_teacher_gallery.length >= 6) {
+      toast.error('ไม่สามารถอัปโหลดรูปภาพได้');
+      return;
+    }
+    const newLength = formData.swim_teacher_gallery.length + files.length;
+    if (newLength > 6) {
+      toast.error('มีรูปภาพในแกลเลอรี่ได้แค่ 6 รูป');
+      return;
+    }
+
+    const fileArray = Array.from(files);
+    const uploadPromises = fileArray.map(async (file) => {
+      const fileName = `${user.id}-${file.name}`;
+      try {
+        // Upload the file to Supabase storage
+        const { data, error } = await supabase.storage
+          .from('teacher-gallery') // Replace with your Supabase storage bucket name
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: true,
+          });
+        if (error) {
+          toast.error('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ');
+          console.error(error); 
+          return null;
+        }
+        // Get the public URL of the uploaded file
+        const { data: publicUrlData } = supabase.storage
+          .from('teacher-gallery')
+          .getPublicUrl(fileName);
+        return publicUrlData.publicUrl;
+      } catch (error) {
+        console.error('Unexpected error:', error);
+        toast.error('เกิดข้อผิดพลาดที่ไม่คาดคิดในการอัปโหลดรูปภาพ');
+        return null;
+      }
+    });
+    try {
+      setSaving(true);
+      const urls = await Promise.all(uploadPromises);
+      const validUrls = urls.filter(url => url !== null); // Filter out any null values
+      if (validUrls.length > 0) {
+        const { data, error } = await supabase
+          .from('swim_teacher_gallery')
+          .upsert(
+            validUrls.map(url => ({
+              teacher_id: user.id,
+              image_url: url,
+            })),
+          );
+        if (error) {
+          console.error('Error uploading gallery images:', error);
+          toast.error('ไม่สามารถอัปโหลดรูปภาพได้');
+          setSaving(false);
+          return;
+        }
+        // Update the formData with the new gallery images
+        setFormData(prev => ({
+          ...prev,
+          swim_teacher_gallery: [
+            ...prev.swim_teacher_gallery,
+            ...validUrls.map(url => ({ image_url: url, teacher_id: user.id })),
+          ],
+          updated_at: new Date().toISOString(), // Update the timestamp
+        }));
+        setOriginalData(prev => ({
+          ...prev,
+          swim_teacher_gallery: [
+            ...prev.swim_teacher_gallery,
+            ...validUrls.map(url => ({ image_url: url, teacher_id: user.id })),
+          ],
+          updated_at: new Date().toISOString(), // Update the timestamp
+        })); 
+        // Update original data
+        toast.success('อัปโหลดรูปภาพสำเร็จ');
+      } else {
+        toast.error('ไม่สามารถอัปโหลดรูปภาพได้');
+      }
+      setSaving(false);
+    } catch (error) {
+      console.error('Error uploading gallery images:', error);
+      toast.error('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ');
+      setSaving(false);
+    }
+  }
+
+  const handleDeleteGalleryImage = async (imageUrl, teacherId) => {
+    try {
+      const data = await deleteTeacherGallery(imageUrl, teacherId);
+      if (data) {
+        // Update the formData to remove the deleted image
+        setFormData(prev => ({
+          ...prev,
+          swim_teacher_gallery: prev.swim_teacher_gallery.filter(image => image.image_url !== imageUrl),
+          updated_at: new Date().toISOString(), // Update the timestamp
+        }));
+        setOriginalData(prev => ({
+          ...prev,
+          swim_teacher_gallery: prev.swim_teacher_gallery.filter(image => image.image_url !== imageUrl),
+          updated_at: new Date().toISOString(), // Update the timestamp
+        })); // Update original data
+        toast.success('ลบรูปภาพสำเร็จ');
+      } else {
+        toast.error('ไม่สามารถลบรูปภาพได้');
+      }
+    } catch (error) {
+      console.error('Error deleting gallery image:', error);
+      toast.error('เกิดข้อผิดพลาดในการลบรูปภาพ');
+    }
+  }
 
   const handleUpsert = async (field, value) => {
     const fieldValue = value;
@@ -317,7 +433,7 @@ export default function Profile() {
             <input
               type="file"
               id="profilePictureUpload"
-              accept="image/*"
+              accept=".png, .jpg, .jpeg"
               onChange={handleProfilePictureUpload}
               className="block w-full text-sm text-gray-700
                         file:mr-4 file:py-2 file:px-4
@@ -361,6 +477,39 @@ export default function Profile() {
           }
         }}
       />
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แกลเลอรี่ <span className='text-sm text-gray-400'>(6 รูปภาพ)</span></h4>
+      {/* Gallery Upload */}
+      <input type='file' id='file' accept=".png, .jpg, .jpeg" multiple onChange={handleUploadGallery}
+        className="block w-full text-sm text-gray-700
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-full file:border-0
+        file:text-sm file:font-semibold
+        file:bg-blue-50 file:text-blue-700
+        hover:file:bg-blue-100
+        cursor-pointer
+        overflow-hidden"
+      />
+      {formData.swim_teacher_gallery.length > 0 && (
+        <div className="w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {formData.swim_teacher_gallery.map((image, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={image.image_url || placeholder_image}
+                  alt={`Gallery ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-lg shadow-md"
+                />
+                <CloseIcon 
+                  className='absolute top-2 right-1 bg-black/5 hover:bg-black/40 rounded-full cursor-pointer'
+                  fontSize='medium'
+                  onClick={() => handleDeleteGalleryImage(image.image_url, user.id)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Contacts */}
       <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">รายละเอียดการติดต่อ</h4>
       {formData.contacts.map((contact, index) => (
