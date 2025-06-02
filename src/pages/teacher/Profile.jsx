@@ -10,6 +10,7 @@ import placeholder_image from '../../assets/placeholder_image.jpg';
 import { useNavigate } from 'react-router';
 import { upsertTeacherProfileField, upsertTeacherLocation, deleteTeacherGallery } from '../../services/teacher';
 import CloseIcon from '@mui/icons-material/Close';
+import ReactPlayer from 'react-player';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -44,6 +45,7 @@ export default function Profile() {
     is_subscribed: false,
     updated_at: '',
     swim_teacher_gallery: [],
+    video_link: '',
   });
 
   const [originalData, setOriginalData] = useState(formData); // initially the same
@@ -123,6 +125,7 @@ export default function Profile() {
             is_subscribed: data.is_subscribed || false,
             updated_at: data.updated_at || '',
             swim_teacher_gallery: data.swim_teacher_gallery || [],
+            video_link: data.video_link || '',
           };
           const packagesArray = JSON.parse(data.lesson_package || '[]');
           setPackages(packagesArray || []); // Initialize packages from data
@@ -362,7 +365,60 @@ export default function Profile() {
     ));
   };
 
+  useEffect(() => {
+  if (formData.is_public && isFormInvalid()) {
+    setFormData(prev => ({ ...prev, is_public: false }));
+    handleUpsert('is_public', false);
+    toast.warn('ปิดการเผยแพร่อัตโนมัติ เนื่องจากข้อมูลไม่ครบถ้วน');
+  }
+  // eslint-disable-next-line
+}, [
+  formData.profile_picture,
+  formData.display_name,
+  formData.bio,
+  formData.about_location,
+  formData.about_lesson,
+  formData.hourly_rate,
+  formData.experience,
+  formData.qualification,
+  formData.selectedProvinces,
+  formData.selectedLevel,
+  formData.contacts,
+]);
 
+  const isFormInvalid = () => {
+    const {
+      profile_picture,
+      display_name,
+      bio,
+      contacts,
+      selectedProvinces,
+      about_location,
+      selectedLevel,
+      about_lesson,
+      hourly_rate,
+      experience,
+      qualification,
+    } = formData;
+
+    // Check each required field
+    if (
+      !profile_picture.trim() ||
+      !display_name.trim() ||
+      !bio.trim() ||
+      !about_location.trim() ||
+      !about_lesson.trim() ||
+      !hourly_rate ||
+      !experience.trim() ||
+      !qualification.trim() ||
+      selectedProvinces.length === 0 ||
+      selectedLevel.length === 0 ||
+      !contacts.some(contact => contact.value && contact.value.trim())
+    ) {
+      return true; // Form is invalid (some required field is empty)
+    }
+    return false; // All required fields are filled
+  };
   
 
   if (loading) return null;
@@ -404,6 +460,11 @@ export default function Profile() {
               onChange={(e) => {
                 const newValue = e.target.checked;
                 const oldValue = originalData.is_public;
+                // Check if form is empty
+                if (isFormInvalid()) {
+                  toast.error('กรุณากรอกข้อมูลก่อนเผยแพร่');
+                  return;
+                }
 
                 if (newValue !== oldValue) {
                   handleUpsert('is_public', newValue);
@@ -421,7 +482,7 @@ export default function Profile() {
       <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
       {/* General profile image */}
       <div className="w-full bg-white p-4 rounded-xl shadow-sm">
-        <div className="mt-6 flex justify-center">
+        <div className="flex justify-center">
           <img
             src={formData.profile_picture || placeholder_image}
             alt="โปรไฟล์"
@@ -477,8 +538,48 @@ export default function Profile() {
           }
         }}
       />
-      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แกลเลอรี่ <span className='text-sm text-gray-400'>(6 รูปภาพ)</span></h4>
+      {/* Video Introduction */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">วิดีโอแนะนำตัว</h4>
+      <MyTextField
+        id={'วิดีโอลิงค์'}
+        label="วิดีโอลิงค์ (Youtube Link)"
+        value={formData.video_link}
+        onChange={(e) => updateField('video_link', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('video_link')) {
+            handleUpsert('video_link', e.target.value);
+          }
+        }}
+      />
+      {formData.video_link && ReactPlayer.canPlay(formData.video_link) ? (        
+        <div className='flex items-center justify-center w-full aspect-video'>
+          <ReactPlayer 
+            url={formData.video_link}
+            controls={true}
+            width="100%"
+            height="100%"
+            style={{ maxHeight: '100%' }}
+            config={
+              {
+                youtube: {
+                  playerVars: {
+                    rel: 0, // Disable related videos at the end
+                    modestbranding: 1,
+                    showinfo: 0, // Hide video title and uploader
+                  },
+                },
+              }
+            }
+          />
+        </div>
+      ) :
+        (
+          <p className='text-sm text-gray-500 self-center'>กรุณาใส่ลิงค์วิดีโอแนะนำตัว (YouTube Link)</p>
+        )
+      }
+
       {/* Gallery Upload */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แกลเลอรี่ <span className='text-sm text-gray-400'>(6 รูปภาพ)</span></h4>
       <input type='file' id='file' accept=".png, .jpg, .jpeg" multiple onChange={handleUploadGallery}
         className="block w-full text-sm text-gray-700
         file:mr-4 file:py-2 file:px-4
@@ -531,230 +632,231 @@ export default function Profile() {
             required={contact.type !== 'line link' && contact.type !== 'facebook link' && contact.type !== 'instagram link' && contact.type !== 'email'}            />
         </div>
       ))}
+      
+      {/* Locations */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
+      <MySelectionBox 
+        options={provinces} 
+        isMulti={true}
+        placeholder={'จังหวัดที่สอน'}
+        className={'z-10'}
+        value={formData.selectedProvinces}
+        onChange={(e) => {
+          const newSelectedProvinces = e.map(option => option);  
+          const province_codes = e.map(option => option.value);
+          const originalProvinces = originalData.selectedProvinces || [];
+          const isDifferent = JSON.stringify(newSelectedProvinces) !== JSON.stringify(originalProvinces);
+          if (isDifferent) {
+            handleUpsertLocation(province_codes);
+          }
+          updateField('selectedProvinces', newSelectedProvinces);
+        }}
+      />
+      <MyTextField
+        id={'ข้อมูลสถานที่สอน'}
+        label="ข้อมูลสถานที่สอน"
+        value={formData.about_location}
+        onChange={(e) => updateField('about_location', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('about_location')) {
+            handleUpsert('about_location', e.target.value);
+          }
+        }}
+        multiline
+        rows={8}
+        maxLength={1500}
+        showCounter={true}
+        required={true}
+      />
+      <FormControlLabel control={<Switch checked={formData.can_travel} 
+        onChange={(e) => {
+                const newValue = e.target.checked;
+                const oldValue = originalData.can_travel;
 
-       
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">สถานที่สอน</h4>
-        <MySelectionBox 
-          options={provinces} 
-          isMulti={true}
-          placeholder={'จังหวัดที่สอน'}
-          className={'z-10'}
-          value={formData.selectedProvinces}
-          onChange={(e) => {
-            const newSelectedProvinces = e.map(option => option);  
-            const province_codes = e.map(option => option.value);
-            const originalProvinces = originalData.selectedProvinces || [];
-            const isDifferent = JSON.stringify(newSelectedProvinces) !== JSON.stringify(originalProvinces);
-            if (isDifferent) {
-              handleUpsertLocation(province_codes);
-            }
-            updateField('selectedProvinces', newSelectedProvinces);
-          }}
-        />
-        <MyTextField
-          id={'ข้อมูลสถานที่สอน'}
-          label="ข้อมูลสถานที่สอน"
-          value={formData.about_location}
-          onChange={(e) => updateField('about_location', e.target.value)}
+                if (newValue !== oldValue) {
+                  handleUpsert('can_travel', newValue);
+                }
+
+                updateField('can_travel', newValue);
+              }} />
+      } label="สามารถเดินทางได้" />
+        
+      {formData.can_travel && (
+          <MyTextField
+          id={"หมายเหตุเกี่ยวกับการเดินทาง"}
+          label="หมายเหตุเกี่ยวกับการเดินทาง"
+          value={formData.travel_note}
+          onChange={(e) => updateField('travel_note', e.target.value)}
           onBlur={(e) => {
-            if (isChanged('about_location')) {
-              handleUpsert('about_location', e.target.value);
+            if (isChanged('travel_note')) {
+              handleUpsert('travel_note', e.target.value);
             }
           }}
           multiline
-          rows={8}
-          maxLength={1500}
+          rows={3}
+          maxLength={1000}
           showCounter={true}
-          required={true}
         />
-        <FormControlLabel control={<Switch checked={formData.can_travel} 
-          onChange={(e) => {
-                  const newValue = e.target.checked;
-                  const oldValue = originalData.can_travel;
+      )}
+      <FormControlLabel 
+      control={<Switch checked={formData.can_online} 
+        onChange={(e) => {
+                const newValue = e.target.checked;
+                const oldValue = originalData.can_online;
 
-                  if (newValue !== oldValue) {
-                    handleUpsert('can_travel', newValue);
-                  }
+                if (newValue !== oldValue) {
+                  handleUpsert('can_online', newValue);
+                }
 
-                  updateField('can_travel', newValue);
-                }} />
-        } label="สามารถเดินทางได้" />
-         
-        {formData.can_travel && (
-            <MyTextField
-            id={"หมายเหตุเกี่ยวกับการเดินทาง"}
-            label="หมายเหตุเกี่ยวกับการเดินทาง"
-            value={formData.travel_note}
-            onChange={(e) => updateField('travel_note', e.target.value)}
-            onBlur={(e) => {
-              if (isChanged('travel_note')) {
-                handleUpsert('travel_note', e.target.value);
-              }
-            }}
-            multiline
-            rows={3}
-            maxLength={1000}
+                updateField('can_online', newValue);
+              }}
+      />} label="สอนออนไลน์" />
+      
+      {/* Lessons */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลการสอน</h4>
+      <MySelectionBox 
+        options={levels} 
+        isMulti={true}
+        placeholder={'ระดับการสอน'}
+        className={'z-10'}
+        value={formData.selectedLevel}
+        onChange={(e) => {
+          const newSelectedLevels = e.map(level => level);
+          const levels = e.map(level => level.value);
+          const originalLevels = originalData.selectedLevel || [];
+          const isDifferent = JSON.stringify(newSelectedLevels) !== JSON.stringify(originalLevels);
+          if (isDifferent) {
+            handleUpsert('levels', levels);
+          }
+          updateField('selectedLevel', newSelectedLevels);
+        }}
+      />
+      
+      <MyTextField
+        id={'ข้อมูลเกี่ยวกับการสอน'}
+        label="ข้อมูลเกี่ยวกับการสอน"
+        value={formData.about_lesson}
+        onChange={(e) => updateField('about_lesson', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('about_lesson')) {
+            handleUpsert('about_lesson', e.target.value);
+          }
+        }}
+        multiline
+        rows={8}
+        maxLength={1500}
+        showCounter={true}
+        required={true}
+      />
+      <MyTextField
+        id={"ราคาต่อชั่วโมง (บาท)"}
+        label="ราคาต่อชั่วโมง (บาท)"
+        value={formData.hourly_rate}
+        onChange={(e) => updateField('hourly_rate', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('hourly_rate')) {
+            handleUpsert('hourly_rate', e.target.value);
+          }
+        }}
+        type='number'
+        required={true}
+      />
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แพ็คเกจการสอน</h4>
+      {packages.map((info, idx) => (
+        <div key={idx} className="p-4 rounded-2xl border-gray-400 border-2 mb-2 flex flex-col gap-2">
+          <MyTextField
+            label="ชื่อแพ็คเกจ"
+            value={info.name}
+            onChange={e => handlePackageChange(idx, 'name', e.target.value)}
+            maxLength={64}
             showCounter={true}
           />
-        )}
-        <FormControlLabel 
-        control={<Switch checked={formData.can_online} 
-          onChange={(e) => {
-                  const newValue = e.target.checked;
-                  const oldValue = originalData.can_online;
-
-                  if (newValue !== oldValue) {
-                    handleUpsert('can_online', newValue);
-                  }
-
-                  updateField('can_online', newValue);
-                }}
-        />} label="สอนออนไลน์" />
-        
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลการสอน</h4>
-        <MySelectionBox 
-          options={levels} 
-          isMulti={true}
-          placeholder={'ระดับการสอน'}
-          className={'z-10'}
-          value={formData.selectedLevel}
-          onChange={(e) => {
-            const newSelectedLevels = e.map(level => level);
-            const levels = e.map(level => level.value);
-            const originalLevels = originalData.selectedLevel || [];
-            const isDifferent = JSON.stringify(newSelectedLevels) !== JSON.stringify(originalLevels);
-            if (isDifferent) {
-              handleUpsert('levels', levels);
-            }
-            updateField('selectedLevel', newSelectedLevels);
-          }}
-        />
-        
-        <MyTextField
-          id={'ข้อมูลเกี่ยวกับการสอน'}
-          label="ข้อมูลเกี่ยวกับการสอน"
-          value={formData.about_lesson}
-          onChange={(e) => updateField('about_lesson', e.target.value)}
-          onBlur={(e) => {
-            if (isChanged('about_lesson')) {
-              handleUpsert('about_lesson', e.target.value);
-            }
-          }}
-          multiline
-          rows={8}
-          maxLength={1500}
-          showCounter={true}
-          required={true}
-        />
-        <MyTextField
-          id={"ราคาต่อชั่วโมง (บาท)"}
-          label="ราคาต่อชั่วโมง (บาท)"
-          value={formData.hourly_rate}
-          onChange={(e) => updateField('hourly_rate', e.target.value)}
-          onBlur={(e) => {
-            if (isChanged('hourly_rate')) {
-              handleUpsert('hourly_rate', e.target.value);
-            }
-          }}
-          type='number'
-          required={true}
-        />
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แพ็คเกจการสอน</h4>
-        {packages.map((info, idx) => (
-          <div key={idx} className="p-4 rounded-2xl border-gray-400 border-2 mb-2 flex flex-col gap-2">
-            <MyTextField
-              label="ชื่อแพ็คเกจ"
-              value={info.name}
-              onChange={e => handlePackageChange(idx, 'name', e.target.value)}
-              maxLength={64}
-              showCounter={true}
-            />
-            <MyTextField
-              label="รายละเอียด"
-              value={info.description}
-              onChange={e => handlePackageChange(idx, 'description', e.target.value)}
-              multiline
-              rows={3}
-              showCounter={true}
-              maxLength={500}
-            />
-            <MyTextField
-              label="ราคา (บาท)"
-              value={info.price}
-              onChange={e => handlePackageChange(idx, 'price', e.target.value)}
-              type='number'
-            />
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => {
-                setPackages(prev => prev.filter((_, i) => i !== idx))
-                handleUpsert('lesson_package', JSON.stringify(packages.filter((_, i) => i !== idx)))
-              }}
-            >
-              ลบแพ็คเกจ
-            </Button>
-          </div>
-        ))}
-        <div className='flex justify-between items-center'>
-          {packages.length !== 0 && (
+          <MyTextField
+            label="รายละเอียด"
+            value={info.description}
+            onChange={e => handlePackageChange(idx, 'description', e.target.value)}
+            multiline
+            rows={3}
+            showCounter={true}
+            maxLength={500}
+          />
+          <MyTextField
+            label="ราคา (บาท)"
+            value={info.price}
+            onChange={e => handlePackageChange(idx, 'price', e.target.value)}
+            type='number'
+          />
           <Button
-            variant="contained"
-            color="success"
-            onClick={() =>
-            {
-              if (packages.length > 0) {
-                const isDifferent = JSON.stringify(packages) !== JSON.stringify(originalData.lesson_package);
-                if (isDifferent) {
-                  handleUpsert('lesson_package', JSON.stringify(packages));
-                }
-              }
+            variant="outlined"
+            color="error"
+            onClick={() => {
+              setPackages(prev => prev.filter((_, i) => i !== idx))
+              handleUpsert('lesson_package', JSON.stringify(packages.filter((_, i) => i !== idx)))
             }}
           >
-            บันทึกแพ็คเกจ
+            ลบแพ็คเกจ
           </Button>
-        )}
-        <Button
-          variant="contained"
-          onClick={handleAddPackage}
-          >
-          เพิ่มแพ็คเกจ
-        </Button>
         </div>
-        
-        <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ประสบการณ์และคุณวุฒิ</h4>
-        <MyTextField
-          id={"ประสบการณ์"}
-          label="ประสบการณ์"
-          value={formData.experience}
-          onChange={(e) => updateField('experience', e.target.value)}
-          onBlur={(e) => {
-            if (isChanged('experience')) {
-              handleUpsert('experience', e.target.value);
-            }
-          }}
-          multiline
-          rows={8}
-          maxLength={1500}
-          showCounter={true}
-          required={true}
-        />
-        <MyTextField
-          id={"ใบรับรองคุณวุฒิ"}
-          label="ใบรับรองคุณวุฒิ"
-          value={formData.qualification}
-          onChange={(e) => updateField('qualification', e.target.value)}
-          onBlur={(e) => {
-            if (isChanged('qualification')) {
-              handleUpsert('qualification', e.target.value);
-            }
-          }}
-          multiline
-          rows={8}
-          maxLength={1500}
-          showCounter={true}
-          required={true}
-        /> 
+      ))}
+        <div className='flex justify-between items-center'>
+          {packages.length !== 0 && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() =>
+              {
+                if (packages.length > 0) {
+                  const isDifferent = JSON.stringify(packages) !== JSON.stringify(originalData.lesson_package);
+                  if (isDifferent) {
+                    handleUpsert('lesson_package', JSON.stringify(packages));
+                  }
+                }
+              }}
+            >
+              บันทึกแพ็คเกจ
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            onClick={handleAddPackage}
+            >
+            เพิ่มแพ็คเกจ
+          </Button>
+        </div>
+      {/* Experience */}
+      <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ประสบการณ์และคุณวุฒิ</h4>
+      <MyTextField
+        id={"ประสบการณ์"}
+        label="ประสบการณ์"
+        value={formData.experience}
+        onChange={(e) => updateField('experience', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('experience')) {
+            handleUpsert('experience', e.target.value);
+          }
+        }}
+        multiline
+        rows={8}
+        maxLength={1500}
+        showCounter={true}
+        required={true}
+      />
+      <MyTextField
+        id={"ใบรับรองคุณวุฒิ"}
+        label="ใบรับรองคุณวุฒิ"
+        value={formData.qualification}
+        onChange={(e) => updateField('qualification', e.target.value)}
+        onBlur={(e) => {
+          if (isChanged('qualification')) {
+            handleUpsert('qualification', e.target.value);
+          }
+        }}
+        multiline
+        rows={8}
+        maxLength={1500}
+        showCounter={true}
+        required={true}
+      /> 
     </form>
   </>
 
