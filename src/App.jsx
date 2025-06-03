@@ -21,6 +21,7 @@ import Contact from './pages/Contact.jsx'
 import FAQ from './pages/FAQ.jsx'
 import StudentRequests from './pages/student/StudentRequests.jsx'
 import TeacherRequests from './pages/teacher/TeacherRequests.jsx'
+import Preview from './pages/teacher/Preview.jsx'
 
 function App() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -105,6 +106,14 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
                     <TeacherRequests />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/teacher/preview"
+                element={
+                  <ProtectedRoute requiredRole={'ครูสอนว่ายน้ำ'}>
+                    <Preview />
                   </ProtectedRoute>
                 }
               />

@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import { upsertTeacherProfileField, upsertTeacherLocation, deleteTeacherGallery } from '../../services/teacher';
 import CloseIcon from '@mui/icons-material/Close';
 import ReactPlayer from 'react-player';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -371,7 +372,6 @@ export default function Profile() {
     handleUpsert('is_public', false);
     toast.warn('ปิดการเผยแพร่อัตโนมัติ เนื่องจากข้อมูลไม่ครบถ้วน');
   }
-  // eslint-disable-next-line
 }, [
   formData.profile_picture,
   formData.display_name,
@@ -420,6 +420,14 @@ export default function Profile() {
     return false; // All required fields are filled
   };
   
+  const handlePreview = () => {
+    if (isFormInvalid()) {
+      toast.error('กรุณากรอกข้อมูลให้ครบถ้วนก่อนดูตัวอย่าง');
+      return;
+    }
+    navigate('/teacher/preview');
+  };
+
 
   if (loading) return null;
 
@@ -452,31 +460,44 @@ export default function Profile() {
             </div>
           )}
         </div>
-        {/* Set Public */}
-        <FormControlLabel 
-          control={
-            <Switch 
-              checked={formData.is_public} 
-              onChange={(e) => {
-                const newValue = e.target.checked;
-                const oldValue = originalData.is_public;
-                // Check if form is empty
-                if (isFormInvalid()) {
-                  toast.error('กรุณากรอกข้อมูลก่อนเผยแพร่');
-                  return;
-                }
+        <div>
+          {/* Set Public */}
+          <FormControlLabel 
+            control={
+              <Switch 
+                checked={formData.is_public} 
+                onChange={(e) => {
+                  const newValue = e.target.checked;
+                  const oldValue = originalData.is_public;
+                  // Check if form is empty
+                  if (isFormInvalid()) {
+                    toast.error('กรุณากรอกข้อมูลก่อนเผยแพร่');
+                    return;
+                  }
 
-                if (newValue !== oldValue) {
-                  handleUpsert('is_public', newValue);
-                }
+                  if (newValue !== oldValue) {
+                    handleUpsert('is_public', newValue);
+                  }
 
-                updateField('is_public', newValue);
-              }}
-            />
-          } 
-          label="เผยแพร่"  
-          className='flex justify-end'
-        />
+                  updateField('is_public', newValue);
+                }}
+              />
+            } 
+            label="เผยแพร่"  
+            className='flex justify-end'
+          />
+          <Button
+            variant="contained"
+            size='small'
+            color="info"
+            className="ml-2"
+            disabled={isFormInvalid() || saving}
+            onClick={() => handlePreview()}
+            startIcon={<VisibilityIcon fontSize='medium' />}
+          >
+            ดูตัวอย่าง
+          </Button>
+        </div>
       </div>
       {/* General heading */}
       <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">ข้อมูลทั่วไป</h4>
