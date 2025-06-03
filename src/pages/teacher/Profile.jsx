@@ -441,13 +441,13 @@ export default function Profile() {
           ) : (
             <div>
               <p className="text-center text-gray-500">
-                อัปเดตล่าสุด {new Date(formData.updated_at).toLocaleString('th-TH', {
+                {formData.updated_at ? `อัปเดตล่าสุด ${new Date(formData.updated_at).toLocaleString('th-TH', {
                   year: 'numeric',
                   month: 'short',
                   day: 'numeric',
                   hour: '2-digit',
                   minute: '2-digit',
-                })}
+                }) }` : 'ยังไม่มีการอัปเดตข้อมูล'}
               </p>
             </div>
           )}

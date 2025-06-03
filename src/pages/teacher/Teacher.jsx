@@ -24,6 +24,8 @@ import { toast } from "react-toastify";
 import Review from "./Review";
 import SendRequestModal from "./SendRequestModal";
 import { checkExistingRequest, calculateAverageResponseTime } from "../../services/request";
+import ReactPlayer from "react-player";
+import MyGallery from "../../components/Gallery";
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -183,56 +185,57 @@ export default function Teacher() {
                     </Menu>
                 </div>
             </div>
+            {/* Head */}
             <div>
-            <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
-                {/* ⭐ Favorite Star - Top Right */}
-                <div className="absolute top-2 right-2 z-10">
-                    <IconButton
-                    size="small"
-                    sx={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                        transition: 'background-color 0.3s ease-in-out',
-                        '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        },
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation(); // prevent click interference
-                        handleStarClick(teacher.id, user?.id); // pass id and user
-                    }}
-                    >
-                    {myFavorite ? (
-                        <StarRateIcon sx={{ color: 'gold' }} fontSize="large" />
-                    ) : (
-                        <StarOutlineIcon sx={{ color: 'white' }} fontSize="large" />
-                    )}
-                    </IconButton>
-                </div>
-                {/* General Info */}
-                <div className="md:flex md:grid-cols-2 md:gap-2 md:justify-evenly md:items-center">
-                    <Box className="flex justify-center items-center mb-4 lg:w-1/3">
-                        <img
-                            src={teacher.profile_picture}
-                            alt="Teacher"
-                            className="rounded-full w-60 h-60 object-cover shadow-lg"
-                        />
-                    </Box>
-                    <div className="mt-4 mb-4 flex flex-col gap-1 md:flex-1 lg:w-1/3">
-                       <div className="flex items-center justify-center sm:justify-start">
-                            {teacher.is_subscribed && (
-                                <MyChip
-                                    label="แนะนำ"
-                                    icon={<VerifiedIcon color='primary'/>}
-                                    variant='filled'
-                                    size="small"
-                                    color="primary"
-                                    sx={{
-                                        backgroundColor: '#FF6600',
-                                    }}
-                                    className={'w-max animate-pulse'}
-                                />
-                            )}
-                       </div>
+                <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
+                    {/* ⭐ Favorite Star - Top Right */}
+                    <div className="absolute top-2 right-2 z-10">
+                        <IconButton
+                        size="small"
+                        sx={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            transition: 'background-color 0.3s ease-in-out',
+                            '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                            },
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation(); // prevent click interference
+                            handleStarClick(teacher.id, user?.id); // pass id and user
+                        }}
+                        >
+                        {myFavorite ? (
+                            <StarRateIcon sx={{ color: 'gold' }} fontSize="large" />
+                        ) : (
+                            <StarOutlineIcon sx={{ color: 'white' }} fontSize="large" />
+                        )}
+                        </IconButton>
+                    </div>
+                    {/* General Info */}
+                    <div className="md:flex md:grid-cols-2 md:gap-2 md:justify-evenly md:items-center">
+                        <Box className="flex justify-center items-center mb-4 lg:w-1/3">
+                            <img
+                                src={teacher.profile_picture}
+                                alt="Teacher"
+                                className="rounded-full w-60 h-60 object-cover shadow-lg"
+                            />
+                        </Box>
+                        <div className="mt-4 mb-4 flex flex-col gap-1 md:flex-1 lg:w-1/3">
+                        <div className="flex items-center justify-center sm:justify-start">
+                                {teacher.is_subscribed && (
+                                    <MyChip
+                                        label="แนะนำ"
+                                        icon={<VerifiedIcon color='primary'/>}
+                                        variant='filled'
+                                        size="small"
+                                        color="primary"
+                                        sx={{
+                                            backgroundColor: '#FF6600',
+                                        }}
+                                        className={'w-max animate-pulse'}
+                                    />
+                                )}
+                        </div>
                         <div className="flex flex-col md:flex-row items-center md:justify-start md:gap-2">
                             <h1 className='text-center text-2xl font-bold text-wrap'><span>{teacher.is_subscribed && (<VerifiedIcon color='primary'/>)}</span> {teacher.display_name}</h1>
                             <div className='flex flex-row items-center gap-0.5'>
@@ -293,12 +296,51 @@ export default function Teacher() {
                         </div>
                     </div>
                 </div>
+                {/* Gallery */}
+                {teacher.is_subscribed && teacher.swim_teacher_gallery && teacher.swim_teacher_gallery.length > 0 && (
+                    <div className="container mx-auto">
+                        <div className="w-full mx-auto">
+                            <MyGallery 
+                                images={teacher.swim_teacher_gallery.map(
+                                    (image) => ({
+                                        original: image.image_url,
+                                        thumbnail: image.image_url,
+                                    })
+                                )} 
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
+
             {/* Bio + Who I teacher */}
             <div ref={section2Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <h2 className='text-xl font-bold'>📘 เกี่ยวกับ {teacher.display_name}</h2>
                 <p className="text-start text-wrap">{teacher.bio}</p>
             </div>
+            {/* Introduction video */}
+            {teacher.is_subscribed && teacher.video_link && (
+                <div className='flex items-center justify-center w-full aspect-video mt-4'>
+                    <ReactPlayer 
+                    url={teacher.video_link}
+                    controls={true}
+                    width="100%"
+                    height="100%"
+                    style={{ maxHeight: '100%' }}
+                    config={
+                        {
+                        youtube: {
+                            playerVars: {
+                            rel: 0, // Disable related videos at the end
+                            modestbranding: 1,
+                            showinfo: 0, // Hide video title and uploader
+                            },
+                        },
+                        }
+                    }
+                    />
+                </div>
+            )}
             </div>
              {/* About lesson */}
              <div ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
@@ -322,7 +364,7 @@ export default function Teacher() {
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>แพ็คเกจการเรียน</h2>
-                    {JSON.parse(teacher.lesson_package).length > 0 ? (
+                    {teacher.lesson_package && JSON.parse(teacher.lesson_package).length > 0 ? (
                         <div className="text-start">
                             {JSON.parse(teacher.lesson_package).map((packageItem, index) => (
                                 <div key={index} className="flex flex-col items-start gap-2 mb-2">

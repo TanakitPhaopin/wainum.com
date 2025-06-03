@@ -45,7 +45,8 @@ export async function getTeacherById(id) {
             .select(`
                 *,
                 swim_teacher_locations (province_code),
-                student_requests (*)
+                student_requests (*),
+                swim_teacher_gallery (image_url)
             `)
             .eq('id', id)
             .single();
