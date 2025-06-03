@@ -22,11 +22,9 @@ import { Divider } from "@mui/material";
 export default function Search() {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const [profiles, setProfiles] = useState([]);
     const [surroundingTeachers, setSurroundingTeachers] = useState([]);
-    const [premiumProfiles, setPremiumProfiles] = useState([]);
     const [filtered , setFiltered] = useState(false);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,10 +42,10 @@ export default function Search() {
         value: String(p.provinceCode),
       })), []);
 
-    const itemsToShow_large = premiumProfiles.length < 4 ? premiumProfiles.length : 4;
-    const itemsToShow_desktop = premiumProfiles.length < 3 ? premiumProfiles.length : 3;
-    const itemsToShow_tablet = premiumProfiles.length < 2 ? premiumProfiles.length : 2;
-    const itemsToShow_mobile = premiumProfiles.length < 1 ? premiumProfiles.length : 1;
+    const itemsToShow_large = surroundingTeachers.length < 4 ? surroundingTeachers.length : 4;
+    const itemsToShow_desktop = surroundingTeachers.length < 3 ? surroundingTeachers.length : 3;
+    const itemsToShow_tablet = surroundingTeachers.length < 2 ? surroundingTeachers.length : 2;
+    const itemsToShow_mobile = surroundingTeachers.length < 1 ? surroundingTeachers.length : 1;
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 1536 },
@@ -114,8 +112,6 @@ export default function Search() {
           setLoading(false);
           return;
         }
-        const premiumData = data.filter(profile => profile.is_subscribed);
-        setPremiumProfiles(premiumData);
         let results = [...data];      
         results.sort((a, b) => {
         return (b.is_subscribed ? 1 : 0) - (a.is_subscribed ? 1 : 0);
@@ -472,10 +468,10 @@ export default function Search() {
                     </Stack>
                     )}
                 </div>
-                <Divider/>
-                <div className="p-4">
-                  {surroundingTeachers.length > 0 ? (
-                  <div className="mb-4">
+                
+                {surroundingTeachers.length > 0 ? (
+                  <div className="p-4">
+                    <Divider sx={{marginBottom: 4}} />
                     <h1 className="text-lg font-semibold mb-2">📍 บริเวณใกล้เคียง</h1>
                     <Carousel
                       swipeable={true}
@@ -485,7 +481,7 @@ export default function Search() {
                       ssr={true} 
                       infinite={true}
                       autoPlay={true}
-                      autoPlaySpeed={3000}
+                      autoPlaySpeed={2500}
                       keyBoardControl={false}
                       customTransition="transform 300ms ease-in-out"
                       transitionDuration={500}
@@ -518,52 +514,7 @@ export default function Search() {
                   ) : (
                     <div></div>
                   )}
-                  {premiumProfiles.length > 0 ? (
-                  <div className="mb-2 p-2 md:p-4">
-                    <h1 className="text-lg font-semibold mb-2">สปอนเซอร์</h1>
-                    <Carousel
-                      swipeable={true}
-                      draggable={true}
-                      showDots={true}
-                      responsive={responsive}
-                      ssr={true} 
-                      infinite={true}
-                      autoPlay={true}
-                      autoPlaySpeed={4000}
-                      keyBoardControl={false}
-                      customTransition="transform 300ms ease-in-out"
-                      transitionDuration={500}
-                      containerClass="carousel-container"
-                      deviceType={deviceType}
-                      dotListClass="custom-dot-list-style"
-                      itemClass="px-0 sm:px-2"
-                    >
-                    {premiumProfiles.map((profile) => (
-                        <MyCard 
-                            display_name={profile.display_name} 
-                            bio={profile.bio} 
-                            key={profile.id} 
-                            image={profile.profile_picture}
-                            can_travel={profile.can_travel}
-                            can_online={profile.can_online}
-                            hourly_rate={profile.hourly_rate}
-                            province_code={profile.swim_teacher_locations}
-                            handleClick={() => {navigate(`/teacher/${profile.id}`);}}
-                            levels={profile.levels}
-                            is_subscribed={profile.is_subscribed}
-                            handleStarClick={() => handleStarClick(profile.id, user?.id)}
-                            isFavorite={myFavorites.includes(profile.id)}
-                            teacher_reviews={profile.teacher_reviews}
-                            average_response_time={profile.average_response_time}
-                        />                  
-                      ))}
-                    </Carousel>
-                  </div>
-                  ) : (
-                    <div></div>
-                  )}
                 </div>
-              </div>
             )}
         </div>
     );
