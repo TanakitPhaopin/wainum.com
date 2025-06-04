@@ -119,7 +119,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
               </div>
             )}
           </div>  
-        <CardContent className='w-full flex flex-col justify-between h-50'>
+        <CardContent className='w-full flex flex-col justify-between h-52'>
           {provinceLabels.length > 0 && (
             <p className="text-sm text-gray-600">
               📍 {provinceLabels.slice(0, 2).join(', ')}
@@ -131,7 +131,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
             <div className="text-md break-words line-clamp-2">{bio}</div>
           </div>
           {levels.length > 0 && (
-            <div className="flex flex-row gap-1 overflow-x-auto">
+            <div className="flex flex-row gap-1 overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
               {levels.map((level, index) => (
                 <MyChip 
                   label={level} 
