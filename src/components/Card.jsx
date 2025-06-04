@@ -131,7 +131,7 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
             <div className="text-md break-words line-clamp-2">{bio}</div>
           </div>
           {levels.length > 0 && (
-            <div className="flex flex-row gap-1 overflow-x-scroll">
+            <div className="flex flex-row gap-1 overflow-x-auto">
               {levels.map((level, index) => (
                 <MyChip 
                   label={level} 
