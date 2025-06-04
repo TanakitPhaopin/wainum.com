@@ -5,17 +5,23 @@ import { getFiveStarReviews } from '../services/home';
 import { MyCarousel } from '../components/Carousal';
 import { useNavigate } from 'react-router';
 import { Avatar } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function ReviewSection() {
     const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
     // Fetch 5-star reviews when the component mounts
     const fetchReviews = async () => {
         try {
+            setLoading(true);
             const reviews = await getFiveStarReviews();
             setReviews(reviews);
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching reviews:", error);
+            setLoading(false);
+            setReviews([]);
         }
     };
     useEffect(() => {
@@ -82,9 +88,21 @@ export default function ReviewSection() {
             <div className='w-full
             md:w-1/2
             '>
+            {loading ? (
+                <div className='w-full h-full flex items-center justify-center'>
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height="200px"
+                        animation="wave"
+                    />
+                </div>
+                
+            ) : (
                 <div className='w-full h-full flex items-center justify-center'>
                     <MyCarousel Content={Content} container_style={'w-full'}/>
                 </div>
+            )}
             </div>
         </div>
     );

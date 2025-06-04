@@ -40,6 +40,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -52,8 +53,10 @@ export default function LoginModal({open, handleClose, openSignup}) {
   
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
     const { error } = await signIn(email, password);
     if (error) {
+      setIsLoading(false);
       if (error.code === 'email_not_confirmed') {
         toast.error('กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ');
         return;
@@ -69,6 +72,7 @@ export default function LoginModal({open, handleClose, openSignup}) {
       navigate('/redirect');
       toast.success('เข้าสู่ระบบสำเร็จ');
     }
+    setIsLoading(false);
   }
   return (
     <div>
@@ -97,8 +101,8 @@ export default function LoginModal({open, handleClose, openSignup}) {
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            <Button variant="contained" color="primary" onClick={handleSubmit} className='w-full'>
-              ดำเนินการต่อ
+            <Button variant="contained" color="primary" onClick={handleSubmit} className={`w-full`} disabled={isLoading}>
+              {isLoading ? 'กำลังดำเนินการ...' : 'ดำเนินการต่อ'}
             </Button>
             <div className='mt-8 flex flex-col items-center gap-4'>
               <p className='text-sm text-gray-500 font-sans'><a href="/forget-password" className='hover:underline'>ลืมรหัสผ่าน?</a></p>

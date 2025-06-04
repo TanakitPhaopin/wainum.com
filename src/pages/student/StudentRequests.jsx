@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import ContactModal from '../teacher/ContactModal';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function StudentRequests() {
     const { user } = useAuth();
@@ -71,7 +72,12 @@ export default function StudentRequests() {
     };
 
     if (loading) {
-        return (<div></div>);
+        return (
+            <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+                <CircularProgress size={60} />
+                <p>กำลังโหลดข้อมูล...</p>
+            </div>
+        );
     }
 
     return (

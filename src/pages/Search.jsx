@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Divider } from "@mui/material";
+import Skeleton from '@mui/material/Skeleton';
 
 export default function Search() {
     const { user } = useAuth();
@@ -412,7 +413,29 @@ export default function Search() {
                 </div>
             </div>
             { loading ? (
-                <div></div>
+                <div>
+                  <Skeleton variant="rectangular" width='30%' height='20px' animation="wave"/>
+                  <div className="w-full min-h-[300px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center mt-4">
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="400px"
+                      animation="wave"
+                    />
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="400px"
+                      animation="wave"
+                    />
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="400px"
+                      animation="wave"
+                    />
+                  </div>
+                </div>
             ) : (
               <div className="flex flex-col gap-4">
                 <div>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
         if (!email) {
@@ -13,12 +14,15 @@ export default function ForgetPassword() {
             return;
         }
         try {
+            setIsLoading(true);
             const message = await resetPassword(email);
             setEmail("");
             toast.success(message);
+            setIsLoading(false);
         } catch (error) {
             toast.error(error.message || "เกิดข้อผิดพลาดในการส่งลิงก์รีเซ็ตรหัสผ่าน");
             setEmail("");
+            setIsLoading(false);
         }
 
         
@@ -48,7 +52,7 @@ export default function ForgetPassword() {
                     className="w-full py-2 text-white font-semibold hover:bg-blue-700 transition duration-200"
                     onClick={handleSubmit}
                 >
-                    ส่งลิงก์รีเซ็ตรหัสผ่าน
+                    {isLoading ? 'กำลังดำเนินการ...' : 'ส่งลิงก์รีเซ็ตรหัสผ่าน'}
                 </Button>
             </div>
         </div>

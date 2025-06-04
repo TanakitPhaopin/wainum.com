@@ -21,11 +21,12 @@ import MyChip from "../../components/Chip";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Review from "./Review";
-import SendRequestModal from "./SendRequestModal";
+import SendRequestModal from "../student/SendRequestModal";
 import ReactPlayer from "react-player";
 import MyGallery from "../../components/Gallery";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Preview() {
     const { user } = useAuth();
@@ -102,8 +103,13 @@ export default function Preview() {
     }, []);            
 
     if (loading) {
-        return null;
-    }
+            return (
+                <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+                    <CircularProgress size={60} />
+                    <p>กำลังโหลดข้อมูล...</p>
+                </div>
+            );
+        }
     
     return (
         <div className='min-h-screen w-full'>

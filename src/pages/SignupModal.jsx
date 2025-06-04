@@ -51,10 +51,13 @@ import { createStudentProfile } from '../services/student.js';
     const [username, setUsername] = useState('');
     const [dob, setDob] = useState(null);  
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (open) {
         setEmail('');
+        setUsername('');
+        setDob(null);
         setPassword('');
         setConfirmPassword('');
         const r = searchParams.get('r');
@@ -67,26 +70,33 @@ import { createStudentProfile } from '../services/student.js';
     }, [open, searchParams]);
   
     async function handleSignup(e) {
+      e.preventDefault();
+      setIsLoading(true);
       if ( role === '' || username === '' || email === '' || password === '' || confirmPassword === '' || dob === null) {
         toast.error('กรุณากรอกข้อมูลให้ครบถ้วน');
+        setIsLoading(false);
         return;
       }
 
       if (password !== confirmPassword) {
         toast.error('รหัสผ่านไม่ตรงกัน');
+        setIsLoading(false);
         return;
       }
       if (role === '') {
         toast.error('กรุณาเลือกบทบาท');
+        setIsLoading(false);
         return;
       }
       const { data, error } = await signUp(email, password, role, username, dob);
       if (error) {
         toast.error('เกิดข้อผิดพลาด: กรุณาตรวจสอบข้อมูลของคุณ');
         console.error('Error signing up:', error);
+        setIsLoading(false);
+        return;
       }
       if (data) {
-        console.log('Signup successful:', data);
+        // console.log('Signup successful:', data, error);
         if (data?.user?.user_metadata?.role === 'นักเรียน') {
           const userId = data?.user?.id;
           const fullName = data?.user?.user_metadata?.full_name;
@@ -104,15 +114,18 @@ import { createStudentProfile } from '../services/student.js';
           if (result) {
             toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
             toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
+            setIsLoading(false);
           }
           else {
             toast.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
             console.error('เกิดข้อผิดพลาดในการสร้างโปรไฟล์นักเรียน');
+            setIsLoading(false);
           }
         }
         else if (data?.user?.user_metadata?.role === 'ครูสอนว่ายน้ำ') {
           toast.success('สมัครสมาชิกเรียบร้อยแล้ว');
           toast.info('เช็คอีเมลของคุณเพื่อยืนยันการสมัครสมาชิก');
+          setIsLoading(false);
         }
         handleClose();
         setSearchParams({});
@@ -207,8 +220,8 @@ import { createStudentProfile } from '../services/student.js';
                 onChange={e => setConfirmPassword(e.target.value)}
               />
             </div>
-            <Button variant="contained" color="primary" onClick={handleSignup} className='w-full'>
-              ดำเนินการต่อ
+            <Button variant="contained" color="primary" onClick={handleSignup} className='w-full' disabled={isLoading}>
+             {isLoading ? 'กำลังดำเนินการ...' : 'ดำเนินการต่อ'}
             </Button>
             <div className='mt-8 flex flex-col items-center gap-4'>
               <p className='text-sm text-gray-500 font-sans'>มีบัญชี? <span className='text-blue-500 hover:underline cursor-pointer' onClick={openLogin}>เข้าสู่ระบบ</span></p>          

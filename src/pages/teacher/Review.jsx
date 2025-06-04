@@ -11,6 +11,7 @@ import MyTooltip from '../../components/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LinearProgress from '@mui/material/LinearProgress';
 import ReplyIcon from '@mui/icons-material/Reply';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function Review({teacher_id, teacher_picture, setRatingInTeacherPage, setReviewCountInTeacherPage}) {
     const { user } = useAuth();
@@ -20,6 +21,7 @@ export default function Review({teacher_id, teacher_picture, setRatingInTeacherP
     const [onTimeRating, setOnTimeRating] = useState(0);
     const [communicationRating, setCommunicationRating] = useState(0);
     const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
     // Teacher ratings
     const [overall_teaching_skill_rating, setOverallTeachingSkillRating] = useState(0);
     const [overall_on_time_rating, setOverallOnTimeRating] = useState(0);
@@ -34,16 +36,28 @@ export default function Review({teacher_id, teacher_picture, setRatingInTeacherP
 
     const fetchReviews = async () => {
         try {
+            setLoading(true);
             const reviews = await getTeacherReviews(teacher_id);
             if (reviews) {
                 setReviews(reviews);
                 // Calculate ratings
                 getRatings(reviews);
+                setLoading(false);
             }
         } catch (error) {
             console.error('Error fetching reviews:', error);
+            setLoading(false);
+            setReviews([]);
+            setOverallTeachingSkillRating(0);
+            setOverallOnTimeRating(0);
+            setOverallCommunicationRating(0);
+            setOverallRating(0);
+            setReviewCount(0);
+            setRatingInTeacherPage(0);
+            setReviewCountInTeacherPage(0);
         }
     };
+
 
     const getRatings = (reviews) => {
         // Extract ratings from reviews
@@ -198,6 +212,18 @@ export default function Review({teacher_id, teacher_picture, setRatingInTeacherP
         }
     }
 
+    if (loading) {
+        return (
+            <div className='w-full'>
+                <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height="400px"
+                    animation="wave"
+                />
+            </div>
+        );
+    }
 
 
     return (

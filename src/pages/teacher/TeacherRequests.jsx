@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import CallIcon from '@mui/icons-material/Call';
 import ResponseModal from './ResponseModal';
 import MyChip from '../../components/Chip';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function TeacherRequests() {
     const { user } = useAuth();
@@ -70,7 +71,12 @@ export default function TeacherRequests() {
     }
 
     if (loading) {
-        return <div></div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+                <CircularProgress size={60} />
+                <p>กำลังโหลดข้อมูล...</p>
+            </div>
+        );
     }
 
     return (

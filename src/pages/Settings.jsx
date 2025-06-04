@@ -15,7 +15,6 @@ export default function Settings() {
     const [openChangeName, setOpenChangeName] = useState(false);
     const [newName, setNewName] = useState('');
 
-
     const handleChange_NewPassword = (e) => {
         setNewPassword(e.target.value);
     }

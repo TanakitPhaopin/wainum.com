@@ -22,10 +22,11 @@ import { IsMyFavorite } from "../../services/student";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Review from "./Review";
-import SendRequestModal from "./SendRequestModal";
-import { checkExistingRequest, calculateAverageResponseTime } from "../../services/request";
+import SendRequestModal from "../student/SendRequestModal";
+import { checkExistingRequest } from "../../services/request";
 import ReactPlayer from "react-player";
 import MyGallery from "../../components/Gallery";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -99,7 +100,6 @@ export default function Teacher() {
     const fetchTeacher = async () => {
             const teacherId = id; // Replace with actual teacher ID
             const data = await getTeacherById(teacherId);       
-            console.log("Teacher data:", data);
             if (data) {
                 setTeacher(data);
             } else {
@@ -126,7 +126,12 @@ export default function Teacher() {
     }, [user, teacher]);
 
     if (loading) {
-        return null;
+        return (
+            <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+                <CircularProgress size={60} />
+                <p>กำลังโหลดข้อมูล...</p>
+            </div>
+        );
     }
     
     const handleStarClick = async (teacher_id, student_id) => {

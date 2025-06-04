@@ -7,6 +7,7 @@ import { toggleFavorite } from "../../services/search";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { Divider } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Favourite() {
     const { user } = useAuth();
@@ -67,7 +68,10 @@ export default function Favourite() {
             <Divider/>
             <div className="my-4">
             {loading ? (
-                <div></div>
+                <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+                    <CircularProgress size={60} />
+                    <p>กำลังโหลดข้อมูล...</p>
+                </div>
             ) : favourites.length === 0 ? (
                 <div className="flex justify-center items-center h-64">
                 <h2 className="text-xl font-semibold text-gray-500">ไม่มีครูที่ชื่นชอบ</h2>

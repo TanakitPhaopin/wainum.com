@@ -8,6 +8,7 @@ import {toggleFavorite} from "../services/search";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { getStudentFavorites } from "../services/search";
+import Skeleton from '@mui/material/Skeleton';
 
 export default function HomeContent({ deviceType }) {
     const { user } = useAuth();
@@ -104,6 +105,45 @@ export default function HomeContent({ deviceType }) {
               setMyFavorites(favoriteIds);
             }
         }
+
+  if (loading) {
+    return (
+      <>
+      <Skeleton variant="rectangular" width='30%' height='20px' animation="wave"/>
+      <div className="w-full min-h-[300px] flex flex-row items-center justify-center gap-2 mt-4">
+        {/* Show on small screens only */}
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height="400px"
+          animation="wave"
+          sx={{
+            display: { xs: 'block', md: 'none' }
+          }}
+        />
+        {/* Show on md and up */}
+        <Skeleton
+          variant="rectangular"
+          width="50%"
+          height="400px"
+          animation="wave"
+          sx={{
+            display: { xs: 'none', md: 'block' }
+          }}
+        />
+        <Skeleton
+          variant="rectangular"
+          width="50%"
+          height="400px"
+          animation="wave"
+          sx={{
+            display: { xs: 'none', md: 'block' }
+          }}
+        />
+      </div>
+      </>
+    );
+  }
       
 
   return (

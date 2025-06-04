@@ -12,6 +12,7 @@ import { upsertTeacherProfileField, upsertTeacherLocation, deleteTeacherGallery 
 import CloseIcon from '@mui/icons-material/Close';
 import ReactPlayer from 'react-player';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -429,7 +430,14 @@ export default function Profile() {
   };
 
 
-  if (loading) return null;
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center min-h-screen flex-col gap-2">
+            <CircularProgress size={60} />
+            <p>กำลังโหลดข้อมูล...</p>
+        </div>
+    );
+  }
 
   return (
   <>
