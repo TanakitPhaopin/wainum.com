@@ -8,6 +8,7 @@ import CallIcon from '@mui/icons-material/Call';
 import ResponseModal from './ResponseModal';
 import MyChip from '../../components/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "motion/react"
 
 export default function TeacherRequests() {
     const { user } = useAuth();
@@ -80,11 +81,19 @@ export default function TeacherRequests() {
     }
 
     return (
-       <div className="flex flex-col items-center justify-start min-h-screen">
+        <div className="flex flex-col items-center justify-start min-h-screen">
             <ResponseModal open={openResponseModal} handleClose={handleCloseResponseModal} requestData={requestData} refresh={fetchRequests}/>
-            <h1 className="flex text-2xl font-semibold self-start mb-4">รายการคำขอจากนักเรียน</h1>
+            <motion.h1 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}  
+                className="flex text-2xl font-semibold self-start mb-4">รายการคำขอจากนักเรียน</motion.h1>
             <Divider className="w-full" />
-            <div className='w-full flex flex-row items-center justify-start gap-2 mt-4 overflow-auto'>
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className='w-full flex flex-row items-center justify-start gap-2 mt-4 overflow-auto'>
                 <MyChip 
                     label={`pending (${statusCounts.pending || 0})`}
                     variant="outlined"
@@ -135,8 +144,13 @@ export default function TeacherRequests() {
                         transition: 'all 0.2s ease-in-out',
                     }}
                 />
-            </div>
-            <div className="w-full max-w-2xl my-4">
+            </motion.div>
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                delay={0.3}
+                className="w-full max-w-2xl my-4">
                 {requests.filter((request) => request.request_status === selectedStatus).length > 0 ? (
                     requests
                         .filter((request) => request.request_status === selectedStatus)
@@ -208,7 +222,7 @@ export default function TeacherRequests() {
                 ) : (
                     <p className="text-gray-500">ไม่มีคำขอในสถานะนี้</p>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 }

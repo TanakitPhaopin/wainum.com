@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import ContactModal from '../teacher/ContactModal';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "motion/react"
 
 export default function StudentRequests() {
     const { user } = useAuth();
@@ -83,9 +84,19 @@ export default function StudentRequests() {
     return (
         <div className="flex flex-col items-center justify-start min-h-screen">
             <ContactModal open={openContactModal} handleClose={handleCloseContactModal} contacts={teacherContacts} />
-            <h1 className="flex text-2xl font-semibold self-start mb-4">รายการคำขอของคุณ</h1>
+            <motion.h1 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                delay={0.2}
+                className="flex text-2xl font-semibold self-start mb-4">รายการคำขอของคุณ</motion.h1>
             <Divider className="w-full" />
-            <div className="w-full max-w-2xl my-4">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                delay={0.3}
+                className="w-full max-w-2xl my-4">
                 {requests.length > 0 ? (
                     requests.map((request) => (
                         // Display each request
@@ -168,7 +179,7 @@ export default function StudentRequests() {
                 ) : (
                     <p className="text-gray-500">คุณยังไม่มีคำขอใด ๆ</p>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import MyTextField from "../components/TextField";
 import { resetPassword } from "../services/password";
 import { toast } from "react-toastify";
+import { motion } from "motion/react"
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState("");
@@ -30,7 +31,12 @@ export default function ForgetPassword() {
 
     return (
         <div className="flex items-center justify-center h-full">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                delay={0.1}
+                className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">ลืมรหัสผ่าน</h2>
 
                 <div className="mb-4">
@@ -54,7 +60,7 @@ export default function ForgetPassword() {
                 >
                     {isLoading ? 'กำลังดำเนินการ...' : 'ส่งลิงก์รีเซ็ตรหัสผ่าน'}
                 </Button>
-            </div>
+            </motion.div>
         </div>
     );
 }

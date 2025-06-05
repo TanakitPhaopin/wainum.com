@@ -27,6 +27,7 @@ import { checkExistingRequest } from "../../services/request";
 import ReactPlayer from "react-player";
 import MyGallery from "../../components/Gallery";
 import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "motion/react"
 
 export default function Teacher() {
     const { user } = useAuth();
@@ -162,7 +163,12 @@ export default function Teacher() {
     return (
         <div className='min-h-screen w-full'>
             <SendRequestModal open={openModal} handleClose={handleCloseModal} teacherId={teacher.id}/>
-            <div className="mb-4 flex justify-between items-center">
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mb-4 flex justify-between items-center"
+            >
                 <Button onClick={() => navigate(-1)} variant="contained" color="inherit">กลับ</Button>
                 <div>
                     <Button
@@ -189,9 +195,13 @@ export default function Teacher() {
                         <MenuItem onClick={() => {scrollToSection(section5Ref); handleClose();}}>ความเชี่ยวชาญ</MenuItem>
                     </Menu>
                 </div>
-            </div>
+            </motion.div>
             {/* Head */}
-            <div>
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+            >
                 <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
                     {/* ⭐ Favorite Star - Top Right */}
                     <div className="absolute top-2 right-2 z-10">
@@ -315,40 +325,44 @@ export default function Teacher() {
                             />
                         </div>
                     </div>
-                )}
-            </div>
-
-            {/* Bio + Who I teacher */}
-            <div ref={section2Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
-                <h2 className='text-xl font-bold'>📘 เกี่ยวกับ {teacher.display_name}</h2>
-                <p className="text-start text-wrap">{teacher.bio}</p>
-            </div>
-            {/* Introduction video */}
-            {teacher.is_subscribed && teacher.video_link && (
-                <div className='flex items-center justify-center w-full aspect-video mt-4'>
-                    <ReactPlayer 
-                    url={teacher.video_link}
-                    controls={true}
-                    width="100%"
-                    height="100%"
-                    style={{ maxHeight: '100%' }}
-                    config={
-                        {
-                        youtube: {
-                            playerVars: {
-                            rel: 0, // Disable related videos at the end
-                            modestbranding: 1,
-                            showinfo: 0, // Hide video title and uploader
-                            },
-                        },
-                        }
-                    }
-                    />
+                    )}
                 </div>
-            )}
-            </div>
+
+                {/* Bio + Who I teacher */}
+                <div ref={section2Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+                    <h2 className='text-xl font-bold'>📘 เกี่ยวกับ {teacher.display_name}</h2>
+                    <p className="text-start text-wrap">{teacher.bio}</p>
+                </div>
+                {/* Introduction video */}
+                {teacher.is_subscribed && teacher.video_link && (
+                    <div className='flex items-center justify-center w-full aspect-video mt-4'>
+                        <ReactPlayer 
+                        url={teacher.video_link}
+                        controls={true}
+                        width="100%"
+                        height="100%"
+                        style={{ maxHeight: '100%' }}
+                        config={
+                            {
+                            youtube: {
+                                playerVars: {
+                                rel: 0, // Disable related videos at the end
+                                modestbranding: 1,
+                                showinfo: 0, // Hide video title and uploader
+                                },
+                            },
+                            }
+                        }
+                        />
+                    </div>
+                )}
+            </motion.div>
              {/* About lesson */}
-             <div ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+             <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สอนใครบ้าง</h2>
                     <p className="text-start text-wrap">
@@ -387,9 +401,13 @@ export default function Teacher() {
                         </div>
                     )}
                 </div>
-            </div>
+            </motion.div>
             {/* Location */}
-            <div ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>📍 สถานที่สอน</h2>
                     <p className="text-start line-clamp-4 break-words">{teacher.swim_teacher_locations
@@ -442,9 +460,13 @@ export default function Teacher() {
                         )}
                     </div>
                 </div>
-            </div>
+            </motion.div>
             {/* Experience and Qualifications */}
-            <div ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1 }}
+                ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>💼 ประสบการณ์</h2>
                     <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.experience}</p>
@@ -453,12 +475,16 @@ export default function Teacher() {
                     <h2 className='text-xl font-bold'>🎓 ใบรับรองคุณวุฒิ</h2>
                     <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.qualification}</p>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Reviews */}
-            <div className="container mt-4 mx-auto">
+            <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                className="container mt-4 mx-auto">
                 <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture} setRatingInTeacherPage={setRatingInTeacherPage} setReviewCountInTeacherPage={setReviewCountInTeacherPage}/>
-            </div>
+            </motion.div>
         </div>
     )
 }

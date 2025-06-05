@@ -27,6 +27,7 @@ import MyGallery from "../../components/Gallery";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "motion/react"
 
 export default function Preview() {
     const { user } = useAuth();
@@ -114,8 +115,18 @@ export default function Preview() {
     return (
         <div className='min-h-screen w-full'>
             <SendRequestModal open={openModal} handleClose={handleCloseModal} teacherId={teacher.id}/>
-            <h2 className="text-lg text-center font-semibold">ตัวอย่างโปรไฟล์</h2>
-            <div className="flex flex-row items-center justify-center gap-2 mb-2">
+            <motion.h2 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                delay={0.2}
+                className="text-lg text-center font-semibold">ตัวอย่างโปรไฟล์</motion.h2>
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                delay={0.3}
+                className="flex flex-row items-center justify-center gap-2 mb-2">
                     <FormControlLabel control={<Switch checked={is_subscribed} onChange={() => setIsSubscribed(!is_subscribed)}/>} label="เป็นพรีเมี่ยม"/>
                     {teacher && !teacher.is_subscribed && (
                         <Button
@@ -128,8 +139,13 @@ export default function Preview() {
                         </Button>
                         
                     )}
-            </div>
-            <div className="mb-4 flex justify-between items-center">
+            </motion.div>
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                delay={0.4}
+                className="mb-4 flex justify-between items-center">
                 <Button onClick={() => navigate(-1)} variant="contained" color="inherit">กลับ</Button>
                 <div>
                     <Button
@@ -156,9 +172,13 @@ export default function Preview() {
                         <MenuItem onClick={() => {scrollToSection(section5Ref); handleClose();}}>ความเชี่ยวชาญ</MenuItem>
                     </Menu>
                 </div>
-            </div>
+            </motion.div>
             {/* Head */}
-            <div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                delay={0.5}>
                 <div ref={section1Ref} className="relative container mx-auto p-4 rounded-xl shadow-xl bg-[#ffffff]">
                     {/* ⭐ Favorite Star - Top Right */}
                     <div className="absolute top-2 right-2 z-10">
@@ -310,9 +330,14 @@ export default function Preview() {
                     />
                 </div>
             )}
-            </div>
+            </motion.div>
              {/* About lesson */}
-             <div ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+             <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                delay={0.6}
+                ref={section3Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>สอนใครบ้าง</h2>
                     <p className="text-start text-wrap">
@@ -351,9 +376,14 @@ export default function Preview() {
                         </div>
                     )}
                 </div>
-            </div>
+            </motion.div>
             {/* Location */}
-            <div ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                delay={0.7}
+                ref={section4Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>📍 สถานที่สอน</h2>
                     <p className="text-start line-clamp-4 break-words">{teacher.swim_teacher_locations
@@ -406,9 +436,14 @@ export default function Preview() {
                         )}
                     </div>
                 </div>
-            </div>
+            </motion.div>
             {/* Experience and Qualifications */}
-            <div ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                delay={0.8}
+                ref={section5Ref} className="container mx-auto p-4 mt-4 rounded-xl shadow-lg bg-[#ffffff]">
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>💼 ประสบการณ์</h2>
                     <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.experience}</p>
@@ -417,12 +452,17 @@ export default function Preview() {
                     <h2 className='text-xl font-bold'>🎓 ใบรับรองคุณวุฒิ</h2>
                     <p className="text-start text-wrap h-auto max-h-[300px] overflow-y-scroll whitespace-pre-line">{teacher.qualification}</p>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Reviews */}
-            <div className="container mt-4 mx-auto">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                delay={0.9}
+                className="container mt-4 mx-auto">
                 <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture} setRatingInTeacherPage={setRatingInTeacherPage} setReviewCountInTeacherPage={setReviewCountInTeacherPage}/>
-            </div>
+            </motion.div>
         </div>
     )
 }

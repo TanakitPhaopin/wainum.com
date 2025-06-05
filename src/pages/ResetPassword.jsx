@@ -4,6 +4,7 @@ import MyTextField from "../components/TextField";
 import { toast } from "react-toastify";
 import { updatePassword } from "../services/settings";
 import { signOut } from "../lib/auth";
+import { motion } from "motion/react"
 
 export default function ResetPassword() {
     const [newPassword, setNewPassword] = useState("");
@@ -39,7 +40,12 @@ export default function ResetPassword() {
 
     return (
         <div className="flex items-center justify-center h-full">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md flex flex-col gap-4">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                delay={0.2}
+                className="bg-white p-8 rounded-lg shadow-md w-full max-w-md flex flex-col gap-4">
                 <h2 className="text-2xl font-bold mb-6 text-center">รีเซ็ตรหัสผ่าน</h2>
                 <MyTextField
                     id="new-password"
@@ -65,7 +71,7 @@ export default function ResetPassword() {
                 >
                     รีเซ็ตรหัสผ่าน
                 </Button>
-            </div>
+            </motion.div>
         </div>
     );
 }

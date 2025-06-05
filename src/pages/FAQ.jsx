@@ -1,5 +1,7 @@
 import MyAccordion from "../components/Accordion";
 import { Divider } from "@mui/material";
+import { motion } from "motion/react"
+
 export default function FAQ() {
     // Student FAQs
     const faqStudent_SearchAndBooking = [
@@ -123,48 +125,103 @@ export default function FAQ() {
 
     return (
         <div className="max-w-4xl mx-auto md:px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">คำถามที่พบบ่อย (FAQ)</h1>
+            <motion.h1 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                delay={0.2}
+                className="text-3xl font-bold mb-6">คำถามที่พบบ่อย (FAQ)</motion.h1>
             <div className="flex flex-col gap-8">
-                <h2 className="text-2xl font-semibold text-center">สำหรับนักเรียน</h2>
+                <motion.h2 
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    delay={0.3}
+                    className="text-2xl font-semibold text-center">สำหรับนักเรียน</motion.h2>
                 <div className="flex flex-col gap-4">
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        delay={0.4}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การค้นหาและจองครู</h3>
                         <MyAccordion data={faqStudent_SearchAndBooking} />
-                    </div>  
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div>  
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        delay={0.5}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การติดต่อและความน่าเชื่อถือ</h3>
                         <MyAccordion data={faqStudent_ContactAndTrust} />
-                    </div> 
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div> 
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                        delay={0.6}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การชำระเงิน</h3>
                         <MyAccordion data={faqStudent_Payment} />
-                    </div> 
+                    </motion.div> 
                 </div>
             </div>
             <Divider sx={{marginY: 4}} />
             <div className="flex flex-col gap-8">
-                <h2 className="text-2xl font-semibold text-center">สำหรับครูสอนว่ายน้ำ</h2>
+                <motion.h2 
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.7 }}
+                    delay={0.7}
+                    className="text-2xl font-semibold text-center">สำหรับครูสอนว่ายน้ำ</motion.h2>
                 <div className="flex flex-col gap-4">
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
+                        delay={0.8}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การสมัครและโปรไฟล์</h3>
                         <MyAccordion data={faqRegisterProfile} />
-                    </div>  
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div>  
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.9 }}
+                        delay={0.9}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>ค่าบริการและการชำระเงิน</h3>
                         <MyAccordion data={faqFeesPayment} />
-                    </div> 
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div> 
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1 }}
+                        delay={1}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การเรียนการสอน</h3>
                         <MyAccordion data={faqTeaching} />
-                    </div> 
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div> 
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.1 }}
+                        delay={1.1}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>โปรไฟล์ครูพรีเมียม</h3>
                         <MyAccordion data={faqPremium} />
-                    </div> 
-                    <div className="text-xl font-semibold flex flex-col gap-2">
+                    </motion.div> 
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 1.2 }}
+                        delay={1.2}
+                        className="text-xl font-semibold flex flex-col gap-2">
                         <h3>การสนับสนุนและช่วยเหลือ</h3>
                         <MyAccordion data={faqSupport} />
-                    </div> 
+                    </motion.div> 
                 </div>
             </div>
         </div>

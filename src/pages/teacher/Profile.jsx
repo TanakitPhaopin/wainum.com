@@ -13,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ReactPlayer from 'react-player';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "motion/react"
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -441,7 +442,11 @@ export default function Profile() {
 
   return (
   <>
-    <form
+    <motion.form
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      delay={0.2}
       className="relative max-w-3xl mx-auto bg-white shadow-xl rounded-xl px-3 md:px-8 py-10 flex flex-col gap-6"
       noValidate
     >
@@ -886,7 +891,7 @@ export default function Profile() {
         showCounter={true}
         required={true}
       /> 
-    </form>
+    </motion.form>
   </>
 
   );

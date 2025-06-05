@@ -4,6 +4,7 @@ import { Divider, Button } from "@mui/material";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { updatePassword, updateUserName, deleteUserAccount } from "../services/settings";
+import { motion } from "motion/react"
 
 export default function Settings() {
     const { user } = useAuth();
@@ -100,7 +101,12 @@ export default function Settings() {
     }
 
     return (
-        <div className="flex flex-col gap-4 items-center justify-center h-auto">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            delay={0.2}
+            className="flex flex-col gap-4 items-center justify-center h-auto">
             <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
                 <h1 className="text-2xl font-bold mb-4">ตั้งค่าบัญชี</h1>
                 {/* Email */}
@@ -254,6 +260,6 @@ export default function Settings() {
                 </div>
             </div>
             
-        </div>
+        </motion.div>
     );
 }

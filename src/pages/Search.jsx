@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Divider } from "@mui/material";
-import Skeleton from '@mui/material/Skeleton';
+import { motion } from "motion/react"
 
 export default function Search() {
     const { user } = useAuth();
@@ -360,61 +360,66 @@ export default function Search() {
 
     return (
         <div className="relative">
-            <div className="pb-4">
-                <SearchFilter open={openFilter} handleClose={handleCloseFilter} setFiltered={setFiltered}/>
-                {/* Search */}
-                <div className="mb-2">
-                    <MySelectionBox 
-                        options={provinces} 
-                        isMulti={true}
-                        placeholder={'จังหวัดที่ต้องการค้นหา'}
-                        className={'w-full'}
-                        class_select={'z-50'}
-                        value={selectedProvinces}
-                        onChange={handleProvinceChange}
-                    />
-                </div>
-                <div className="flex flex-row gap-2">
-                    {/* Filter */}
-                    <Button 
-                        variant="contained" 
-                        sx={{
-                            backgroundColor: filtered ? 'gray' : 'primary',
-                            '&:hover': {
-                            backgroundColor: filtered ? 'darkgray' : 'primary.dark',
-                            }
+            <motion.div 
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="pb-4"
+            >
+              <SearchFilter open={openFilter} handleClose={handleCloseFilter} setFiltered={setFiltered}/>
+              {/* Search */}
+              <div className="mb-2">
+                  <MySelectionBox 
+                      options={provinces} 
+                      isMulti={true}
+                      placeholder={'จังหวัดที่ต้องการค้นหา'}
+                      className={'w-full'}
+                      class_select={'z-50'}
+                      value={selectedProvinces}
+                      onChange={handleProvinceChange}
+                  />
+              </div>
+              <div className="flex flex-row gap-2">
+                  {/* Filter */}
+                  <Button 
+                      variant="contained" 
+                      sx={{
+                          backgroundColor: filtered ? 'gray' : 'primary',
+                          '&:hover': {
+                          backgroundColor: filtered ? 'darkgray' : 'primary.dark',
+                          }
+                      }}
+                      onClick={handleOpenFilter} className="w-1/2"
+                      size="large"
+                      startIcon={<FilterListIcon />}
+                  >
+                      <span className="break-words line-clamp-1">{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}</span>
+                  </Button>
+                  {/* Sort */}
+                  <div className="w-1/2">
+                    <MySelect 
+                        label={'เรียงลำดับ'}
+                        menuItems={[
+                            { label: 'ยอดนิยม', value: 'popularity' },
+                            { label: 'ใหม่ล่าสุด', value: 'newest' },
+                            { label: 'ตอบกลับเร็วที่สุด', value: 'response_time' },
+                            { label: 'ราคา (น้อยไปมาก)', value: 'price_asc' },
+                            { label: 'ราคา (มากไปน้อย)', value: 'price_desc' },
+                        ]}
+                        onChange={(e) => {
+                            const selectedValue = e.target.value;
+                            const newParams = new URLSearchParams(searchParams);
+                            newParams.set('sort', selectedValue);
+                            setSearchParams(newParams);
                         }}
-                        onClick={handleOpenFilter} className="w-1/2"
-                        size="large"
-                        startIcon={<FilterListIcon />}
-                    >
-                        <span className="break-words line-clamp-1">{filtered ? 'แก้ไขตัวกรอง' : 'ตัวกรอง'}</span>
-                    </Button>
-                    {/* Sort */}
-                    <div className="w-1/2">
-                      <MySelect 
-                          label={'เรียงลำดับ'}
-                          menuItems={[
-                              { label: 'ยอดนิยม', value: 'popularity' },
-                              { label: 'ใหม่ล่าสุด', value: 'newest' },
-                              { label: 'ตอบกลับเร็วที่สุด', value: 'response_time' },
-                              { label: 'ราคา (น้อยไปมาก)', value: 'price_asc' },
-                              { label: 'ราคา (มากไปน้อย)', value: 'price_desc' },
-                          ]}
-                          onChange={(e) => {
-                              const selectedValue = e.target.value;
-                              const newParams = new URLSearchParams(searchParams);
-                              newParams.set('sort', selectedValue);
-                              setSearchParams(newParams);
-                          }}
-                          value={searchParams.get('sort') || ''}
-                      />
-                    </div>
-                </div>
-            </div>
+                        value={searchParams.get('sort') || ''}
+                    />
+                  </div>
+              </div>
+            </motion.div>
             { loading ? (
                 <div>
-                  <Skeleton variant="rectangular" width='30%' height='20px' animation="wave"/>
+                  {/* <Skeleton variant="rectangular" width='30%' height='20px' animation="wave"/>
                   <div className="w-full min-h-[300px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center mt-4">
                     <Skeleton
                       variant="rectangular"
@@ -434,24 +439,20 @@ export default function Search() {
                       height="400px"
                       animation="wave"
                     />
-                  </div>
+                  </div> */}
                 </div>
             ) : (
               <div className="flex flex-col gap-4">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
                        {profiles.length > 0 ? (
                           <div className="flex flex-start mb-2">
                             <h1 className="text-xs font-normal">ผลการค้นหา - {profiles.length}</h1>
                           </div>
                         ) : (
-                          // <div className="flex flex-col gap-2 items-center justify-center my-12">
-                          //     <SearchIcon 
-                          //       className="mx-auto" 
-                          //       fontSize="large" 
-                          //       sx={{width: 100, height: 100}}/>
-                          //     <h1 className="text-md font-normal">ไม่พบผู้สอน</h1>
-                          //     <h1 className="text-md font-normal">กรุณาลองใหม่อีกครั้ง</h1>
-                          // </div>
                           <div>
                             <h1 className="text-md font-normal text-center">ไม่พบผู้สอน</h1>
                           </div>
@@ -490,10 +491,15 @@ export default function Search() {
                         />
                     </Stack>
                     )}
-                </div>
+                </motion.div>
                 
                 {surroundingTeachers.length > 0 ? (
-                  <div className="p-4">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="p-4"
+                  >
                     <Divider sx={{marginBottom: 4}} />
                     <h1 className="text-lg font-semibold mb-2">📍 บริเวณใกล้เคียง</h1>
                     <Carousel
@@ -533,7 +539,7 @@ export default function Search() {
                         />                  
                       ))}
                     </Carousel>
-                  </div>
+                  </motion.div>
                   ) : (
                     <div></div>
                   )}

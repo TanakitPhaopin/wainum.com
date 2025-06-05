@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import { useLocation } from 'react-router';
+import { motion } from "motion/react"
 
 export default function TermsOfService() {
   const location = useLocation();
@@ -8,7 +9,12 @@ export default function TermsOfService() {
   }, [location.pathname]);
 
   return (
-    <div className="p-8 bg-white text-gray-800">
+    <motion.div 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      delay={0.1}
+      className="p-8 bg-white text-gray-800">
       <h1 className="text-2xl font-bold mb-4">ข้อตกลงและเงื่อนไขการใช้งาน</h1>
       
       <section className="mb-6">
@@ -78,6 +84,6 @@ export default function TermsOfService() {
       <div className="text-center text-sm text-gray-400 mt-8">
         © {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์
       </div>
-    </div>
+    </motion.div>
   );
 }

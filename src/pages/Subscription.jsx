@@ -4,6 +4,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import SearchIcon from '@mui/icons-material/Search';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import PushPinIcon from '@mui/icons-material/PushPin';
+import { motion } from "motion/react"
 
 export function Subscription() {
     const { user, isSubscribed } = useAuth();
@@ -14,7 +15,12 @@ export function Subscription() {
     const loginUrl = `${stripeLoginLink}?prefilled_email=${encodedEmail}`;
 
     return (
-        <div className="mt-4 flex flex-col items-center justify-center h-max sm:p-4">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            delay={0.2}
+            className="mt-4 flex flex-col items-center justify-center h-max sm:p-4">
             <div className="flex flex-col items-center justify-center h-max w-auto gap-4 bg-gray-50 rounded-2xl p-4 shadow-md">
                 <h1 className="text-4xl">Premium</h1>
                 <h2 className="text-xl">149 บาท/เดือน</h2>
@@ -58,7 +64,7 @@ export function Subscription() {
                     )}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 
 }
