@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -30,6 +30,20 @@ function App() {
   const [signupOpen, setSignupOpen] = useState(false);
   const openSignup   = () =>  { setLoginOpen(false); setSignupOpen(true);}
   const closeSignup  = () => setSignupOpen(false);
+
+  useEffect(() => {
+  const currentHost = window.location.hostname;
+  const renderHost = import.meta.env.VITE_RENDER_HOSTNAME;
+  const productionUrl = import.meta.env.VITE_PRODUCTION_URL;
+
+  if (currentHost === renderHost) {
+    window.location.replace(
+      productionUrl + window.location.pathname + window.location.search
+    );
+  }
+}, []);
+
+
   return (
     <BrowserRouter >
       <div className="min-h-screen flex flex-col">
