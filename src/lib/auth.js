@@ -11,7 +11,7 @@ export function signUp(email, password, role, username, dob) {
                 full_name: username,
                 date_of_birth: dob,
             },
-            emailRedirectTo: 'http://localhost:5173/redirect' // use your domain in production
+            emailRedirectTo: `${import.meta.env.VITE_PRODUCTION_URL}/redirect` // use your domain in production
         }
     });
 }
