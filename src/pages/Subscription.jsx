@@ -56,7 +56,7 @@ export function Subscription() {
                         <Button 
                             variant="contained" 
                             color="primary" 
-                            onClick={() => window.location.href = `https://buy.stripe.com/test_14k5o4dYX1RH5OgeUU?prefilled_email=${encodedEmail}`}
+                            onClick={() => window.location.href = `${import.meta.env.VITE_SUBSCRIPTION_LINK}.?prefilled_email=${encodedEmail}`}
                             sx={{width: 1, maxWidth: 300}}
                             >
                                 ซื้อ
