@@ -71,6 +71,7 @@ export default function Teacher() {
     const section3Ref = useRef(null);
     const section4Ref = useRef(null);
     const section5Ref = useRef(null);
+    const section6Ref = useRef(null);
     const [myFavorite, setMyFavorite] = useState(false);
     const [ratingInTeacherPage, setRatingInTeacherPage] = useState(0);
     const [reviewCountInTeacherPage, setReviewCountInTeacherPage] = useState(0);
@@ -193,6 +194,7 @@ export default function Teacher() {
                         <MenuItem onClick={() => {scrollToSection(section3Ref); handleClose();}}>เกี่ยวกับการสอน</MenuItem>
                         <MenuItem onClick={() => {scrollToSection(section4Ref); handleClose();}}>เกี่ยวกับสถานที่สอน</MenuItem>
                         <MenuItem onClick={() => {scrollToSection(section5Ref); handleClose();}}>ความเชี่ยวชาญ</MenuItem>
+                        <MenuItem onClick={() => {scrollToSection(section6Ref); handleClose();}}>รีวิว</MenuItem>
                     </Menu>
                 </div>
             </motion.div>
@@ -482,6 +484,7 @@ export default function Teacher() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1.2 }}
+                ref={section6Ref}
                 className="container mt-4 mx-auto">
                 <Review teacher_id={teacher?.id} teacher_picture={teacher?.profile_picture} setRatingInTeacherPage={setRatingInTeacherPage} setReviewCountInTeacherPage={setReviewCountInTeacherPage}/>
             </motion.div>
