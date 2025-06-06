@@ -30,7 +30,6 @@ export default function StudentRequests() {
             if (user) {
                 setLoading(true);
                 const myRequests = await getMyRequests(user.id);
-                console.log('My Requests:', myRequests);
                 setRequests(myRequests);
                 setLoading(false);
             }

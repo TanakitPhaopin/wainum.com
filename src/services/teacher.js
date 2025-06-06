@@ -26,7 +26,6 @@ export async function upsertTeacherProfileField(
 // Upsert a swim teacher location
 export async function upsertTeacherLocation(teacherId, province_code) {
   try {
-    console.log("Upserting teacher location for ID:", teacherId, "with provinces:", province_code);
     const { error: deleteError } = await supabase
       .from("swim_teacher_locations")
       .delete()
@@ -52,7 +51,6 @@ export async function upsertTeacherLocation(teacherId, province_code) {
       .select("updated_at");
     if (updateTimestampError) throw updateTimestampError;
     const combinedData = [...insertData, ...updateTimestampData];
-    console.log("Successfully upserted teacher location:", combinedData);
     return combinedData;
   } catch (error) {
     console.error("Error upserting teacher location:", error);

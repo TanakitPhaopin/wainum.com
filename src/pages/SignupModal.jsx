@@ -96,7 +96,6 @@ import { createStudentProfile } from '../services/student.js';
         return;
       }
       if (data) {
-        // console.log('Signup successful:', data, error);
         if (data?.user?.user_metadata?.role === 'นักเรียน') {
           const userId = data?.user?.id;
           const fullName = data?.user?.user_metadata?.full_name;

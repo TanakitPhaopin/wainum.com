@@ -16,29 +16,3 @@ createRoot(document.getElementById('root')).render(
     </AuthProvider>
   </StrictMode>,
 )
-
-// import React from 'react';
-// import { hydrate, render } from 'react-dom'; // instead of createRoot
-// import './index.css';
-// import App from './App.jsx';
-// import { AuthProvider } from './contexts/AuthContext.jsx';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-
-// const Root = () => (
-//   <React.StrictMode>
-//     <AuthProvider>
-//       <LocalizationProvider dateAdapter={AdapterMoment}>
-//         <App />
-//       </LocalizationProvider>
-//     </AuthProvider>
-//   </React.StrictMode>
-// );
-
-// render(<Root />, document.getElementById('root'));
-// const rootElement = document.getElementById('root');
-// if (rootElement.hasChildNodes()) {
-//   hydrate(<Root />, rootElement);
-// } else {
-//   render(<Root />, rootElement);
-// }

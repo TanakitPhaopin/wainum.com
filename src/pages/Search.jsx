@@ -106,7 +106,6 @@ export default function Search() {
       const fetchAndFilter = async () => {
         setLoading(true);
         const data = await getAllProfiles();
-        console.log("Fetched profiles:", data);
         if (!data) {
           console.error("Error fetching profiles");
           setProfiles([]);
