@@ -28,6 +28,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-geocode": "^2.0.1",
+    "react-helmet": "^6.1.0",
     "react-image-gallery": "^1.4.0",
     "react-multi-carousel": "^2.8.6",
     "react-player": "^2.16.0",
