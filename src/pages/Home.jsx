@@ -77,7 +77,7 @@ export default function Home({openSignupClick}) {
         <Helmet>
             <title>ว่ายน้ำ.com | ค้นหาครูสอนว่ายน้ำ</title>
             <meta name="description" content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ สอนว่ายน้ำสำหรับทุกวัย ทั้งออนไลน์และที่บ้าน เปรียบเทียบราคาและรีวิวได้" />
-            <meta name="keywords" content="ครูสอนว่ายน้ำ, สอนว่ายน้ำออนไลน์, สอนว่ายน้ำที่บ้าน, ว่ายน้ำสำหรับเด็ก, ว่ายน้ำสำหรับผู้ใหญ่, ว่ายน้ำทั่วไทย, เรียนว่ายน้ำ, ว่ายน้ำ" />
+            <meta name="keywords" content="ครูสอนว่ายน้ำ, สอนว่ายน้ำออนไลน์, สอนว่ายน้ำที่บ้าน, ว่ายน้ำสำหรับเด็ก, ว่ายน้ำสำหรับผู้ใหญ่, ว่ายน้ำทั่วไทย, เรียนว่ายน้ำ, ว่ายน้ำ, ว่ายน้ำ.com" />
             <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
             <meta property="og:url" content="https://xn--q3cro8bc2kk6a.com/" />
             <meta property="og:type" content="website" />
