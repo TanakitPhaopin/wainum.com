@@ -54,7 +54,9 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
               <img
                 src={image}
                 alt="profile"
-                loading="lazy"
+                width="400"
+                height="300"
+                fetchPriority='high'
                 style={{
                   height: '100%',
                   width: '100%',
