@@ -14,6 +14,7 @@ import ReactPlayer from 'react-player';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CircularProgress from '@mui/material/CircularProgress';
 import { motion } from "motion/react"
+import imageCompression from 'browser-image-compression';
 
 export default function Profile() {
   const { user, isSubscribed } = useAuth();
@@ -52,6 +53,13 @@ export default function Profile() {
   });
 
   const [originalData, setOriginalData] = useState(formData); // initially the same
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1024,
+    useWebWorker: true,
+    fileType: 'image/webp',
+  };
 
 
   const provinces = provinces_th.map((province) => ({
@@ -159,10 +167,11 @@ export default function Profile() {
   
     const fileName = `${user.id}-${file.name}`;
     try {
+      const compressedFile = await imageCompression(file, options);
       // Upload the file to Supabase storage
       const { data, error } = await supabase.storage
         .from('profile-images') // Replace with your Supabase storage bucket name
-        .upload(fileName, file, {
+        .upload(fileName, compressedFile, {
           cacheControl: '3600',
           upsert: true,
         });
@@ -204,10 +213,11 @@ export default function Profile() {
     const uploadPromises = fileArray.map(async (file) => {
       const fileName = `${user.id}-${file.name}`;
       try {
+        const compressedFile = await imageCompression(file, options);
         // Upload the file to Supabase storage
         const { data, error } = await supabase.storage
           .from('teacher-gallery') // Replace with your Supabase storage bucket name
-          .upload(fileName, file, {
+          .upload(fileName, compressedFile, {
             cacheControl: '3600',
             upsert: true,
           });

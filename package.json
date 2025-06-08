@@ -21,6 +21,7 @@
     "@stripe/stripe-js": "^7.3.0",
     "@supabase/supabase-js": "^2.49.4",
     "@tailwindcss/vite": "^4.1.4",
+    "browser-image-compression": "^2.0.2",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "moment": "^2.30.1",
