@@ -87,13 +87,15 @@ export default function Home({openSignupClick}) {
                 <motion.h1 
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0}}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    delay={0.1}
                     className="text-4xl lg:text-5xl 2xl:text-6xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ
                 </motion.h1>
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    delay={0.2}
                     className='flex items-center justify-center my-1'
                 >
                     <ReactTyped 
@@ -115,7 +117,8 @@ export default function Home({openSignupClick}) {
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        delay={0.3}
                         className="relative w-full"
                     >
                         <Autocomplete
@@ -153,7 +156,8 @@ export default function Home({openSignupClick}) {
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        delay={0.4}
                         className='w-full flex gap-x-2 mt-2'
                     >
                         <Button variant="text" onClick={getLocation} sx={{color: '#023047', width: 1, bgcolor: 'white', '&:hover': {bgcolor: '#A4D8E1'}}}>ครูว่ายน้ำใกล้ฉัน</Button>
@@ -164,7 +168,8 @@ export default function Home({openSignupClick}) {
             <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                delay={0.5}
                 className='w-full mt-4'
             >
                 <HomeContent deviceType={deviceType}/>
@@ -172,7 +177,8 @@ export default function Home({openSignupClick}) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                delay={0.6}
                 className='w-full mt-4'
             >
                 <ReviewSection />
@@ -180,7 +186,8 @@ export default function Home({openSignupClick}) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                delay={0.7}
                 className='w-full mt-4'
             >
                 <BecomeTeacher openSignupClick={openSignupClick}/>
