@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import { useLocation } from 'react-router';
 import { motion } from "motion/react"
+import { Helmet } from 'react-helmet';
 
 export default function TermsOfService() {
   const location = useLocation();
@@ -9,6 +10,15 @@ export default function TermsOfService() {
   }, [location.pathname]);
 
   return (
+    <>
+    <Helmet>
+      <title>ว่ายน้ำ.com | ข้อตกลงและเงื่อนไขการใช้งาน</title>
+      <meta name="description" content="ข้อตกลงและเงื่อนไขการใช้งานของ ว่ายน้ำ.com สำหรับผู้เรียนและครูผู้สอนว่ายน้ำ" />
+      <meta name="keywords" content="ครูสอนว่ายน้ำ, สอนว่ายน้ำออนไลน์, สอนว่ายน้ำที่บ้าน, ว่ายน้ำสำหรับเด็ก, ว่ายน้ำสำหรับผู้ใหญ่, ว่ายน้ำทั่วไทย, เรียนว่ายน้ำ, ว่ายน้ำ, ว่ายน้ำ.com" />
+      <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
+      <meta property="og:url" content="https://xn--q3cro8bc2kk6a.com/terms-of-service" />
+      <meta property="og:type" content="website" />
+    </Helmet>
     <motion.div 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -85,5 +95,6 @@ export default function TermsOfService() {
         © {new Date().getFullYear()} ว่ายน้ำ.com สงวนลิขสิทธิ์
       </div>
     </motion.div>
+    </>
   );
 }
