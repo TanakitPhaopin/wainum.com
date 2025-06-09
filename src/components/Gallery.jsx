@@ -7,12 +7,13 @@ export default function MyGallery({ images }) {
             showThumbnails={true}
             showFullscreenButton={false}
             showPlayButton={false}
-            autoPlay={true}
+            autoPlay={false}
             slideInterval={3000}
             showBullets={true}
             showNav={true}
             slideDuration={500}
             thumbnailPosition={"bottom"}
+            lazyLoad={true}
         />
     );
 }
