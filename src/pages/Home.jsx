@@ -165,7 +165,7 @@ export default function Home({openSignupClick}) {
                     </motion.div>
                 </div>
             </div>
-            {/* <motion.div 
+            <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
@@ -182,7 +182,7 @@ export default function Home({openSignupClick}) {
                 className='w-full mt-4'
             >
                 <ReviewSection />
-            </motion.div > */}
+            </motion.div >
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
