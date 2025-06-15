@@ -12,7 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import { createStudentProfile } from '../services/student.js';
-import { createTeacherProfile } from '../services/teacher.js';
 
   const style = {
     position: 'absolute',
