@@ -46,9 +46,10 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
   const [apply_price, setApply_price] = useState(false);
   const [can_travel, setCan_travel] = useState(false);
   const [can_online, setCan_online] = useState(false);
+  const [is_freeTrial, setIs_freeTrial] = useState(false);
   const [levels, setLevels] = useState(false);
   const [selectedLevels, setSelectedLevels] = useState([]);
-  const allowedKeys = ['code', 'sort', 'minPrice', 'maxPrice', 'travel', 'online', 'levels'];
+  const allowedKeys = ['code', 'sort', 'minPrice', 'maxPrice', 'travel', 'online', 'levels', 'freeTrial'];
   useEffect(() => {
     const hasValidFilters = [...searchParams].some(
       ([key]) => allowedKeys.includes(key) && key !== 'code' && key !== 'sort'
@@ -64,6 +65,7 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
     setApply_price(searchParams.get('minPrice') !== null && searchParams.get('maxPrice') !== null);
     setCan_travel(searchParams.get('travel') === 'true');
     setCan_online(searchParams.get('online') === 'true');
+    setIs_freeTrial(searchParams.get('freeTrial') === 'true');
 
     const levelParam = searchParams.get('levels');
     if (levelParam) {
@@ -77,7 +79,7 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
 
   const handleChange = (field) => (e) => {
     const value = 
-      field === 'can_travel' || field === 'can_online' || field === 'apply_price' || field === 'levels'
+      field === 'can_travel' || field === 'can_online' || field === 'apply_price' || field === 'levels' || field === 'is_freeTrial'
         ? e.target.checked // For switches
         : e.target.value;  // For text fields and other inputs
     
@@ -93,6 +95,9 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
         break;
       case 'levels':
         setLevels(value);
+        break;
+      case 'is_freeTrial':
+        setIs_freeTrial(value);
         break;
       default:
         break;
@@ -124,6 +129,11 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
     } else {
       newParams.delete('online');
     }
+    if (is_freeTrial) {
+      newParams.set('freeTrial', is_freeTrial);
+    } else {
+      newParams.delete('freeTrial');
+    }
     if (levels) {
       if (selectedLevels.length > 0) {
         newParams.set('levels', selectedLevels.join(','));
@@ -152,6 +162,7 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
     newParams.delete('travel');
     newParams.delete('online');
     newParams.delete('levels');
+    newParams.delete('freeTrial');
     setSearchParams(newParams); // Update the URL
     handleClose();
   }
@@ -217,6 +228,7 @@ export default function SearchFilter({open, handleClose, setFiltered}) {
               </div>
             )}
               <Divider />
+              <FormControlLabel control={<Switch checked={is_freeTrial} onChange={handleChange('is_freeTrial')} />} label="ทดลองเรียนฟรี!!" />
               <FormControlLabel control={<Switch checked={can_travel} onChange={handleChange('can_travel')} />} label="สามารถเดินทางได้" />
               <FormControlLabel control={<Switch checked={can_online} onChange={handleChange('can_online')} />} label="สอนออนไลน์" />
             </div>

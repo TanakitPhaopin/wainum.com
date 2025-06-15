@@ -15,7 +15,7 @@ export default function HomeContent({ deviceType }) {
     const navigate = useNavigate();
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const itemsToShow_large = profiles.length < 4 ? profiles.length : 4;
+    const itemsToShow_large = profiles.length < 3 ? profiles.length : 3;
     const itemsToShow_desktop = profiles.length < 3 ? profiles.length : 3;
     const itemsToShow_tablet = profiles.length < 2 ? profiles.length : 2;
     const itemsToShow_mobile = profiles.length < 1 ? profiles.length : 1;
@@ -186,6 +186,7 @@ export default function HomeContent({ deviceType }) {
                 handleClick={() => navigate(`/teacher/${profile.id}`)}
                 teacher_reviews={profile.teacher_reviews}
                 average_response_time={profile.average_response_time}
+                is_freeTrial={profile.is_freeTrial}
               />
           ))}
         </Carousel>

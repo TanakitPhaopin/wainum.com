@@ -11,7 +11,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import RecommendIcon from '@mui/icons-material/Recommend';
 
-export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite, teacher_reviews, average_response_time }) {
+export default function MyCard({ display_name, bio, image, can_travel, can_online, hourly_rate, province_code, handleClick, levels, is_subscribed, handleStarClick, isFavorite, teacher_reviews, average_response_time, is_freeTrial }) {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
 
@@ -149,8 +149,9 @@ export default function MyCard({ display_name, bio, image, can_travel, can_onlin
             <p className="font-semibold">{hourly_rate} บาท / ชั่วโมง</p>
             <p className='flex flex-row'>{<StarRateIcon color='warning'/>}{isNaN(averageRating) ? 'ไม่มีรีวิว' : averageRating} ({ratingCount})</p>
           </div>
-          <div>
-            <p className='text-xs text-end text-gray-500'>ตอบกลับภายใน ~ {average_response_time} นาที</p>
+          <div className='flex flex-r0w justify-between items-center'>
+            <p className='text-xs text-green-600 font-semibold'>{is_freeTrial ? 'ทดลองเรียนฟรี!' : ''}</p>
+            <p className='text-xs text-gray-500'>ตอบกลับภายใน ~ {average_response_time} นาที</p>
           </div>
         </CardContent>
       </Card>

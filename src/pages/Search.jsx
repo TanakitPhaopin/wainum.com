@@ -44,7 +44,7 @@ export default function Search() {
         value: String(p.provinceCode),
       })), []);
 
-    const itemsToShow_large = surroundingTeachers.length < 4 ? surroundingTeachers.length : 4;
+    const itemsToShow_large = surroundingTeachers.length < 3? surroundingTeachers.length : 3;
     const itemsToShow_desktop = surroundingTeachers.length < 3 ? surroundingTeachers.length : 3;
     const itemsToShow_tablet = surroundingTeachers.length < 2 ? surroundingTeachers.length : 2;
     const itemsToShow_mobile = surroundingTeachers.length < 1 ? surroundingTeachers.length : 1;
@@ -164,6 +164,11 @@ export default function Search() {
         // --- Filter by online
         if (searchParams.get('online') === 'true') {
           results = results.filter((profile) => profile.can_online);
+        }
+
+        // --- Filter by free trial
+        if (searchParams.get('freeTrial') === 'true') {
+          results = results.filter((profile) => profile.is_freeTrial);
         }
 
         if (searchParams.get('levels')) {
@@ -484,6 +489,7 @@ export default function Search() {
                                 isFavorite={myFavorites.includes(profile.id)}
                                 teacher_reviews={profile.teacher_reviews}
                                 average_response_time={profile.average_response_time}
+                                is_freeTrial={profile.is_freeTrial}
                             />
                         ))}
                     </div>
@@ -545,6 +551,7 @@ export default function Search() {
                             isFavorite={myFavorites.includes(profile.id)}
                             teacher_reviews={profile.teacher_reviews}
                             average_response_time={profile.average_response_time}
+                            is_freeTrial={profile.is_freeTrial}
                         />                  
                       ))}
                     </Carousel>

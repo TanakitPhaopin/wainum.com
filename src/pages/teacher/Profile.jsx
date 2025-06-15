@@ -137,6 +137,7 @@ export default function Profile() {
             updated_at: data.updated_at || '',
             swim_teacher_gallery: data.swim_teacher_gallery || [],
             video_link: data.video_link || '',
+            is_freeTrial: data.is_freeTrial || false,
           };
           const packagesArray = JSON.parse(data.lesson_package || '[]');
           setPackages(packagesArray || []); // Initialize packages from data
@@ -805,6 +806,19 @@ export default function Profile() {
         type='number'
         required={true}
       />
+      <FormControlLabel 
+        control={<Switch checked={formData.is_freeTrial} 
+        onChange={(e) => {
+                const newValue = e.target.checked;
+                const oldValue = originalData.is_freeTrial;
+
+                if (newValue !== oldValue) {
+                  handleUpsert('is_freeTrial', newValue);
+                }
+
+                updateField('is_freeTrial', newValue);
+              }}
+      />} label="ทดลองเรียนฟรี" />
       <h4 className="text-lg font-semibold text-gray-700 border-b pb-1">แพ็คเกจการสอน</h4>
       {packages.map((info, idx) => (
         <div key={idx} className="p-4 rounded-2xl border-gray-400 border-2 mb-2 flex flex-col gap-2">

@@ -382,6 +382,19 @@ export default function Teacher() {
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>💰 ค่าเรียน</h2>
                     <p className="text-start text-wrap">{teacher.hourly_rate} บาท / ชั่วโมง</p>
+                     <div className="text-start">
+                        {teacher.is_freeTrial ? (
+                            <div className="flex items-center">
+                            <CheckIcon className="mr-1" sx={{ color: 'green' }} />
+                            <span>ทดลองเรียนฟรี</span>
+                            </div>
+                        ) : (
+                            <div className="flex items-center">
+                            <CloseIcon className="mr-1" sx={{ color: 'red' }} />
+                            <span>ไม่สามารถทดลองเรียนได้</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className="flex flex-col gap-2 mb-4">
                     <h2 className='text-xl font-bold'>แพ็คเกจการเรียน</h2>
