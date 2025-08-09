@@ -1,6 +1,7 @@
 import MyAccordion from "../components/Accordion";
 import { Divider } from "@mui/material";
 import { motion } from "motion/react"
+import { Helmet } from "react-helmet";
 
 export default function FAQ() {
     // Student FAQs
@@ -122,15 +123,61 @@ export default function FAQ() {
             defaultExpanded: false
         }
     ];
+    // General FAQ JSON-LD
+    const title = "คำถามที่พบบ่อย (FAQ) – ว่ายน้ำ.com";
+    const desc  = "คำถามที่พบบ่อยเกี่ยวกับการค้นหาครูสอนว่ายน้ำ การติดต่อ การชำระเงิน และการสมัครเป็นครูบน ว่ายน้ำ.com";
+    const url   = "https://xn--q3cro8bc2kk6a.com/faq";
+
+    // Build FAQPage JSON‑LD from all sections
+    const allFaqs = [
+        ...faqStudent_SearchAndBooking,
+        ...faqStudent_ContactAndTrust,
+        ...faqStudent_Payment,
+        ...faqRegisterProfile,
+        ...faqFeesPayment,
+        ...faqTeaching,
+        ...faqPremium,
+        ...faqSupport,
+    ];
+    const faqLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": allFaqs.map(({ title, content }) => ({
+        "@type": "Question",
+        "name": title,
+        "acceptedAnswer": { "@type": "Answer", "text": content }
+        }))
+    };
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "หน้าหลัก", "item": "https://xn--q3cro8bc2kk6a.com/" },
+        { "@type": "ListItem", "position": 2, "name": "คำถามที่พบบ่อย (FAQ)", "item": url }
+        ]
+    };
 
     return (
+        <>
+        <Helmet>
+            <title>{title}</title>
+            <meta name="description" content={desc} />
+            <link rel="canonical" href={url} />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={desc} />
+            <meta property="og:url" content={url} />
+            <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
+            <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+            <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
+        </Helmet>
         <div className="max-w-4xl mx-auto md:px-4 py-8">
             <motion.h1 
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 delay={0.2}
-                className="text-3xl font-bold mb-6">คำถามที่พบบ่อย (FAQ)</motion.h1>
+                className="text-3xl font-bold mb-6">คำถามที่พบบ่อย (FAQ) – ว่ายน้ำ.com</motion.h1>
             <div className="flex flex-col gap-8">
                 <motion.h2 
                     initial={{ y: -20, opacity: 0 }}
@@ -225,5 +272,6 @@ export default function FAQ() {
                 </div>
             </div>
         </div>
+        </>
     );
 }

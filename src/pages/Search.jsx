@@ -365,15 +365,22 @@ export default function Search() {
 
     return (
       <>
-      <Helmet>
-          <title>ค้นหาครูสอนว่ายน้ำ</title>
-          <meta name="description" content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ สอนว่ายน้ำสำหรับทุกวัย ทั้งออนไลน์และที่บ้าน เปรียบเทียบราคาและรีวิวได้ เรียงลำดับตามความนิยม" />
-          <meta name="keywords" content="ครูสอนว่ายน้ำ, สอนว่ายน้ำออนไลน์, สอนว่ายน้ำที่บ้าน, ว่ายน้ำสำหรับเด็ก, ว่ายน้ำสำหรับผู้ใหญ่, ว่ายน้ำทั่วไทย, เรียนว่ายน้ำ, ว่ายน้ำ, ว่ายน้ำ.com" />
-          <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
-          <meta property="og:url" content="https://xn--q3cro8bc2kk6a.com/search" />
-          <meta property="og:type" content="website" />
-      </Helmet>
+        <Helmet>
+            <title>ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com</title>
+            <meta
+              name="description"
+              content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ เปรียบเทียบรีวิวและราคา เรียนได้ทั้งออนไลน์และที่บ้านบน ว่ายน้ำ.com"
+            />
+            <link rel="canonical" href="https://xn--q3cro8bc2kk6a.com/search" />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com" />
+            <meta property="og:description" content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ เปรียบเทียบรีวิวและราคา เรียนได้ทั้งออนไลน์และที่บ้านบน ว่ายน้ำ.com" />
+            <meta property="og:url" content="https://xn--q3cro8bc2kk6a.com/search" />
+            <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
+        </Helmet>
+
         <div className="relative">
+          <h1 className="sr-only">ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com</h1>
             <motion.div 
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
