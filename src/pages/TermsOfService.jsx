@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import { useLocation } from 'react-router';
 import { motion } from "motion/react"
-import { Helmet } from 'react-helmet';
+import Seo from '../components/Seo';
 
 export default function TermsOfService() {
   const location = useLocation();
@@ -9,42 +9,20 @@ export default function TermsOfService() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
-  const title = "ข้อตกลงและเงื่อนไขการใช้งาน – ว่ายน้ำ.com";
-  const desc  = "ข้อตกลงและเงื่อนไขการใช้งานของ ว่ายน้ำ.com สำหรับผู้เรียนและครูผู้สอนว่ายน้ำ";
-  const url   = "https://xn--q3cro8bc2kk6a.com/terms-of-service";
-
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "หน้าหลัก", "item": "https://xn--q3cro8bc2kk6a.com/" },
-      { "@type": "ListItem", "position": 2, "name": "ข้อตกลงและเงื่อนไขการใช้งาน", "item": url }
-    ]
-  };
-
   return (
     <>
-     <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={desc} />
-        <link rel="canonical" href={url} />
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={desc} />
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
-        {/* JSON‑LD */}
-        <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
-      </Helmet>
-      <h1 className="sr-only">ข้อตกลงและเงื่อนไขการใช้งาน – ว่ายน้ำ.com</h1>
+     <Seo
+       title={'ข้อตกลงและเงื่อนไขการใช้งาน – ว่ายน้ำ.com'}
+       description={'ข้อตกลงและเงื่อนไขการใช้งานของ ว่ายน้ำ.com สำหรับผู้เรียนและครูผู้สอนว่ายน้ำ'}
+       canonical={'https://xn--q3cro8bc2kk6a.com/terms-of-service'}
+     />
     <motion.div 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       delay={0.1}
       className="p-8 bg-white text-gray-800">
-      <h2 className="text-2xl font-bold mb-4">ข้อตกลงและเงื่อนไขการใช้งาน</h2>
+      <h2 className="text-2xl font-bold mb-4">ข้อตกลงและเงื่อนไขการใช้งาน <span className='text-sm text-gray-500'>– ว่ายน้ำ.com</span></h2>
       
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2">1. การยอมรับข้อตกลง</h2>

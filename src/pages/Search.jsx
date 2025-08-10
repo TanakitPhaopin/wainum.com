@@ -19,7 +19,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Divider } from "@mui/material";
 import { motion } from "motion/react"
-import { Helmet } from 'react-helmet';
+import Seo from "../components/Seo";
 
 export default function Search() {
     const { user } = useAuth();
@@ -365,22 +365,21 @@ export default function Search() {
 
     return (
       <>
-        <Helmet>
-            <title>ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com</title>
-            <meta
-              name="description"
-              content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ เปรียบเทียบรีวิวและราคา เรียนได้ทั้งออนไลน์และที่บ้านบน ว่ายน้ำ.com"
-            />
-            <link rel="canonical" href="https://xn--q3cro8bc2kk6a.com/search" />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content="ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com" />
-            <meta property="og:description" content="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ เปรียบเทียบรีวิวและราคา เรียนได้ทั้งออนไลน์และที่บ้านบน ว่ายน้ำ.com" />
-            <meta property="og:url" content="https://xn--q3cro8bc2kk6a.com/search" />
-            <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
-        </Helmet>
-
+        <Seo
+            title="ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com"
+            description="ค้นหาครูสอนว่ายน้ำที่ดีที่สุดใกล้บ้านคุณ เปรียบเทียบรีวิวและราคา เรียนได้ทั้งออนไลน์และที่บ้านบน ว่ายน้ำ.com"
+            canonical="https://xn--q3cro8bc2kk6a.com/search"
+        />
         <div className="relative">
-          <h1 className="sr-only">ค้นหาครูสอนว่ายน้ำ | ว่ายน้ำ.com</h1>
+            <motion.h1
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="text-xl font-bold mb-4"
+            >
+              ค้นหาครูสอนว่ายน้ำ <span className="text-base text-gray-500">| ว่ายน้ำ.com</span>
+            </motion.h1>
+
             <motion.div 
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}

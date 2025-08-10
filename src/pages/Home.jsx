@@ -11,7 +11,7 @@ import { ReactTyped } from "react-typed";
 import ReviewSection from './ReviewSection.jsx';
 import BecomeTeacher from './BecomeTeacher.jsx';
 import { motion } from "motion/react"
-import { Helmet } from 'react-helmet';
+import Seo from '../components/Seo.jsx';
 
 export default function Home({openSignupClick}) {
     const navigate = useNavigate();
@@ -72,37 +72,21 @@ export default function Home({openSignupClick}) {
         id: province.provinceCode,
     }));
 
-    const pageTitle = 'ว่ายน้ำ.com – ค้นหาครูสอนว่ายน้ำทั่วไทย';
-    const pageDesc  = 'ว่ายน้ำ.com แหล่งรวมครูสอนว่ายน้ำทั่วไทย ค้นหา เปรียบเทียบราคา และอ่านรีวิว ครูสอนว่ายน้ำใกล้คุณ';
-    const pageUrl   = 'https://xn--q3cro8bc2kk6a.com/';
-
     return (
         <>
-        <Helmet>
-            <title>{pageTitle}</title>
-            <meta name="description" content={pageDesc} />
-            <link rel="canonical" href={pageUrl} />
-            {/* Open Graph */}
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={pageTitle} />
-            <meta property="og:description" content={pageDesc} />
-            <meta property="og:url" content={pageUrl} />
-            <meta property="og:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
-            {/* Twitter Card */}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={pageTitle} />
-            <meta name="twitter:description" content={pageDesc} />
-            <meta name="twitter:image" content="https://jxamlumehxyjlqcekmgl.supabase.co/storage/v1/object/public/wainum-logo//wainum_logo.png" />
-        </Helmet>
+        <Seo
+            title="ว่ายน้ำ.com | ค้นหาครูสอนว่ายน้ำทั่วไทย"
+            description="ว่ายน้ำ.com แหล่งรวมครูสอนว่ายน้ำทั่วไทย ค้นหา เปรียบเทียบราคา และอ่านรีวิว ครูสอนว่ายน้ำใกล้คุณ"
+            canonical="https://xn--q3cro8bc2kk6a.com/"
+        />
         <div className="h-full w-full mb-8">
-            <h1 className="sr-only">ว่ายน้ำ.com - ค้นหาครูสอนว่ายน้ำทั่วไทย</h1>
             <div className="flex flex-col items-center justify-center py-0 lg:py-8">
-                <motion.h2 
+                <motion.h1 
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0 }}
-                    className="text-4xl lg:text-5xl 2xl:text-6xl text-black">ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ที่ดีที่สุดใกล้บ้านคุณ
-                </motion.h2>
+                    className="text-4xl lg:text-5xl 2xl:text-6xl text-black leading-snug sm:leading-tight">ว่ายน้ำ.com | ค้นหา<span className="font-semibold">ครูสอนว่ายน้ำ</span>ทั่วไทย
+                </motion.h1>
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
